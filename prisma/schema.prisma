@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+enum StudentLevel {
+  LEVEL_1
+  LEVEL_2
+  LEVEL_3
+}
+
+model ActiveStudent {
+  id            Int          @id @default(autoincrement())
+  studentId     Int          @unique @default(0)
+  name          String       @default("")  
+  profilePath   String       @default("")
+  hours         Int          @default(0)
+  level         StudentLevel @default(LEVEL_1)
+  lifetimeHours Int          @default(0)
+  projectCount  Int          @default(0)
+  projects      Project[]    @relation("StudentProjects")
+  ownedProjects Project[]    @relation("OwnedProjects")
+}
+
+model Project {
+  id         Int       @id @default(autoincrement())
+  name       String
+  hours      Int
+  startPath  DateTime
+  endPath    DateTime
+  assistants ActiveStudent[] @relation("StudentProjects")
+  owner      ActiveStudent   @relation("OwnedProjects", fields: [ownerId], references: [id])
+  ownerId    Int
+}
+
+model AllStudents {
+  id           Int          @id @default(autoincrement())
+  studentId    Int          @unique
+  firstName    String
+  lastName     String
+}
