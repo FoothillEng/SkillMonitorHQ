@@ -3,4 +3,6 @@
         "src"
     ],
     "tailwindCSS.rootFontSize": 10,
+    "WillLuke.nextjs.addTypesOnSave": true,
+    "WillLuke.nextjs.hasPrompted": true,
 }

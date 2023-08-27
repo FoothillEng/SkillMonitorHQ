@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 
 import Layout from '@/components/Layout';
-import { oxygen } from '@/utils/fonts';
+import { oxygen } from '@/lib/fonts';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

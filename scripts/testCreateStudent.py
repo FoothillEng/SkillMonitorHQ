@@ -3,8 +3,7 @@ import requests
 URL = "http://localhost:3000/api/createStudent"
 
 data = {
-    "id": "John Doe",
-    "profilePath": "https://www.google.com",
+    "studentId": 98465,
 }
 
 r = requests.post(url=URL, json=data)
