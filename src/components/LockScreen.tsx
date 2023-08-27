@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
+import { useAppStore } from "@/lib/store"
+
 
 const LockScreen = () => {
     const [studentId, setStudentId] = useState<string>("");
+
+    const { setStudent } = useAppStore();
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStudentId(e.target.value);
@@ -21,15 +25,15 @@ const LockScreen = () => {
             body: JSON.stringify({studentId: parsedStudentId}),
             });
 
-
         if (response.ok) {
             console.log("student real!");
+            setStudent(parsedStudentId);
+            
         } else {
             console.log("student not real!");
         }
     
     }
-
 
     return (
         <div className="text-center font-oxygen text-green">
