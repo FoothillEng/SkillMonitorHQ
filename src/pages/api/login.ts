@@ -31,7 +31,7 @@ export default async function handler(
         }
         break;
     default:
-        res.status(405).end(); //Method Not Allowed
+        res.status(417).end(); //Method Not Allowed
         break;
     }
 }
