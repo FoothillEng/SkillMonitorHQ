@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
     return (
-        <div>
+        <div className="flex flex-col min-h-screen items-center justify-between bg-gradient-radial from-blue-950 to-black">
             <Header />
             <main>
                 {children}
