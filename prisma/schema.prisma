@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url  	= env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -17,18 +17,19 @@ enum StudentLevel {
 model ActiveStudent {
   id            Int          @id @default(autoincrement())
   studentId     Int          @unique @default(0)
-  name          String       @default("")  
-  profilePath   String       @default("")
+  name          String       @default("")
+  avatar        Bytes        @default("")
   hours         Int          @default(0)
   level         StudentLevel @default(LEVEL_1)
   lifetimeHours Int          @default(0)
   projectCount  Int          @default(0)
   projects      Project[]    @relation("StudentProjects")
   ownedProjects Project[]    @relation("OwnedProjects")
+  admin         Boolean      @default(false)
 }
 
 model Project {
-  id         Int       @id @default(autoincrement())
+  id         Int             @id @default(autoincrement())
   name       String
   hours      Int
   startPath  DateTime
@@ -39,8 +40,8 @@ model Project {
 }
 
 model AllStudents {
-  id           Int          @id @default(autoincrement())
-  studentId    Int          @unique
-  firstName    String
-  lastName     String
+  id        Int    @id @default(autoincrement())
+  studentId Int    @unique
+  firstName String
+  lastName  String
 }
