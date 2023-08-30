@@ -1,8 +1,8 @@
 {
-    "eslint.workingDirectories": [
-        "src"
-    ],
+    "eslint.workingDirectories": ["src"],
     "tailwindCSS.rootFontSize": 10,
     "WillLuke.nextjs.addTypesOnSave": true,
     "WillLuke.nextjs.hasPrompted": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
 }

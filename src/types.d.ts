@@ -11,11 +11,11 @@ interface IStudent {
 interface IProject {
     name: string;
     hours: number;
-    assistants: IPerson[];  // default empty array
+    assistants: IPerson[]; // default empty array
     owner: IPerson;
     startPath: Date;
     endPath: Date;
     // is_active: boolean;
     // is_completed: boolean;
-    // is_cancelled: boolean;  
+    // is_cancelled: boolean;
 }
