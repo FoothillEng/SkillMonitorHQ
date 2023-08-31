@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BsBackspace } from 'react-icons/bs';
 import { AiOutlineEnter } from 'react-icons/ai';
 
-import { useAppStore } from '@/lib/store';
+import { signIn } from 'next-auth/react';
 
 interface NumberBoxProps {
     value: number | typeof BsBackspace | typeof AiOutlineEnter;
@@ -30,7 +30,6 @@ const NumberBox = ({ value, onNumberClick }: NumberBoxProps) => {
 
 const LockScreen = () => {
     const [studentId, setStudentId] = useState<string>('');
-    const { setStudent } = useAppStore();
 
     const handleInput = (
         number: number | typeof BsBackspace | typeof AiOutlineEnter
@@ -54,18 +53,15 @@ const LockScreen = () => {
         const parsedStudentId = parseInt(studentId);
 
         if (!isNaN(parsedStudentId)) {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentId: parsedStudentId })
+            // const response = await fetch('/api/login', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ studentId: parsedStudentId })
+            // });
+            await signIn('credentials', {
+                studentId: parsedStudentId,
+                callbackUrl: '/index2'
             });
-
-            if (response.ok) {
-                console.log('student real!');
-                setStudent(parsedStudentId);
-            } else {
-                console.log('student not real!');
-            }
         }
     };
 

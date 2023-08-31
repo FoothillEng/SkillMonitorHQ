@@ -22,7 +22,8 @@ export default async function handler(
                     where: {
                         studentId,
                     }
-                });
+                }); // catch NotFoundError if student does not exist??
+
                 if (student && student.admin === true) {
                     res.status(200).json({ message: 'student is admin' });
                     return;

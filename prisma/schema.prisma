@@ -14,29 +14,29 @@ enum StudentLevel {
   LEVEL_3
 }
 
-model ActiveStudent {
-  id            Int          @id @default(autoincrement())
-  studentId     Int          @unique @default(0)
-  name          String       @default("")
-  avatar        Bytes        @default("")
-  hours         Int          @default(0)
-  level         StudentLevel @default(LEVEL_1)
-  lifetimeHours Int          @default(0)
-  projectCount  Int          @default(0)
-  projects      Project[]    @relation("StudentProjects")
-  ownedProjects Project[]    @relation("OwnedProjects")
-  admin         Boolean      @default(false)
-}
+// model ActiveStudent {
+//   id            Int          @id @default(autoincrement())
+//   studentId     Int          @unique @default(0)
+//   name          String       @default("")
+//   avatar        Bytes        @default("")
+//   hours         Int          @default(0)
+//   level         StudentLevel @default(LEVEL_1)
+//   lifetimeHours Int          @default(0)
+//   projectCount  Int          @default(0)
+//   projects      Project[]    @relation("StudentProjects")
+//   ownedProjects Project[]    @relation("OwnedProjects")
+//   admin         Boolean      @default(false)
+// }
 
 model Project {
-  id         Int             @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
   hours      Int
   startPath  DateTime
   endPath    DateTime
-  assistants ActiveStudent[] @relation("StudentProjects")
-  owner      ActiveStudent   @relation("OwnedProjects", fields: [ownerId], references: [id])
-  ownerId    Int
+  assistants User[]   @relation("StudentProjects")
+  owner      User     @relation("OwnedProjects", fields: [ownerId], references: [id])
+  ownerId    String
 }
 
 model AllStudents {
@@ -44,4 +44,28 @@ model AllStudents {
   studentId Int    @unique
   firstName String
   lastName  String
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String       @id @default(cuid())
+  studentId     Int          @unique
+  firstName     String? // make it required
+  lastName      String? // make it required
+  avatar        String? // make it required
+  sessions      Session[]
+  hours         Int          @default(0)
+  level         StudentLevel @default(LEVEL_1)
+  lifetimeHours Int          @default(0)
+  projectCount  Int          @default(0)
+  projects      Project[]    @relation("StudentProjects")
+  ownedProjects Project[]    @relation("OwnedProjects")
+  admin         Boolean      @default(false)
 }
