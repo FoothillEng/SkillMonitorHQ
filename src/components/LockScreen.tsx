@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+
 import { BsBackspace } from 'react-icons/bs';
 import { AiOutlineEnter } from 'react-icons/ai';
 
@@ -30,6 +32,8 @@ const NumberBox = ({ value, onNumberClick }: NumberBoxProps) => {
 
 const LockScreen = () => {
     const [studentId, setStudentId] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const router = useRouter();
 
     const handleInput = (
         number: number | typeof BsBackspace | typeof AiOutlineEnter
@@ -48,14 +52,22 @@ const LockScreen = () => {
     };
 
     const handleSubmit = async () => {
+        setError('');
         console.log(studentId);
 
         const parsedStudentId = parseInt(studentId);
 
         if (!isNaN(parsedStudentId)) {
             await signIn('credentials', {
-                studentId: parsedStudentId
-                // callbackUrl: '/'
+                studentId: parsedStudentId,
+                redirect: false
+            }).then((res) => {
+                if (res && res.error) {
+                    setError('Error signing in, please try again');
+                    setStudentId('');
+                } else {
+                    router.replace('/');
+                }
             });
         }
     };
@@ -98,6 +110,9 @@ const LockScreen = () => {
                     ))}
                 </div>
             </form>
+            {error && (
+                <div className="mt-[5rem] text-red-500 text-3xl">{error}</div>
+            )}
         </div>
     );
 };
