@@ -53,14 +53,9 @@ const LockScreen = () => {
         const parsedStudentId = parseInt(studentId);
 
         if (!isNaN(parsedStudentId)) {
-            // const response = await fetch('/api/login', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ studentId: parsedStudentId })
-            // });
             await signIn('credentials', {
-                studentId: parsedStudentId,
-                callbackUrl: '/index2'
+                studentId: parsedStudentId
+                // callbackUrl: '/'
             });
         }
     };
