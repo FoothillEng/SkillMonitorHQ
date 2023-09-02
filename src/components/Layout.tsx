@@ -7,14 +7,12 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
     return (
-        <div className="flex flex-col min-h-screen items-center justify-between bg-gradient-radial from-blue-950 to-black">
+        <div className="flex flex-col min-h-screen justify-between bg-gradient-radial from-blue-950 to-black">
             <Header />
-            <main>
-                {children}
-            </main>
+            <main>{children}</main>
             <Footer />
         </div>
-    )
-}
+    );
+};
 
 export default Layout;

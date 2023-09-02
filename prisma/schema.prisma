@@ -14,20 +14,6 @@ enum StudentLevel {
   LEVEL_3
 }
 
-// model ActiveStudent {
-//   id            Int          @id @default(autoincrement())
-//   studentId     Int          @unique @default(0)
-//   name          String       @default("")
-//   avatar        Bytes        @default("")
-//   hours         Int          @default(0)
-//   level         StudentLevel @default(LEVEL_1)
-//   lifetimeHours Int          @default(0)
-//   projectCount  Int          @default(0)
-//   projects      Project[]    @relation("StudentProjects")
-//   ownedProjects Project[]    @relation("OwnedProjects")
-//   admin         Boolean      @default(false)
-// }
-
 model Project {
   id         Int      @id @default(autoincrement())
   name       String
@@ -59,7 +45,7 @@ model User {
   studentId     Int          @unique
   firstName     String? // make it required
   lastName      String? // make it required
-  avatar        String? // make it required
+  avatar        String?
   sessions      Session[]
   hours         Int          @default(0)
   level         StudentLevel @default(LEVEL_1)

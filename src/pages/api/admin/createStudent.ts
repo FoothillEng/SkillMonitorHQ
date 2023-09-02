@@ -1,7 +1,7 @@
-import { readFileSync } from 'fs';
-
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { prisma } from '@/lib/prisma';
+
 
 export default async function handler(
     req: NextApiRequest,
@@ -10,14 +10,24 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                const { studentId } = req.body;
+                const { studentId, firstName, lastName, avatar } = req.body;
 
-                const pathToAvatar = `./public/ai-photo-pfp.jpeg`;
-                const avatar = readFileSync(pathToAvatar).toString('base64');
+                const user = await prisma.user.findUnique({
+                    where: { studentId },
+                });
 
-                await prisma.activeStudent.create({
+                if (user !== null) {
+                    return res.send({ user: null, message: 'User already exists' });
+                }
+
+
+
+
+                await prisma.user.create({
                     data: {
                         studentId,
+                        firstName,
+                        lastName,
                         avatar
                     }
                 });
