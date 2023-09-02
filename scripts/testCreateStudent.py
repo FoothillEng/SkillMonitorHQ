@@ -1,6 +1,6 @@
 import requests
 
-URL = "http://localhost:3000/api/createStudent"
+URL = "http://localhost:3000/api/admin/createStudent"
 
 data = {
     "studentId": 2222,

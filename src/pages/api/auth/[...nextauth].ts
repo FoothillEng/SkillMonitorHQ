@@ -6,7 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { prisma } from '@/lib/prisma';
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         CredentialsProvider({
@@ -30,13 +30,14 @@ const authOptions: AuthOptions = {
         session({ session, token }) {
             session.user.id = token.id;
             session.user.studentId = token.studentId;
+            session.user.admin = token.admin;
             return session;
         },
         jwt({ token, account, user }) {
             if (account) {
-                token.accessToken = account.access_token;
                 token.id = user.id;
                 token.studentId = (user as User).studentId;
+                token.admin = (user as User).admin;
             }
             return token;
         },
@@ -45,7 +46,7 @@ const authOptions: AuthOptions = {
         signIn: '/',
     },
     secret: process.env.NEXTAUTH_SECRET,
-    session: { strategy: "jwt", maxAge: 5 * 60 }, // 5 minutes
+    session: { strategy: "jwt", maxAge: 15 * 60 }, // 15 minutes
 
 
     jwt: {

@@ -8,10 +8,10 @@ const Index = (props) => {
     const { data: session, status } = useSession();
 
     return (
-        <div className="w-screen flex items-center justify-center">
+        <div className="w-screen flex items-center justify-center font-oxygen">
             {!session && <LockScreen />}
             {session && (
-                <div className="text-center font-oxygen text-green">
+                <div className="text-center text-green">
                     <h1 className="text-6xl">Welcome to SkillMonitorHQ</h1>
                     <h2 className="text-3xl mt-4">
                         You are logged in as {session.user?.id}
