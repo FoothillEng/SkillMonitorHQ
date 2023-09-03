@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="flex flex-col min-h-screen justify-between bg-gradient-radial from-blue-950 to-black">
             <Header />
             {/* <main className="flex flex-row"> */}
-            <div>{children}</div>
+            {children}
             {/* <SideNav /> */}
             {/* </main> */}
             <Footer />

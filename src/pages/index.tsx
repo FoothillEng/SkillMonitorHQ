@@ -1,11 +1,10 @@
 // import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 
 import LockScreen from '@/components/LockScreen';
 
 const Index = (props) => {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
 
     return (
         <div className="w-screen flex items-center justify-center font-oxygen">

@@ -8,12 +8,14 @@ interface AlphanumericInputProps {
     title: string;
     _title: string;
     type: 'text' | 'number';
+    style?: string;
     onChange: (title: string, value: string) => void;
 }
-const AlphanumericInput = ({
+export const AlphanumericInput = ({
     title,
     _title,
     type,
+    style,
     onChange
 }: AlphanumericInputProps) => {
     const [value, setInput] = useState('');
@@ -23,7 +25,7 @@ const AlphanumericInput = ({
         onChange(_title, value);
     };
     return (
-        <div className="flex flex-col">
+        <div className={`flex flex-col items-center justify-center ${style}`}>
             <label className="text-center text-3xl" htmlFor={_title}>
                 {title}
             </label>
@@ -80,7 +82,7 @@ const CreateUser = (props) => {
             formData.studentId as unknown as string
         );
 
-        const res = await fetch('/api/admin/createStudent', {
+        await fetch('/api/admin/createStudent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -91,7 +93,6 @@ const CreateUser = (props) => {
                 if (!res.ok) {
                     throw new Error(res.status.toString());
                 }
-                return res.json();
             })
             .then(() => router.push('/admin'))
             .catch((error) => {
@@ -109,7 +110,7 @@ const CreateUser = (props) => {
                 <h1 className="text-center text-9xl mb-[5rem]">
                     Register New Student
                 </h1>
-                <div className="grid gap-4 grid-cols-2 ">
+                <div className="grid gap-4 grid-cols-2">
                     <AlphanumericInput
                         _title="studentId"
                         title="Student ID"
@@ -175,7 +176,7 @@ const CreateUser = (props) => {
                     className="flex items-center mt-64 mx-auto cursor-pointer mb-2 p-2"
                     type="submit"
                 >
-                    <div className="text-9xl hollow-text-3 text-center hover:bg-slate-400">
+                    <div className="text-9xl hollow-text-3 text-center active:bg-slate-400">
                         Submit
                     </div>
                 </button>
