@@ -14,17 +14,6 @@ enum StudentLevel {
   LEVEL_3
 }
 
-model Project {
-  id         Int      @id @default(autoincrement())
-  name       String
-  hours      Int
-  startPath  DateTime
-  endPath    DateTime
-  assistants User[]   @relation("StudentProjects")
-  owner      User     @relation("OwnedProjects", fields: [ownerId], references: [id])
-  ownerId    String
-}
-
 model AllStudents {
   id        Int    @id @default(autoincrement())
   studentId Int    @unique
@@ -35,25 +24,39 @@ model AllStudents {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
 }
 
 model User {
-  id            String       @id @default(uuid())
-  studentId     Int          @unique
+  id            String        @id @default(uuid())
+  studentId     Int           @unique
   firstName     String
   lastName      String
   avatar        String
   sessions      Session[]
-  hours         Int          @default(0)
-  level         StudentLevel @default(LEVEL_1)
-  lifetimeHours Int          @default(0)
-  projectCount  Int          @default(0)
-  projects      Project[]    @relation("StudentProjects")
-  ownedProjects Project[]    @relation("OwnedProjects")
-  admin         Boolean      @default(false)
+  level         StudentLevel  @default(LEVEL_1)
+  lifetimeHours Int           @default(0)
+  admin         Boolean       @default(false)
+  machines      UserMachine[]
 }
 
-// model Machine {
+model Machine {
+  id    Int           @id @default(autoincrement())
+  uuid  String        @unique @default(uuid())
+  name  String        @unique
+  users UserMachine[]
+
+  @@unique([id, uuid])
+}
+
+model UserMachine {
+  id          Int     @id @default(autoincrement())
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  machine     Machine @relation(fields: [machineId, machineUUID], references: [id, uuid], onDelete: Cascade)
+  machineId   Int // do i rlly need both of these linked?
+  machineUUID String
+  minutes     Int     @default(0)
+}
