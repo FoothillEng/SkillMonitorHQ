@@ -41,11 +41,11 @@ model Session {
 }
 
 model User {
-  id            String       @id @default(cuid())
+  id            String       @id @default(uuid())
   studentId     Int          @unique
-  firstName     String? // make it required
-  lastName      String? // make it required
-  avatar        String?
+  firstName     String
+  lastName      String
+  avatar        String
   sessions      Session[]
   hours         Int          @default(0)
   level         StudentLevel @default(LEVEL_1)
@@ -55,3 +55,5 @@ model User {
   ownedProjects Project[]    @relation("OwnedProjects")
   admin         Boolean      @default(false)
 }
+
+// model Machine {

@@ -17,11 +17,8 @@ export default async function handler(
                 });
 
                 if (user !== null) {
-                    return res.send({ user: null, message: 'User already exists' });
+                    return res.status(403).send({ message: 'User already exists' });
                 }
-
-
-
 
                 await prisma.user.create({
                     data: {

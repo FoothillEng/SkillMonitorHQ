@@ -11,12 +11,16 @@ interface AppPropsWithSession extends AppProps {
     session: Session;
 }
 // fix
-export default function App({Component,pageProps: { session, ...pageProps }}) { // eslint-disable-line
+export default function App({
+        Component,
+        pageProps: { session, ...pageProps }
+    }) {
+    // eslint-disable-line
     return (
-        <Layout>
-            <SessionProvider session={session}>
+        <SessionProvider session={session}>
+            <Layout>
                 <Component {...pageProps} />
-            </SessionProvider>
+            </Layout>
             <style jsx global>
                 {`
                     :root {
@@ -24,6 +28,6 @@ export default function App({Component,pageProps: { session, ...pageProps }}) { 
                     }
                 `}
             </style>
-        </Layout>
+        </SessionProvider>
     );
 }
