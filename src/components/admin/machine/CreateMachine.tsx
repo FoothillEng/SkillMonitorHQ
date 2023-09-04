@@ -54,7 +54,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center text-pink-500">
+        <div className="flex flex-col items-center justify-center text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
                 <h1 className="text-center text-6xl mb-[3rem]">
                     Register New Machine

@@ -26,14 +26,11 @@ export const AlphanumericInput = ({
     };
     return (
         <div className={`flex flex-col items-center justify-center ${style}`}>
-            <label className="text-center text-3xl" htmlFor={_title}>
-                {title}
-            </label>
             <input
-                className="w-full h-full border-4 border-green rounded text-center text-6xl"
-                name={_title}
+                className="w-[50rem] h-[6rem] border-4 border-green rounded-full text-center text-6xl"
                 type={type}
                 onChange={(e) => handleFieldValueChange(e.target.value)}
+                placeholder={`Enter ${title} here`}
                 value={value}
             />
         </div>
@@ -105,12 +102,12 @@ const CreateUser = (props) => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center text-pink-500">
+        <div className="flex flex-col items-center justify-center text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
-                <h1 className="text-center text-9xl mb-[5rem]">
+                <h1 className="text-center text-9xl mb-[10rem]">
                     Register New Student
                 </h1>
-                <div className="grid gap-4 grid-cols-2">
+                <div className="flex flex-col space-y-[3rem]">
                     <AlphanumericInput
                         _title="studentId"
                         title="Student ID"
@@ -134,7 +131,7 @@ const CreateUser = (props) => {
                         title="Avatar"
                         onChange={handleFieldValueChange}
                     /> */}
-                    <div className="flex items-center justify-center outline outline-4 text-3xl text-center">
+                    <div className="">
                         <CldUploadWidget
                             signatureEndpoint="/api/admin/sign"
                             uploadPreset="ml_default"
@@ -159,12 +156,12 @@ const CreateUser = (props) => {
                                 }
 
                                 return (
-                                    <div>
+                                    <div className="flex flex-col items-center justify-center">
                                         <button
-                                            className="button"
+                                            className="w-[50rem] h-[6rem] border-4 border-green bg-white rounded-full text-center text-6xl"
                                             onClick={handleOnClick}
                                         >
-                                            Upload an Image
+                                            Upload Student Avatar
                                         </button>
                                     </div>
                                 );

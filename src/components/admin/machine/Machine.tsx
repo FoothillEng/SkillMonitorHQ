@@ -36,7 +36,7 @@ const Machine = ({
     return (
         <div
             onClick={handleOnClick}
-            className={`flex flex-row items-center justify-center space-x-[2rem] text-purple-400 active:bg-slate-400 ${
+            className={`flex flex-row items-center justify-center space-x-[2rem] text-green-400 active:bg-slate-400 ${
                 currentMachineId === machine.uuid ? 'text-red-400' : ''
             }`}
         >
