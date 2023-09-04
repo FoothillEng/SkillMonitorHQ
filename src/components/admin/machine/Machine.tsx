@@ -18,45 +18,19 @@ const Machine = ({
     // setCurrentMachineId on inital load from localStorage
     useEffect(() => {
         const initalLoad = async () => {
-            console.log('initalLoad');
-            if (localStorage.getItem('machineId')) {
-                await fetch('/api/admin/machine/decrypt', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        encryptedMachineId: localStorage.getItem('machineId')
-                    })
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        setCurrentMachineId(data.decryptedMachineId);
-                    })
-                    .catch((error) => console.error(error));
+            const machineUUID = localStorage.getItem('machineUUID');
+            if (machineUUID) {
+                setCurrentMachineId(machineUUID);
+                setMachineId(machineUUID);
             }
         };
         initalLoad();
-    }, [setCurrentMachineId]);
+    }, [setCurrentMachineId, setMachineId]);
 
     const handleOnClick = async () => {
-        console.log('Machine clicked', machine.uuid);
         setCurrentMachineId(machine.uuid);
-        await fetch('/api/admin/machine/encrypt', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                machineId: machine.uuid
-            })
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setMachineId(data.encryptedMachineId);
-                localStorage.setItem('machineId', data.encryptedMachineId);
-            })
-            .catch((error) => console.error(error));
+        setMachineId(machine.uuid);
+        localStorage.setItem('machineUUID', machine.uuid);
     };
 
     return (
