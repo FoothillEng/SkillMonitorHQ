@@ -9,7 +9,7 @@ interface ListMachinesProps {
 }
 const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
     const [machines, setMachines] = useState<MachineType[]>([]);
-    const [currentMachineId, setCurrentMachineId] = useState<string>('');
+    const [currentMachineUUID, setCurrentMachineUUID] = useState<string>('');
 
     useEffect(() => {
         const fetchMachines = async () => {
@@ -35,8 +35,8 @@ const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
                     {machines.map((machine) => (
                         <Machine
                             key={machine.id}
-                            currentMachineId={currentMachineId}
-                            setCurrentMachineId={setCurrentMachineId}
+                            currentMachineUUID={currentMachineUUID}
+                            setCurrentMachineUUID={setCurrentMachineUUID}
                             machine={machine}
                         />
                     ))}

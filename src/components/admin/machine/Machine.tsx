@@ -1,43 +1,67 @@
 import { useContext, useEffect } from 'react';
 
 import { Machine } from '@prisma/client';
-import { MachineIdContext } from '@/lib/contexts/MachineIdContext';
+import { MachineContext } from '@/lib/contexts/MachineContext';
 
 interface MachineProps {
     machine: Machine;
-    currentMachineId: string;
-    setCurrentMachineId: (machineId: string) => void;
+    currentMachineUUID: string;
+    setCurrentMachineUUID: (machineUUID: string) => void;
 }
 const Machine = ({
     machine,
-    currentMachineId,
-    setCurrentMachineId
+    currentMachineUUID,
+    setCurrentMachineUUID
 }: MachineProps) => {
-    const { machineId, setMachineId } = useContext(MachineIdContext);
+    const { setMachineUUID, setMachineName } = useContext(MachineContext);
 
     // setCurrentMachineId on inital load from localStorage
     useEffect(() => {
         const initalLoad = async () => {
             const machineUUID = localStorage.getItem('machineUUID');
             if (machineUUID) {
-                setCurrentMachineId(machineUUID);
-                setMachineId(machineUUID);
+                setCurrentMachineUUID(machineUUID);
+                setMachineUUID(machineUUID);
+
+                await fetch(`/api/admin/machine/get?UUID=${machineUUID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setMachineName(data.machine.name);
+                    })
+                    .catch((error) => console.error(error));
             }
         };
         initalLoad();
-    }, [setCurrentMachineId, setMachineId]);
+    }, [setCurrentMachineUUID, setMachineUUID, setMachineName]);
 
     const handleOnClick = async () => {
-        setCurrentMachineId(machine.uuid);
-        setMachineId(machine.uuid);
+        setCurrentMachineUUID(machine.uuid);
+        setMachineUUID(machine.uuid);
         localStorage.setItem('machineUUID', machine.uuid);
+
+        await fetch(`/api/admin/machine/get?UUID=${machine.uuid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setMachineName(data.machine.name);
+            })
+            .catch((error) => console.error(error));
     };
 
     return (
         <div
             onClick={handleOnClick}
             className={`flex flex-row items-center justify-center space-x-[2rem] text-green-400 active:bg-slate-400 ${
-                currentMachineId === machine.uuid ? 'text-red-400' : ''
+                currentMachineUUID === machine.uuid ? 'text-red-400' : ''
             }`}
         >
             <div className="text-3xl">

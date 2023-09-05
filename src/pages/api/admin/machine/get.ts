@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import Prisma from '@prisma/client';
+
 import { prisma } from '@/lib/prisma';
 
 export default async function handler(
@@ -9,10 +11,28 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             try {
-                const machines = await prisma.machine.findMany();
-                res.status(200).json({
-                    machines
-                });
+                const { UUID } = req.query;
+                if (UUID) {
+                    await prisma.machine.findUnique({
+                        where: {
+                            uuid: UUID.toString()
+                        }
+                    }).then((machine) => {
+                        if (!machine) {
+                            res.status(404).json({
+                                message: 'Machine not found'
+                            });
+                        }
+                        res.status(200).json({
+                            machine
+                        });
+                    })
+                } else {
+                    const machines = await prisma.machine.findMany();
+                    res.status(200).json({
+                        machines
+                    });
+                }
             } catch (error) {
                 console.log(error);
                 res.status(400).json({
