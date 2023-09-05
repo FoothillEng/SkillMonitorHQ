@@ -10,10 +10,10 @@ const Layout = ({ children }: LayoutProps) => {
     return (
         <div className="flex flex-col min-h-screen justify-between bg-gradient-radial from-blue-950 to-black">
             <Header />
-            {/* <main className="flex flex-row"> */}
-            {children}
-            {/* <SideNav /> */}
-            {/* </main> */}
+            <main className="flex flex-row">
+                {children}
+                <SideNav />
+            </main>
             <Footer />
         </div>
     );

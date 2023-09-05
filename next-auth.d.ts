@@ -5,6 +5,9 @@ declare module 'next-auth' {
         user: {
             id: string;
             studentId: number;
+            firstName: string;
+            lastName: string;
+            avatar: string;
             admin: boolean;
         } & Session['user'];
     }

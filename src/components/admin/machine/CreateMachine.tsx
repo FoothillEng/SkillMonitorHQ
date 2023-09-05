@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { AlphanumericInput } from '@/pages/admin/create';
+import { AlphanumericInput } from '@/pages/admin/student/create';
 
 interface CreateMachineProps {
     setReload: (reload: boolean) => void;

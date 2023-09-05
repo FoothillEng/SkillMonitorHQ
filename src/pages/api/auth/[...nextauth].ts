@@ -30,6 +30,9 @@ export const authOptions: AuthOptions = {
         session({ session, token }) {
             session.user.id = token.id;
             session.user.studentId = token.studentId;
+            session.user.firstName = token.firstName;
+            session.user.lastName = token.lastName;
+            session.user.avatar = token.avatar;
             session.user.admin = token.admin;
             return session;
         },
@@ -37,6 +40,9 @@ export const authOptions: AuthOptions = {
             if (account) {
                 token.id = user.id;
                 token.studentId = (user as User).studentId;
+                token.firstName = (user as User).firstName;
+                token.lastName = (user as User).lastName;
+                token.avatar = (user as User).avatar;
                 token.admin = (user as User).admin;
             }
             return token;
@@ -51,6 +57,7 @@ export const authOptions: AuthOptions = {
     },
     pages: {
         signIn: '/',
+        signOut: '/',
     },
     secret: process.env.NEXTAUTH_SECRET,
     session: { strategy: "jwt", maxAge: 15 * 60 }, // 15 minutes

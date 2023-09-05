@@ -102,7 +102,7 @@ const CreateUser = (props) => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center text-green">
+        <div className="flex flex-col items-center w-screen text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
                 <h1 className="text-center text-9xl mb-[10rem]">
                     Register New Student

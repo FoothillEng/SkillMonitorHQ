@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 
 const Student = (student: User) => {
     return (
-        <div className="flex flex-row items-center justify-center space-x-[2rem] text-green">
+        <div className="flex flex-row items-center justify-center space-x-[2rem]">
             {student && student.avatar && (
                 <CldImage
                     width="50"

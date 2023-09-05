@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 
 import Student from '@/components/Student';
 
-const AdminUsers = (props) => {
+const ListStudents = (props) => {
     const [students, setStudents] = useState<User[]>([]);
 
     useEffect(() => {
@@ -33,4 +33,4 @@ const AdminUsers = (props) => {
     );
 };
 
-export default AdminUsers;
+export default ListStudents;
