@@ -38,13 +38,12 @@ const LockScreen = () => {
     const handleInput = (
         number: number | typeof BsBackspace | typeof AiOutlineEnter
     ) => {
-        // limit to 6 digits
-        if (studentId.length >= 6) return;
         if (number === BsBackspace) {
             setStudentId((prevValue) => prevValue.slice(0, -1));
         } else if (number === AiOutlineEnter) {
             handleSubmit();
         } else {
+            if (studentId.length >= 6) return;
             setStudentId(
                 (prevValue) => prevValue + (number as number).toString()
             );
