@@ -18,9 +18,12 @@ export const AlphanumericInput = ({
     style,
     onChange
 }: AlphanumericInputProps) => {
-    const [value, setInput] = useState('');
+    const [input, setInput] = useState('');
 
     const handleFieldValueChange = (value: string) => {
+        if (type === 'number') {
+            if (value.length > 6) return;
+        }
         setInput(value);
         onChange(_title, value);
     };
@@ -31,7 +34,7 @@ export const AlphanumericInput = ({
                 type={type}
                 onChange={(e) => handleFieldValueChange(e.target.value)}
                 placeholder={`Enter ${title} here`}
-                value={value}
+                value={input}
             />
         </div>
     );
@@ -91,7 +94,7 @@ const CreateUser = (props) => {
                     throw new Error(res.status.toString());
                 }
             })
-            .then(() => router.push('/admin'))
+            .then(() => router.push('/admin/students'))
             .catch((error) => {
                 if (error.message === '403') {
                     setErrorMessage('Student already exists with that ID');
