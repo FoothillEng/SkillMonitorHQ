@@ -5,18 +5,20 @@ import type { Session } from '@prisma/client';
 interface SessionStopWatchProps {
     userId: string;
     userMachineId: number;
+    setUserMachineDuration: (duration: number) => void;
     setError: (error: string) => void;
 }
 
 const SessionStopWatch = ({
     userId,
     userMachineId,
+    setUserMachineDuration,
     setError
 }: SessionStopWatchProps) => {
-    const [session, setSession] = useState<Session>();
     const [time, setTime] = useState(0);
     const intervalIDRef = useRef<NodeJS.Timeout | null>(null);
     const [started, setStarted] = useState(false);
+    const [session, setSession] = useState<Session>();
 
     const handleStart = useCallback(async () => {
         if (started) return;
@@ -52,13 +54,16 @@ const SessionStopWatch = ({
             })
         })
             .then((res) => res.json())
-            .then((res) => setSession(res.session))
+            .then((res) => {
+                setSession(res.session),
+                    setUserMachineDuration(res.userMachineDuration);
+            })
             .then(() => setStarted(false))
             .catch((error) => {
                 console.error(error);
                 setError('An error occurred. Please try again.');
             });
-    }, [setError, setSession, started, session]);
+    }, [setError, setSession, setUserMachineDuration, started, session]);
 
     const startTimer = useCallback(() => {
         if (intervalIDRef.current === null) {

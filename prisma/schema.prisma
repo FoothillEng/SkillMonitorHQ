@@ -60,6 +60,6 @@ model Session {
   duration      Int? //   seconds, computed on session end
   userMachine   UserMachine @relation(fields: [userMachineId], references: [id])
   userMachineId Int
-  User          User?       @relation(fields: [userId], references: [id])
-  userId        String?
+  User          User        @relation(fields: [userId], references: [id])
+  userId        String
 }

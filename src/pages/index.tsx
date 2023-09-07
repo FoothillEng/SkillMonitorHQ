@@ -13,11 +13,23 @@ interface AccessMachine {
     userMachineId?: number;
 }
 
+// returns a string in the format of "HH:MM:SS"
+const formatTime = (milliseconds: number): string => {
+    const seconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+
+    return `Machine time: ${hours > 0 ? (hours % 24) + ':' : ''}${
+        minutes % 60
+    }:${seconds % 60}`;
+};
+
 const Index = (props) => {
     const [error, setError] = useState('');
     const [accessMachine, setAccessMachine] = useState<AccessMachine>({
         allowed: false
     });
+    const [userMachineDuration, setUserMachineDuration] = useState<number>(0); // [milliseconds]
     const { data: nextAuthSession } = useSession();
 
     useEffect(() => {
@@ -47,6 +59,7 @@ const Index = (props) => {
                             allowed: true,
                             userMachineId: data.userMachineId
                         });
+                        setUserMachineDuration(data.userMachineDuration);
                     }
                     if (!data.allowedMachines) return;
                     setAccessMachine({
@@ -72,7 +85,7 @@ const Index = (props) => {
         <div className="w-screen flex flex-col items-center justify-center text-green font-oxygen">
             {!nextAuthSession && <LockScreen />}
             {nextAuthSession && accessMachine.allowed && (
-                <div className="flex flex-col">
+                <div className="flex flex-col text-center ">
                     <div className="flex flex-row">
                         {nextAuthSession.user &&
                             nextAuthSession.user?.avatar && (
@@ -87,10 +100,16 @@ const Index = (props) => {
                                     alt="pfp"
                                 />
                             )}
-                        <div className="w-[50rem] ml-[10rem] text-center text-6xl capitalize">
-                            {nextAuthSession.user?.firstName +
-                                ' ' +
-                                nextAuthSession.user?.lastName}
+                        <div className="flex flex-col space-y-[3rem]">
+                            <div className="w-[50rem] ml-[10rem] text-6xl capitalize">
+                                {nextAuthSession.user?.firstName +
+                                    ' ' +
+                                    nextAuthSession.user?.lastName}
+                            </div>
+                            <div className="w-[50rem] ml-[10rem] text-4xl">
+                                {userMachineDuration &&
+                                    formatTime(userMachineDuration)}
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -98,6 +117,7 @@ const Index = (props) => {
                             <SessionStopWatch
                                 userId={nextAuthSession.user?.id}
                                 userMachineId={accessMachine?.userMachineId}
+                                setUserMachineDuration={setUserMachineDuration}
                                 setError={setError}
                             />
                         )}

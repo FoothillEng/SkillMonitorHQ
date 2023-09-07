@@ -31,8 +31,8 @@ export default async function handler(
                             data: {
                                 usageCount: userMachine.usageCount + 1
                             }
-                        });
-                        res.status(200).json({ allowed: true, userMachineId: userMachine.id });
+                        })
+                        res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration });
                     } else {
                         // return with a list of allowed machines
                         const allowedMachines = await prisma.userMachine.findMany({
