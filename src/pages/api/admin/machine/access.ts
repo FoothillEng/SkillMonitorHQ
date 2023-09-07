@@ -14,8 +14,6 @@ export default async function handler(
                 res.status(400).json({ error: 'Missing parameters.' });
                 return;
             }
-            console.log(userId.toString(), machineUUID.toString())
-
             try {
                 // Check if the user is allowed to use the machine
                 await prisma.userMachine.findUnique({

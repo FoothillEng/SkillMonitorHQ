@@ -82,7 +82,7 @@ const CreateUser = (props) => {
             formData.studentId as unknown as string
         );
 
-        await fetch('/api/admin/createStudent', {
+        await fetch('/api/admin/student/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -8,7 +8,7 @@ const ListStudents = (props) => {
 
     useEffect(() => {
         const fetchStudents = async () => {
-            await fetch('/api/admin/getStudents', {
+            await fetch('/api/admin/student/get', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

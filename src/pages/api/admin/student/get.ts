@@ -11,7 +11,7 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             try {
-                const session = await getServerSession(req, res, authOptions);
+                const session = await getServerSession(req, res, authOptions); // dont need this anymore since middleware is used
 
                 if (session) {
                     if (session.user.admin) {
