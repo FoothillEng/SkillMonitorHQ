@@ -57,6 +57,10 @@ model UserMachine {
   userId      String
   machine     Machine @relation(fields: [machineId, machineUUID], references: [id, uuid], onDelete: Cascade)
   machineId   Int // do i rlly need both of these linked?
-  machineUUID String
+  machineUUID String  @unique
   minutes     Int     @default(0)
+  usageCount  Int     @default(0)
+  tourPassed  Boolean @default(false)
+  testPassed  Boolean @default(false)
+  // assistants  Assistant[]
 }

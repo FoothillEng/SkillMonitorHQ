@@ -1,3 +1,6 @@
+import { useState, useEffect, useContext, useRef } from 'react';
+
+import { MachineContext } from '@/lib/contexts/MachineContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SideNav from '@/components/SideNav';
@@ -7,6 +10,32 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
+    const wasCalled = useRef(false);
+    const { setMachineUUID, setMachineName } = useContext(MachineContext);
+
+    useEffect(() => {
+        if (wasCalled.current) return;
+        wasCalled.current = true;
+        const initialLoad = async () => {
+            const machineUUID = localStorage.getItem('machineUUID');
+
+            if (!machineUUID) return;
+            setMachineUUID(machineUUID);
+
+            await fetch(`/api/machine/get?UUID=${machineUUID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setMachineName(data.machine.name);
+                })
+                .catch((error) => console.error(error));
+        };
+        initialLoad();
+    }, [setMachineName, setMachineUUID]);
     return (
         <div className="flex flex-col min-h-screen justify-between bg-gradient-radial from-blue-950 to-black">
             <Header />

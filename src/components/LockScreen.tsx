@@ -51,9 +51,6 @@ const LockScreen = () => {
     };
 
     const handleSubmit = async () => {
-        setError('');
-        console.log(studentId);
-
         const parsedStudentId = parseInt(studentId);
 
         if (!isNaN(parsedStudentId)) {
