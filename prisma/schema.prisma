@@ -14,32 +14,17 @@ enum StudentLevel {
   LEVEL_3
 }
 
-model AllStudents {
-  id        Int    @id @default(autoincrement())
-  studentId Int    @unique
-  firstName String
-  lastName  String
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
-}
-
 model User {
   id            String        @id @default(uuid())
   studentId     Int           @unique
   firstName     String
   lastName      String
   avatar        String
-  sessions      Session[]
   level         StudentLevel  @default(LEVEL_1)
   lifetimeHours Int           @default(0)
   admin         Boolean       @default(false)
   machines      UserMachine[]
+  sessions      Session[]
 }
 
 model Machine {
@@ -52,15 +37,29 @@ model Machine {
 }
 
 model UserMachine {
-  id          Int     @id @default(autoincrement())
-  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  machine     Machine @relation(fields: [machineId, machineUUID], references: [id, uuid], onDelete: Cascade)
+  machine     Machine   @relation(fields: [machineId, machineUUID], references: [id, uuid], onDelete: Cascade)
   machineId   Int // do i rlly need both of these linked?
-  machineUUID String  @unique
-  minutes     Int     @default(0)
-  usageCount  Int     @default(0)
-  tourPassed  Boolean @default(false)
-  testPassed  Boolean @default(false)
+  machineUUID String    @unique
+  duration    Int       @default(0) // seconds, computed on session end
+  usageCount  Int       @default(0)
+  tourPassed  Boolean   @default(false)
+  testPassed  Boolean   @default(false)
   // assistants  Assistant[]
+  sessions    Session[]
+
+  @@unique([machineId, machineUUID])
+}
+
+model Session {
+  id            String      @id @default(uuid())
+  startTime     DateTime    @default(now())
+  endTime       DateTime?
+  duration      Int? //   seconds, computed on session end
+  userMachine   UserMachine @relation(fields: [userMachineId], references: [id])
+  userMachineId Int
+  User          User?       @relation(fields: [userId], references: [id])
+  userId        String?
 }

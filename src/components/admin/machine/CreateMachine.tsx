@@ -69,7 +69,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                     />
                 </div>
                 <button
-                    className="flex items-center mt-[3rem] mx-auto cursor-pointer mb-2 p-2"
+                    className="flex items-center mt-[3rem] mx-auto mb-2 p-2"
                     type="submit"
                 >
                     <div className="text-5xl outline outline-4 p-4 text-center active:bg-slate-400">
