@@ -13,15 +13,28 @@ interface AccessMachine {
     userMachineId?: number;
 }
 
-// returns a string in the format of "HH:MM:SS"
+// returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
 const formatTime = (milliseconds: number): string => {
+    console.log(milliseconds);
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
 
-    return `Machine time: ${hours > 0 ? (hours % 24) + ':' : ''}${
-        minutes % 60
-    }:${seconds % 60}`;
+    const formattedSeconds = seconds % 60;
+    const formattedMinutes = minutes % 60;
+    const formattedHours = hours % 60;
+
+    return (
+        'Hours on Machine: ' +
+        (formattedHours < 10 ? '0' : '') +
+        formattedHours +
+        ':' +
+        (formattedMinutes < 10 ? '0' : '') +
+        formattedMinutes +
+        ':' +
+        (formattedSeconds < 10 ? '0' : '') +
+        formattedSeconds
+    );
 };
 
 const Index = (props) => {
@@ -106,7 +119,7 @@ const Index = (props) => {
                                     ' ' +
                                     nextAuthSession.user?.lastName}
                             </div>
-                            <div className="w-[50rem] ml-[10rem] text-4xl">
+                            <div className="w-[50rem] ml-[19.5rem] text-5xl">
                                 {userMachineDuration &&
                                     formatTime(userMachineDuration)}
                             </div>

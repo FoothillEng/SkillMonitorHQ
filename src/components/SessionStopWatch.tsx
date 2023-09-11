@@ -82,35 +82,37 @@ const SessionStopWatch = ({
 
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">
-            <div className="text-5xl">
+            <div className="text-6xl">
                 <span>
                     {('0' + Math.floor((time / 60000) % 60)).slice(-2)}:
                 </span>
                 <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
                 <span>{('0' + ((time / 10) % 100)).slice(-2)}</span>
             </div>
-            <div className="flex flex-row space-x-[3rem]">
+
+            {started ? (
+                <button
+                    className="flex items-center mt-[3rem] mx-auto mb-2 p-2"
+                    onClick={() => {
+                        stopTimer(), handleStop();
+                    }}
+                >
+                    <div className="w-[20rem] outline outline-4 p-4 active:bg-slate-400 text-5xl text-center">
+                        Stop Session
+                    </div>
+                </button>
+            ) : (
                 <button
                     className="flex items-center mt-[3rem] mx-auto mb-2 p-2"
                     onClick={() => {
                         startTimer(), handleStart();
                     }}
                 >
-                    <div className="w-[10rem] outline outline-4 p-4 active:bg-slate-400 text-5xl text-center">
-                        Start
+                    <div className="w-[30rem] outline outline-4 p-[2rem] active:bg-slate-400 text-5xl text-center">
+                        Start New Session
                     </div>
                 </button>
-                <button
-                    className="flex items-center w-[10rem] mt-[3rem] mx-auto mb-2 p-2"
-                    onClick={() => {
-                        stopTimer(), handleStop();
-                    }}
-                >
-                    <div className="w-[10rem] outline outline-4 p-4 active:bg-slate-400 text-5xl text-center">
-                        Stop
-                    </div>
-                </button>
-            </div>
+            )}
         </div>
     );
 };
