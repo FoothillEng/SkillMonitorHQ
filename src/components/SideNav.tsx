@@ -87,7 +87,12 @@ const SideNav = () => {
                                 <div className="border-t-2 border-blue-300 mt-[1rem] mb-[2rem]" />
                             </div>
                         )}
-                        {user && <Student {...user} />}
+                        {user && (
+                            <Student
+                                student={user}
+                                viewId={session.user?.admin}
+                            />
+                        )}
 
                         <NavItem
                             href="#"

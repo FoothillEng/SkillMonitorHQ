@@ -2,7 +2,12 @@ import { CldImage } from 'next-cloudinary';
 
 import { User } from '@prisma/client';
 
-const Student = (student: User) => {
+interface StudentProps {
+    student: User;
+    viewId: boolean;
+}
+
+const Student = ({ student, viewId }: StudentProps) => {
     return (
         <div className="flex flex-row items-center justify-center space-x-[2rem]">
             {student && student.avatar && (
@@ -21,7 +26,7 @@ const Student = (student: User) => {
             <h1 className="text-3xl capitalize">
                 {student.firstName} {student.lastName}
             </h1>
-            <h2 className="text-3xl"> {student.studentId} </h2>
+            {viewId && <h2 className="text-3xl"> {student.studentId} </h2>}
         </div>
     );
 };
