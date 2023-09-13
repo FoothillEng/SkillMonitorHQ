@@ -14,9 +14,7 @@ export const authOptions: AuthOptions = {
                 studentId: { label: 'Student Id', type: 'number', placeholder: 'Enter your student ID' },
             },
             async authorize(credentials, req) {
-                // const { studentId } = loginUserSchema.parse(credentials);
                 const studentId = parseInt(credentials?.studentId as string);
-                console.log(studentId);
                 const user = await prisma.user.findUnique({
                     where: { studentId },
                 });
@@ -34,18 +32,33 @@ export const authOptions: AuthOptions = {
             session.user.lastName = token.lastName;
             session.user.avatar = token.avatar;
             session.user.admin = token.admin;
+            session.user.isFirstLogin = token.isFirstLogin;
+            session.user.message = token.message;
             return session;
         },
-        jwt({ token, account, user }) {
-            if (account) {
-                token.id = user.id;
+        jwt({ token, user, account, trigger, session }) {
+            if (account?.provider === 'credentials') {
+                token.id = (user as User).id;
                 token.studentId = (user as User).studentId;
                 token.firstName = (user as User).firstName;
                 token.lastName = (user as User).lastName;
                 token.avatar = (user as User).avatar;
                 token.admin = (user as User).admin;
             }
+
+            if (trigger === 'signIn') {
+                token.isFirstLogin = true;
+            } else {
+                if (!(token.isFirstLogin === false)) {
+                    const indexPageHasLoaded = session?.message === "ab247ac550e244a1f71147fb444a4ef101cc49bd32edb912ea35076b15e147de"; // just means page is loaded
+                    if (indexPageHasLoaded) {
+                        token.isFirstLogin = false;
+                    }
+                }
+            }
+
             return token;
+
         },
         async redirect({ url, baseUrl }) {
             // Allows relative callback URLs
@@ -60,7 +73,7 @@ export const authOptions: AuthOptions = {
         signOut: '/',
     },
     secret: process.env.NEXTAUTH_SECRET,
-    session: { strategy: "jwt", maxAge: 15 * 60 }, // 15 minutes
+    session: { strategy: "jwt", maxAge: 1 * 60 }, // 60 minutes ??
 
 
     jwt: {

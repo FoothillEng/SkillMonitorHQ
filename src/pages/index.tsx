@@ -1,21 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
 import { CldImage } from 'next-cloudinary';
 
 import LockScreen from '@/components/LockScreen';
+import StarRating from '@/components/StarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
 
 interface AccessMachine {
     allowed: boolean;
     allowedMachines?: Machine[];
     userMachineId?: number;
+    averageRating?: number;
+    lastLoginId?: number;
 }
 
+interface FormattedTimeProps {
+    milliseconds: number;
+}
 // returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
-const formatTime = (milliseconds: number): string => {
-    console.log(milliseconds);
+const FormattedTime = ({ milliseconds }: FormattedTimeProps) => {
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -25,29 +30,49 @@ const formatTime = (milliseconds: number): string => {
     const formattedHours = hours % 60;
 
     return (
-        'Hours on Machine: ' +
-        (formattedHours < 10 ? '0' : '') +
-        formattedHours +
-        ':' +
-        (formattedMinutes < 10 ? '0' : '') +
-        formattedMinutes +
-        ':' +
-        (formattedSeconds < 10 ? '0' : '') +
-        formattedSeconds
+        <div>
+            {'Hours on Machine: ' +
+                (formattedHours < 10 ? '0' : '') +
+                formattedHours +
+                ':' +
+                (formattedMinutes < 10 ? '0' : '') +
+                formattedMinutes +
+                ':' +
+                (formattedSeconds < 10 ? '0' : '') +
+                formattedSeconds}
+        </div>
     );
 };
 
 const Index = (props) => {
     const [error, setError] = useState('');
     const [accessMachine, setAccessMachine] = useState<AccessMachine>({
-        allowed: false
+        allowed: false,
+        lastLoginId: 0
     });
     const [userMachineDuration, setUserMachineDuration] = useState<number>(0); // [milliseconds]
-    const { data: nextAuthSession } = useSession();
+    const [wasCalled, setWasCalled] = useState(false);
+    const { data: nextAuthSession, update } = useSession();
+
+    const handleStarRatingClick = async () => {
+        setAccessMachine((prevAccessMachine) => ({
+            ...prevAccessMachine,
+            lastLoginId: 0
+        }));
+    };
+
+    useEffect(() => {
+        if (wasCalled != true) return;
+        update({
+            message:
+                'ab247ac550e244a1f71147fb444a4ef101cc49bd32edb912ea35076b15e147de' // just means page is loaded
+        });
+    }, [wasCalled, nextAuthSession?.user?.isFirstLogin, update]);
 
     useEffect(() => {
         const machineUUID = localStorage.getItem('machineUUID');
         const userId = nextAuthSession?.user?.id;
+        const isFirstLogin = nextAuthSession?.user?.isFirstLogin;
         if (!userId) return;
         if (!machineUUID) {
             // go to /admin/machine to set machine
@@ -57,7 +82,7 @@ const Index = (props) => {
 
         const setMachineUsage = async () => {
             await fetch(
-                `/api/admin/machine/access?machineUUID=${machineUUID}&userId=${nextAuthSession?.user?.id}`,
+                `/api/admin/machine/access?machineUUID=${machineUUID}&userId=${userId}&isFirstLogin=${isFirstLogin}`,
                 {
                     method: 'GET',
                     headers: {
@@ -70,7 +95,10 @@ const Index = (props) => {
                     if (data.allowed === true) {
                         setAccessMachine({
                             allowed: true,
-                            userMachineId: data.userMachineId
+                            userMachineId: data.userMachineId,
+                            lastLoginId:
+                                data.lastLoginId == null ? 0 : data.lastLoginId,
+                            averageRating: data.averageRating
                         });
                         setUserMachineDuration(data.userMachineDuration);
                     }
@@ -92,7 +120,10 @@ const Index = (props) => {
                 });
         };
         setMachineUsage();
-    }, [nextAuthSession?.user?.id]);
+        setWasCalled(true);
+    }, [nextAuthSession?.user?.id, nextAuthSession?.user?.isFirstLogin]);
+
+    useEffect(() => {}, [accessMachine.lastLoginId]);
 
     return (
         <div className="w-screen flex flex-col items-center justify-center text-green font-oxygen">
@@ -120,19 +151,46 @@ const Index = (props) => {
                                     nextAuthSession.user?.lastName}
                             </div>
                             <div className="w-[50rem] ml-[19.5rem] text-5xl">
-                                {userMachineDuration &&
-                                    formatTime(userMachineDuration)}
+                                {userMachineDuration && (
+                                    <FormattedTime
+                                        milliseconds={userMachineDuration}
+                                    />
+                                )}
                             </div>
+                            {accessMachine.averageRating && (
+                                <div className="text-5xl mt-[3rem]">
+                                    Average Rating:{' '}
+                                    {accessMachine.averageRating}
+                                    {nextAuthSession.user?.isFirstLogin}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div>
-                        {nextAuthSession && accessMachine.userMachineId && (
-                            <SessionStopWatch
-                                userId={nextAuthSession.user?.id}
-                                userMachineId={accessMachine?.userMachineId}
-                                setUserMachineDuration={setUserMachineDuration}
-                                setError={setError}
-                            />
+                        {accessMachine.lastLoginId &&
+                        accessMachine.lastLoginId > 0 ? (
+                            <div className="text-5xl mt-[3rem]">
+                                <StarRating
+                                    currentUserId={nextAuthSession.user?.id}
+                                    userLoginId={accessMachine.lastLoginId}
+                                    handleStarRatingClick={
+                                        handleStarRatingClick
+                                    }
+                                    setError={setError}
+                                />
+                            </div>
+                        ) : (
+                            nextAuthSession &&
+                            accessMachine.userMachineId && (
+                                <SessionStopWatch
+                                    userId={nextAuthSession.user?.id}
+                                    userMachineId={accessMachine?.userMachineId}
+                                    setUserMachineDuration={
+                                        setUserMachineDuration
+                                    }
+                                    setError={setError}
+                                />
+                            )
                         )}
                     </div>
                 </div>

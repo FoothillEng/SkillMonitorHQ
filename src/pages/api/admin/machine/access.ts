@@ -2,37 +2,68 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from '@/lib/prisma';
 
-
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
 ) {
     switch (req.method) {
         case 'GET':
-            const { userId, machineUUID } = req.query;
-            if (!userId || !machineUUID) {
+            const { userId = 0, machineUUID = '', isFirstLogin = false }: { userId?: number; machineUUID?: string; isFirstLogin?: boolean } = req.query;
+
+            if (!userId || !machineUUID || !isFirstLogin) {
                 res.status(400).json({ error: 'Missing parameters.' });
                 return;
             }
+
+            const isLoginSession = ((isFirstLogin + '').toLowerCase() === 'true')
+
             try {
                 // Check if the user is allowed to use the machine
-                await prisma.userMachine.findUnique({
+                await prisma.userMachine.findFirst({
                     where: {
                         userId: userId.toString(),
                         machineUUID: machineUUID.toString()
                     },
                 }).then(async (userMachine) => {
+
                     if (userMachine) {
                         await prisma.userMachine.update({
                             where: {
-                                userId: userId.toString(),
-                                machineUUID: machineUUID.toString()
+                                id: userMachine.id,
                             },
                             data: {
-                                usageCount: userMachine.usageCount + 1
+                                usageCount: userMachine.usageCount + 1,
                             }
                         })
-                        res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration });
+
+                        const lastLogin = await prisma.userLogin.findFirst({
+                            where: {
+                                machineId: userMachine.machineId,
+                                isLoginSession: true,
+                                rated: false,
+                                NOT: {
+                                    userId: userId.toString()
+                                }
+                            },
+                            orderBy: {
+                                loginTime: 'desc'
+                            }
+                        })
+
+
+                        await prisma.userLogin.create({
+                            data: {
+                                userId: userId.toString(),
+                                machineId: userMachine.machineId,
+                                isLoginSession,
+                            }
+                        });
+
+                        if (lastLogin) {
+                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, averageRating: userMachine.averageRating, lastLoginId: lastLogin.id });
+                        } else {
+                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, averageRating: userMachine.averageRating, });
+                        }
                     } else {
                         // return with a list of allowed machines
                         const allowedMachines = await prisma.userMachine.findMany({
