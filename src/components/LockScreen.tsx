@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { BsBackspace } from 'react-icons/bs';
@@ -6,6 +6,8 @@ import { AiOutlineEnter } from 'react-icons/ai';
 
 import { signIn } from 'next-auth/react';
 
+import ListStudents from '@/components/ListStudents';
+import { MachineContext } from '@/lib/contexts/MachineContext';
 interface NumberBoxProps {
     value: number | typeof BsBackspace | typeof AiOutlineEnter;
     onNumberClick: (
@@ -33,6 +35,7 @@ const NumberBox = ({ value, onNumberClick }: NumberBoxProps) => {
 const LockScreen = () => {
     const [studentId, setStudentId] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const { machineUUID } = useContext(MachineContext);
     const router = useRouter();
 
     const handleInput = (
@@ -55,14 +58,12 @@ const LockScreen = () => {
 
         if (!isNaN(parsedStudentId)) {
             await signIn('credentials', {
-                studentId: parsedStudentId,
-                redirect: false
+                studentId: parsedStudentId
+                // redirect: false
             }).then((res) => {
                 if (res && res.error) {
                     setError('Error signing in, please try again');
                     setStudentId('');
-                } else {
-                    router.replace('/');
                 }
             });
         }
@@ -106,6 +107,16 @@ const LockScreen = () => {
                     ))}
                 </div>
             </form>
+            {machineUUID && (
+                <div className="flex flex-col items-center justify-center mt-[3rem] text-blue-300">
+                    <div className="text-5xl mb-[3rem]">Last used:</div>
+                    <ListStudents
+                        fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
+                        viewId={false}
+                        style={'flex flex-row space-x-[2rem]'}
+                    />
+                </div>
+            )}
             {error && (
                 <div className="mt-[5rem] text-red-500 text-3xl">{error}</div>
             )}

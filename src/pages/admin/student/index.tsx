@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import ListStudents from '@/components/admin/students';
+import ListStudents from '@/components/ListStudents';
 
 const AdminStudentsIndex = (props) => {
     return (
@@ -8,7 +8,7 @@ const AdminStudentsIndex = (props) => {
             <div className="outline outline-4 active:bg-purple-300 mb-[5rem] p-[2rem] text-4xl ">
                 <Link href={'/admin/student/create'}>New Student</Link>
             </div>
-            <ListStudents />
+            <ListStudents fetchUrl="/api/admin/student/get" viewId={true} />
         </div>
     );
 };
