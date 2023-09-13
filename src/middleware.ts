@@ -16,3 +16,6 @@ export default withAuth({
 })
 
 export const config = { matcher: ["/admin/:path*", "/api/admin/:path*"] }
+
+// for timeout logic
+// one route would be doing it possible through middleware??? probably not. safer, more reliable option is using setInterval to check if timeout has passed

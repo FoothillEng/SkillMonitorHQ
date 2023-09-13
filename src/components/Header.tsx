@@ -1,5 +1,6 @@
-import { MachineContext } from '@/lib/contexts/MachineContext';
 import { useContext } from 'react';
+
+import { MachineContext } from '@/lib/contexts/MachineContext';
 
 const Header = () => {
     const { machineName } = useContext(MachineContext);
