@@ -77,6 +77,7 @@ const SessionStopWatch = ({
         if (intervalIDRef.current !== null) {
             clearInterval(intervalIDRef.current);
             intervalIDRef.current = null;
+            setTime(0);
         }
     }, []);
 
