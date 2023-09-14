@@ -43,6 +43,9 @@ const StarRating = ({
 
     return (
         <div className="flex flex-row space-x-[2rem]">
+            <div className="text-5xl">
+                <p>Rate the cleanliness of the last user</p>
+            </div>
             {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                     key={star}

@@ -6,6 +6,7 @@ import { CldImage } from 'next-cloudinary';
 
 import LockScreen from '@/components/LockScreen';
 import StarRating from '@/components/StarRating';
+import DynamicStarRating from '@/components/DynamicStarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
 
 interface AccessMachine {
@@ -62,11 +63,12 @@ const Index = (props) => {
     };
 
     useEffect(() => {
-        if (wasCalled != true) return;
+        if (!wasCalled) return;
         update({
             message:
                 'ab247ac550e244a1f71147fb444a4ef101cc49bd32edb912ea35076b15e147de' // just means page is loaded
         });
+        setWasCalled(false);
     }, [wasCalled, nextAuthSession?.user?.isFirstLogin, update]);
 
     useEffect(() => {
@@ -123,53 +125,55 @@ const Index = (props) => {
         setWasCalled(true);
     }, [nextAuthSession?.user?.id, nextAuthSession?.user?.isFirstLogin]);
 
-    useEffect(() => {}, [accessMachine.lastLoginId]);
-
     return (
         <div className="w-screen flex flex-col items-center justify-center text-green font-oxygen">
             {!nextAuthSession && <LockScreen />}
             {nextAuthSession && accessMachine.allowed && (
-                <div className="flex flex-col text-center ">
-                    <div className="flex flex-row">
-                        {nextAuthSession.user &&
-                            nextAuthSession.user?.avatar && (
-                                <CldImage
-                                    width="300"
-                                    height="300"
-                                    sizes="100vw"
-                                    src={nextAuthSession.user?.avatar}
-                                    rawTransformations={[
-                                        'c_crop,g_face/c_scale,w_200,h_200/r_max/e_grayscale/f_auto'
-                                    ]}
-                                    alt="pfp"
-                                />
+                <div className="flex flex-col text-center">
+                    <div className="flex flex-row text-5xl">
+                        <div className="flex flex-col space-x-[2rem]">
+                            {nextAuthSession.user &&
+                                nextAuthSession.user?.avatar && (
+                                    <CldImage
+                                        width="300"
+                                        height="300"
+                                        sizes="100vw"
+                                        src={nextAuthSession.user?.avatar}
+                                        rawTransformations={[
+                                            'c_crop,g_face/c_scale,w_200,h_200/r_max/e_grayscale/f_auto'
+                                        ]}
+                                        alt="pfp"
+                                    />
+                                )}
+                            {accessMachine.averageRating && (
+                                <div className="mt-[3rem]">
+                                    <DynamicStarRating
+                                        averageRating={
+                                            accessMachine.averageRating
+                                        }
+                                    />
+                                </div>
                             )}
-                        <div className="flex flex-col space-y-[3rem]">
-                            <div className="w-[50rem] ml-[10rem] text-6xl capitalize">
+                        </div>
+                        <div className="flex flex-col ml-[10rem] text-start space-y-[3rem]">
+                            <div className="w-[50rem] text-6xl capitalize">
                                 {nextAuthSession.user?.firstName +
                                     ' ' +
                                     nextAuthSession.user?.lastName}
                             </div>
-                            <div className="w-[50rem] ml-[19.5rem] text-5xl">
+                            <div className="w-[50rem] text-5xl">
                                 {userMachineDuration && (
                                     <FormattedTime
                                         milliseconds={userMachineDuration}
                                     />
                                 )}
                             </div>
-                            {accessMachine.averageRating && (
-                                <div className="text-5xl mt-[3rem]">
-                                    Average Rating:{' '}
-                                    {accessMachine.averageRating}
-                                    {nextAuthSession.user?.isFirstLogin}
-                                </div>
-                            )}
                         </div>
                     </div>
-                    <div>
+                    <div className="mt-[7rem]">
                         {accessMachine.lastLoginId &&
                         accessMachine.lastLoginId > 0 ? (
-                            <div className="text-5xl mt-[3rem]">
+                            <div className="text-5xl">
                                 <StarRating
                                     currentUserId={nextAuthSession.user?.id}
                                     userLoginId={accessMachine.lastLoginId}
