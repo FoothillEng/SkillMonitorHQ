@@ -21,7 +21,7 @@ export default async function handler(
                     res.status(500).json({ error: 'Unable to end session.' });
                 });
 
-                const sumMachineHoursSession = await prisma.session.aggregate(
+                const sumMachineHoursSession = await prisma.session.aggregate( // instead of summing all sessions, just add the current session to  userMachine.duration, that way sessinos can be delted safely
                     {
                         where: {
                             userId: session?.userId,
@@ -50,7 +50,7 @@ export default async function handler(
                         res.status(500).json({ error: 'An error occurred.' });
                     });
 
-                const sumLifetimeHours = await prisma.userMachine.aggregate(
+                const sumLifetimeDuration = await prisma.userMachine.aggregate(
                     {
                         where: {
                             userId: session?.userId,
@@ -69,7 +69,7 @@ export default async function handler(
                         id: session?.userId,
                     },
                     data: {
-                        lifetimeDuration: sumLifetimeHours && sumLifetimeHours._sum?.duration !== null ? sumLifetimeHours._sum.duration : undefined
+                        lifetimeDuration: sumLifetimeDuration && sumLifetimeDuration._sum?.duration !== null ? sumLifetimeDuration._sum.duration : undefined
                     },
                 }).catch((error) => {
                     console.error(error);

@@ -48,7 +48,7 @@ export default async function handler(
                     lastName: login.user.lastName,
                     avatar: login.user.avatar,
                     level: login.user.level,
-                    lifetimeHours: login.user.lifetimeHours,
+                    lifetimeDuration: login.user.lifetimeDuration,
                     admin: login.user.admin,
                 }))
 
