@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 // import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
@@ -18,10 +18,14 @@ interface AccessMachine {
 }
 
 interface FormattedTimeProps {
+    prependedString: string;
     milliseconds: number;
 }
 // returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
-const FormattedTime = ({ milliseconds }: FormattedTimeProps) => {
+const FormattedTime = ({
+    prependedString,
+    milliseconds
+}: FormattedTimeProps) => {
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -32,7 +36,7 @@ const FormattedTime = ({ milliseconds }: FormattedTimeProps) => {
 
     return (
         <div>
-            {'Hours on Machine: ' +
+            {prependedString +
                 (formattedHours < 10 ? '0' : '') +
                 formattedHours +
                 ':' +
@@ -51,7 +55,9 @@ const Index = (props) => {
         allowed: false,
         lastLoginId: 0
     });
-    const [userMachineDuration, setUserMachineDuration] = useState<number>(0); // [milliseconds]
+    const [userMachineDuration, setUserMachineDuration] = useState<number>(-1); // [milliseconds]
+    const [userLifetimeDuration, setUserLifetimeDuration] =
+        useState<number>(-1); // [milliseconds]
     const [wasCalled, setWasCalled] = useState(false);
     const { data: nextAuthSession, update } = useSession();
 
@@ -103,6 +109,7 @@ const Index = (props) => {
                             averageRating: data.averageRating
                         });
                         setUserMachineDuration(data.userMachineDuration);
+                        setUserLifetimeDuration(data.userLifetimeDuration);
                     }
                     if (!data.allowedMachines) return;
                     setAccessMachine({
@@ -161,10 +168,17 @@ const Index = (props) => {
                                     ' ' +
                                     nextAuthSession.user?.lastName}
                             </div>
-                            <div className="w-[50rem] text-5xl">
-                                {userMachineDuration && (
+                            <div className="text-5xl space-y-[2rem]">
+                                {userMachineDuration != -1 && (
                                     <FormattedTime
+                                        prependedString="This Machine: "
                                         milliseconds={userMachineDuration}
+                                    />
+                                )}
+                                {userLifetimeDuration != -1 && (
+                                    <FormattedTime
+                                        prependedString="All Machines: "
+                                        milliseconds={userLifetimeDuration}
                                     />
                                 )}
                             </div>
@@ -191,6 +205,9 @@ const Index = (props) => {
                                     userMachineId={accessMachine?.userMachineId}
                                     setUserMachineDuration={
                                         setUserMachineDuration
+                                    }
+                                    setUserLifetimeDuration={
+                                        setUserLifetimeDuration
                                     }
                                     setError={setError}
                                 />

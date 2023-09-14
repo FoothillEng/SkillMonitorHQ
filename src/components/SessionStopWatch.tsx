@@ -6,6 +6,7 @@ interface SessionStopWatchProps {
     userId: string;
     userMachineId: number;
     setUserMachineDuration: (duration: number) => void;
+    setUserLifetimeDuration: (duration: number) => void;
     setError: (error: string) => void;
 }
 
@@ -13,6 +14,7 @@ const SessionStopWatch = ({
     userId,
     userMachineId,
     setUserMachineDuration,
+    setUserLifetimeDuration,
     setError
 }: SessionStopWatchProps) => {
     const [time, setTime] = useState(0);
@@ -56,14 +58,22 @@ const SessionStopWatch = ({
             .then((res) => res.json())
             .then((res) => {
                 setSession(res.session),
-                    setUserMachineDuration(res.userMachineDuration);
+                    setUserMachineDuration(res.userMachineDuration),
+                    setUserLifetimeDuration(res.userLifetimeDuration);
             })
             .then(() => setStarted(false))
             .catch((error) => {
                 console.error(error);
                 setError('An error occurred. Please try again.');
             });
-    }, [setError, setSession, setUserMachineDuration, started, session]);
+    }, [
+        setError,
+        setSession,
+        setUserMachineDuration,
+        setUserLifetimeDuration,
+        started,
+        session
+    ]);
 
     const startTimer = useCallback(() => {
         if (intervalIDRef.current === null) {

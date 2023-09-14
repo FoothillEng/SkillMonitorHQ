@@ -15,17 +15,17 @@ enum StudentLevel {
 }
 
 model User {
-  id            String        @id @default(uuid())
-  studentId     Int           @unique
-  firstName     String
-  lastName      String
-  avatar        String
-  level         StudentLevel  @default(LEVEL_1)
-  lifetimeHours Int           @default(0)
-  admin         Boolean       @default(false)
-  machines      UserMachine[]
-  sessions      Session[]
-  UserLogin     UserLogin[]
+  id               String        @id @default(uuid())
+  studentId        Int           @unique
+  firstName        String
+  lastName         String
+  avatar           String
+  level            StudentLevel  @default(LEVEL_1)
+  lifetimeDuration Int           @default(0)
+  admin            Boolean       @default(false)
+  machines         UserMachine[]
+  sessions         Session[]
+  UserLogin        UserLogin[]
 }
 
 model Machine {
@@ -49,7 +49,7 @@ model UserMachine {
   usageCount            Int       @default(0)
   cumulativeRatingSum   Int       @default(0)
   cumulativeRatingCount Int       @default(0)
-  averageRating         Float     @default(0)
+  averageRating         Float     @default(5)
   tourPassed            Boolean   @default(false)
   testPassed            Boolean   @default(false)
   // assistants  Assistant[]

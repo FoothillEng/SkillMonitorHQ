@@ -36,20 +36,48 @@ export default async function handler(
                     res.status(500).json({ error: 'An error occurred.' });
                 });
 
-                await prisma.userMachine.update({
+
+                const userMachine = await prisma.userMachine.update({
                     where: {
                         id: session?.userMachineId
                     },
                     data: {
                         duration: sumMachineHoursSession && sumMachineHoursSession._sum?.duration !== null ? sumMachineHoursSession._sum.duration : undefined
                     }
-                }).then((userMachine) => {
-                    res.status(200).json({ session, userMachineDuration: userMachine.duration });
                 })
                     .catch((error) => {
                         console.error(error);
                         res.status(500).json({ error: 'An error occurred.' });
                     });
+
+                const sumLifetimeHours = await prisma.userMachine.aggregate(
+                    {
+                        where: {
+                            userId: session?.userId,
+                        },
+                        _sum: {
+                            duration: true
+                        },
+                    }
+                ).catch((error) => {
+                    console.error(error);
+                    res.status(500).json({ error: 'An error occurred.' });
+                });
+
+                const user = await prisma.user.update({
+                    where: {
+                        id: session?.userId,
+                    },
+                    data: {
+                        lifetimeDuration: sumLifetimeHours && sumLifetimeHours._sum?.duration !== null ? sumLifetimeHours._sum.duration : undefined
+                    },
+                }).catch((error) => {
+                    console.error(error);
+                    res.status(500).json({ error: 'An error occurred.' });
+                });
+
+
+                res.status(200).json({ session, userMachineDuration: userMachine?.duration, userLifetimeDuration: user?.lifetimeDuration });
             } catch (error) {
                 console.log(error);
                 res.status(400).json({

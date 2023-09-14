@@ -59,10 +59,20 @@ export default async function handler(
                             }
                         });
 
+                        const user = await prisma.user.findUnique({
+                            where: {
+                                id: userId.toString()
+                            },
+                            select: {
+                                lifetimeDuration: true
+                            }
+                        });;
+
+
                         if (lastLogin) {
-                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, averageRating: userMachine.averageRating, lastLoginId: lastLogin.id });
+                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, lastLoginId: lastLogin.id });
                         } else {
-                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, averageRating: userMachine.averageRating, });
+                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, });
                         }
                     } else {
                         // return with a list of allowed machines
