@@ -9,10 +9,56 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             try {
-                const students = await prisma.user.findMany();
+                const { machineUUID } = req.query;
+
+                if (!machineUUID) {
+                    res.status(400).json({
+                        message: 'Missing machineUUID'
+                    });
+                    return;
+                }
+
+
+
+                const machineUsers = await prisma.machine.findUnique({
+                    where: {
+                        uuid: machineUUID as string
+                    },
+                    include: {
+                        users: { // this is UserMachine[]
+                            include: {
+                                user: true,
+                            },
+                        },
+                    }
+                });
+
+                if (!machineUsers) {
+                    res.status(404).json({
+                        message: 'Machine not found'
+                    });
+                    return;
+                }
+
+                const students = machineUsers?.users.map((user) => ({
+                    id: user.user.id,
+                    studentId: user.user.studentId,
+                    firstName: user.user.firstName,
+                    lastName: user.user.lastName,
+                    avatar: user.user.avatar,
+                    level: user.user.level,
+                    lifetimeDuration: user.user.lifetimeDuration,
+                    admin: user.user.admin,
+                    apprentice: user.apprentice,
+                }));
+
+                console.log(students);
+
                 res.status(200).json({
                     students
                 });
+
+
 
             } catch (error) {
                 console.log(error);
