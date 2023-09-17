@@ -1,13 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 // import { motion } from 'framer-motion';
+
+import { signIn } from 'next-auth/react';
+
 import { useSession } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
 import { CldImage } from 'next-cloudinary';
 
+import { MachineContext } from '@/lib/contexts/MachineContext';
 import LockScreen from '@/components/LockScreen';
+import ListStudents from '@/components/ListStudents';
 import StarRating from '@/components/StarRating';
 import DynamicStarRating from '@/components/DynamicStarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
+import ApprenticeView from '@/components/ApprenticeView';
+import { CustomToast } from '@/components/ApprenticeView';
 
 interface AccessMachine {
     allowed: boolean;
@@ -60,6 +67,7 @@ const Index = (props) => {
         useState<number>(-1); // [milliseconds]
     const [wasCalled, setWasCalled] = useState(false);
     const { data: nextAuthSession, update } = useSession();
+    const { machineUUID } = useContext(MachineContext);
 
     const handleStarRatingClick = async () => {
         setAccessMachine((prevAccessMachine) => ({
@@ -132,9 +140,46 @@ const Index = (props) => {
         setWasCalled(true);
     }, [nextAuthSession?.user?.id, nextAuthSession?.user?.isFirstLogin]);
 
+    const handleSubmit = async (
+        studentId: string,
+        setStudentId: any,
+        setError: any
+    ) => {
+        const parsedStudentId = parseInt(studentId);
+
+        if (!isNaN(parsedStudentId)) {
+            await signIn('credentials', {
+                studentId: parsedStudentId
+                // redirect: false
+            }).then((res) => {
+                if (res && res.error) {
+                    setError('Error signing in, please try again');
+                    setStudentId('');
+                }
+            });
+        }
+    };
+
     return (
-        <div className="w-screen flex flex-col items-center justify-center text-green font-oxygen">
-            {!nextAuthSession && <LockScreen />}
+        <div className="flex w-screen flex-col items-center justify-center font-oxygen text-green">
+            {!nextAuthSession && (
+                <>
+                    <LockScreen
+                        placeholder="Enter your Student ID"
+                        handleSubmit={handleSubmit}
+                    />
+                    {machineUUID && (
+                        <div className="mt-[3rem] flex flex-col items-center justify-center text-blue-300">
+                            <div className="mb-[3rem] text-5xl">Last used:</div>
+                            <ListStudents
+                                fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
+                                viewId={false}
+                                style={'flex flex-row space-x-[2rem]'}
+                            />
+                        </div>
+                    )}
+                </>
+            )}
             {nextAuthSession && accessMachine.allowed && (
                 <div className="flex flex-col text-center">
                     <div className="flex flex-row text-5xl">
@@ -162,13 +207,13 @@ const Index = (props) => {
                                 </div>
                             )}
                         </div>
-                        <div className="flex flex-col ml-[10rem] text-start space-y-[3rem]">
+                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start">
                             <div className="w-[50rem] text-6xl capitalize">
                                 {nextAuthSession.user?.firstName +
                                     ' ' +
                                     nextAuthSession.user?.lastName}
                             </div>
-                            <div className="text-5xl space-y-[2rem]">
+                            <div className="space-y-[2rem] text-5xl">
                                 {userMachineDuration != -1 && (
                                     <FormattedTime
                                         prependedString="This Machine: "
@@ -200,17 +245,22 @@ const Index = (props) => {
                         ) : (
                             nextAuthSession &&
                             accessMachine.userMachineId && (
-                                <SessionStopWatch
-                                    userId={nextAuthSession.user?.id}
-                                    userMachineId={accessMachine?.userMachineId}
-                                    setUserMachineDuration={
-                                        setUserMachineDuration
-                                    }
-                                    setUserLifetimeDuration={
-                                        setUserLifetimeDuration
-                                    }
-                                    setError={setError}
-                                />
+                                <div className="flex flex-col">
+                                    <SessionStopWatch
+                                        userId={nextAuthSession.user?.id}
+                                        userMachineId={
+                                            accessMachine?.userMachineId
+                                        }
+                                        setUserMachineDuration={
+                                            setUserMachineDuration
+                                        }
+                                        setUserLifetimeDuration={
+                                            setUserLifetimeDuration
+                                        }
+                                        setError={setError}
+                                    />
+                                    <ApprenticeView />
+                                </div>
                             )
                         )}
                     </div>
@@ -223,7 +273,7 @@ const Index = (props) => {
                         You are not allowed to use this machine.
                     </div>
                     {accessMachine.allowedMachines && (
-                        <div className="mt-[2rem] mb-[1rem] text-4xl">
+                        <div className="mb-[1rem] mt-[2rem] text-4xl">
                             Machines you are allowed to use:
                             {accessMachine.allowedMachines.length === 0 && (
                                 <div className="text-red">
@@ -244,8 +294,8 @@ const Index = (props) => {
                 </div>
             )}
             {error && (
-                <div className="mt-[4rem] text-center text-red text-4xl">
-                    {error}
+                <div className="mt-[4rem] text-center text-4xl text-red">
+                    <CustomToast text={error} />
                 </div>
             )}
         </div>

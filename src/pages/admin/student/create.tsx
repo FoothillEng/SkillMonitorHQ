@@ -28,9 +28,9 @@ export const AlphanumericInput = ({
         onChange(_title, value);
     };
     return (
-        <div className={`flex flex-col items-center justify-center ${style}`}>
+        <div className="flex flex-col items-center justify-center">
             <input
-                className="w-[50rem] h-[6rem] border-4 border-green rounded-full text-center text-6xl"
+                className={`h-[6rem] rounded-full border-4 border-green text-center text-6xl ${style}`}
                 type={type}
                 onChange={(e) => handleFieldValueChange(e.target.value)}
                 placeholder={`Enter ${title} here`}
@@ -94,7 +94,7 @@ const CreateUser = (props) => {
                     throw new Error(res.status.toString());
                 }
             })
-            .then(() => router.push('/admin/students'))
+            .then(() => router.push('/admin/student/'))
             .catch((error) => {
                 if (error.message === '403') {
                     setErrorMessage('Student already exists with that ID');
@@ -105,9 +105,9 @@ const CreateUser = (props) => {
     }
 
     return (
-        <div className="flex flex-col items-center w-screen text-green">
+        <div className="flex w-screen flex-col items-center text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
-                <h1 className="text-center text-9xl mb-[10rem]">
+                <h1 className="mb-[10rem] text-center text-9xl">
                     Register New Student
                 </h1>
                 <div className="flex flex-col space-y-[3rem]">
@@ -115,18 +115,21 @@ const CreateUser = (props) => {
                         _title="studentId"
                         title="Student ID"
                         type="number"
+                        style="w-[50rem]"
                         onChange={handleFieldValueChange}
                     />
                     <AlphanumericInput
                         _title="firstName"
                         title="First Name"
                         type="text"
+                        style="w-[50rem]"
                         onChange={handleFieldValueChange}
                     />
                     <AlphanumericInput
                         _title="lastName"
                         title="Last Name"
                         type="text"
+                        style="w-[50rem]"
                         onChange={handleFieldValueChange}
                     />
                     {/* <ImageInput
@@ -146,10 +149,16 @@ const CreateUser = (props) => {
                                 showUploadMoreButton: false
                             }}
                             onSuccess={(result) => {
-                                handleFieldValueChange(
-                                    'avatar',
-                                    result.info.secure_url
-                                );
+                                if (
+                                    result.info &&
+                                    typeof result.info === 'object'
+                                ) {
+                                    handleFieldValueChange(
+                                        'avatar',
+                                        (result.info as { secure_url: string })
+                                            .secure_url
+                                    );
+                                }
                             }}
                         >
                             {({ open }) => {
@@ -161,7 +170,7 @@ const CreateUser = (props) => {
                                 return (
                                     <div className="flex flex-col items-center justify-center">
                                         <button
-                                            className="w-[50rem] h-[6rem] border-4 border-green bg-white rounded-full text-center text-6xl"
+                                            className="h-[6rem] w-[50rem] rounded-full border-4 border-green bg-white text-center text-6xl"
                                             onClick={handleOnClick}
                                         >
                                             Upload Student Avatar
@@ -173,16 +182,16 @@ const CreateUser = (props) => {
                     </div>
                 </div>
                 <button
-                    className="flex items-center mt-64 mx-auto cursor-pointer mb-2 p-2"
+                    className="mx-auto mb-2 mt-64 flex cursor-pointer items-center p-2"
                     type="submit"
                 >
-                    <div className="text-9xl hollow-text-3 text-center active:bg-slate-400">
+                    <div className="hollow-text-3 text-center text-9xl active:bg-slate-400">
                         Submit
                     </div>
                 </button>
             </form>
             {errorMessage && (
-                <div className="mt-[5rem] text-red-500 text-3xl">
+                <div className="mt-[5rem] text-3xl text-red-500">
                     {errorMessage}
                 </div>
             )}

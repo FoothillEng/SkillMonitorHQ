@@ -39,6 +39,7 @@ const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
                             key={student.id}
                             student={student}
                             viewId={viewId}
+                            col={false}
                         />
                     ))}
                 </div>
@@ -48,7 +49,7 @@ const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
                 </div>
             )}
             {error && (
-                <div className="mt-[5rem] text-red-500 text-3xl">{error}</div>
+                <div className="mt-[5rem] text-3xl text-red-500">{error}</div>
             )}
         </div>
     );

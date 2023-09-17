@@ -26,7 +26,7 @@ const NavItem = ({ href, icon, label, subItem, onClick }: NavItemProps) => {
     return (
         <Link
             href={href}
-            className={`flex items-center p-[2rem] rounded-lg active:bg-blue-400 ${
+            className={`flex items-center rounded-lg p-[2rem] active:bg-blue-400 ${
                 subItem ? 'ml-[2rem]' : ''
             }`}
             onClick={onClick}
@@ -51,14 +51,14 @@ const SideNav = () => {
     return (
         <div>
             {session && (
-                <div className="fixed top-[20rem] left-[3rem] z-40 w-[30rem] h-screen font-oxygen text-blue-300">
-                    <div className="h-full px-3 py-4 overflow-y-auto text-4xl">
+                <div className="fixed left-[3rem] top-[20rem] z-40 h-screen w-[30rem] font-oxygen text-blue-300">
+                    <div className="h-full overflow-y-auto px-3 py-4 text-4xl">
                         <NavItem
                             href="/"
                             icon={AiFillDashboard}
                             label="Dashboard"
                         />
-                        <div className="border-t-2 border-blue-300 my-[1rem]" />
+                        <div className="my-[1rem] border-t-2 border-blue-300" />
                         {session.user?.admin && (
                             <div>
                                 <NavItem
@@ -84,13 +84,15 @@ const SideNav = () => {
                                     label="Settings"
                                     subItem={true}
                                 />
-                                <div className="border-t-2 border-blue-300 mt-[1rem] mb-[2rem]" />
+                                <div className="mb-[2rem] mt-[1rem] border-t-2 border-blue-300" />
                             </div>
                         )}
                         {user && (
                             <Student
                                 student={user}
-                                viewId={session.user?.admin}
+                                // viewId={session.user?.admin}
+                                viewId={false}
+                                col={false}
                             />
                         )}
 

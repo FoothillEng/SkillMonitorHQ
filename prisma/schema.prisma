@@ -50,10 +50,10 @@ model UserMachine {
   cumulativeRatingSum   Int       @default(0)
   cumulativeRatingCount Int       @default(0)
   averageRating         Float     @default(5)
-  tourPassed            Boolean   @default(false)
-  testPassed            Boolean   @default(false)
-  // assistants  Assistant[]
+  apprentice            Boolean   @default(true)
   sessions              Session[]
+
+  @@unique([userId, machineId])
 }
 
 model Session {
