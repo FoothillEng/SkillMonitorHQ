@@ -29,7 +29,7 @@ const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="text-5xl mb-[2rem]">Current Machines:</div>
+            <div className="mb-[2rem] text-5xl">Current Machines:</div>
             {machines && machines.length > 0 && (
                 <div className="flex flex-col">
                     {machines.map((machine) => (

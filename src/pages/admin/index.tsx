@@ -1,6 +1,6 @@
 const AdminIndex = (props) => {
     return (
-        <div className="flex flex-col items-center w-screen">
+        <div className="flex w-screen flex-col items-center">
             <div className="text-8xl">Admin homepage</div>
         </div>
     );

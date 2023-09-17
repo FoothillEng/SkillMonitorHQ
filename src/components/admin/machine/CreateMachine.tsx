@@ -56,7 +56,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
     return (
         <div className="flex flex-col items-center justify-center text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
-                <h1 className="text-center text-6xl mb-[3rem]">
+                <h1 className="mb-[3rem] text-center text-6xl">
                     Register New Machine
                 </h1>
                 <div className="flex justify-center">
@@ -69,16 +69,16 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                     />
                 </div>
                 <button
-                    className="flex items-center mt-[3rem] mx-auto mb-2 p-2"
+                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
                     type="submit"
                 >
-                    <div className="text-5xl outline outline-4 p-4 text-center active:bg-slate-400">
+                    <div className="p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
                         Submit
                     </div>
                 </button>
             </form>
             {errorMessage && (
-                <div className="mt-[5rem] text-red-500 text-3xl">
+                <div className="mt-[5rem] text-3xl text-red-500">
                     {errorMessage}
                 </div>
             )}
