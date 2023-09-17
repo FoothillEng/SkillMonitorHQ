@@ -89,5 +89,5 @@ module.exports = {
       oxygen: ['var(--font-oxygen)'],
     }
   },
-  plugins: [],
+    plugins: [require('flowbite/plugin')],
 }
