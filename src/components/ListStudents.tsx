@@ -9,8 +9,7 @@ import Student from '@/components/Student';
 
 interface ListStudentsProps {
     fetchUrl: string;
-    viewId: boolean;
-    style?: string;
+    admin?: boolean;
 }
 
 type StudentWithPartialUMI = User & {
@@ -18,7 +17,7 @@ type StudentWithPartialUMI = User & {
     userMachineId: number;
 };
 
-const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
+const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
     const [students, setStudents] = useState<StudentWithPartialUMI[]>([]);
     const [error, setError] = useState<string>('');
 
@@ -83,7 +82,7 @@ const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
                             <th>Avatar</th>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Apprentice</th>
+                            {admin && <th>Apprentice</th>}
                         </tr>
                     </thead>
                     <tbody className="text-3xl capitalize">
@@ -104,22 +103,32 @@ const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
                                 <td> {student.firstName}</td>
                                 <td> {student.lastName}</td>
                                 <td className="flex justify-center">
-                                    {student.apprentice ? (
-                                        <FaCheck
-                                            size={'5rem'}
-                                            className="text-center text-green-500"
-                                            onClick={() =>
-                                                handleChange(student, true)
-                                            }
-                                        />
-                                    ) : (
-                                        <FaTimes
-                                            size={'5rem'}
-                                            className="text-red-500"
-                                            onClick={() =>
-                                                handleChange(student, false)
-                                            }
-                                        />
+                                    {admin && (
+                                        <div>
+                                            {student.apprentice ? (
+                                                <FaCheck
+                                                    size={'5rem'}
+                                                    className="text-center text-green-500"
+                                                    onClick={() =>
+                                                        handleChange(
+                                                            student,
+                                                            true
+                                                        )
+                                                    }
+                                                />
+                                            ) : (
+                                                <FaTimes
+                                                    size={'5rem'}
+                                                    className="text-red-500"
+                                                    onClick={() =>
+                                                        handleChange(
+                                                            student,
+                                                            false
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </div>
                                     )}
                                 </td>
                             </tr>

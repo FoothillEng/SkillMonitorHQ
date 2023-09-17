@@ -14,8 +14,7 @@ const AdminStudentsIndex = (props) => {
             {machineUUID && (
                 <ListStudents
                     fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}`}
-                    viewId={true}
-                    style={'flex flex-col space-y-[2rem]'}
+                    admin={true}
                 />
             )}
         </div>

@@ -51,7 +51,6 @@ const Apprentice = ({
             });
 
             const data = await response.json();
-            console.log(data.message);
             if (data.message) {
                 setErrorMessage(data.message);
             } else {

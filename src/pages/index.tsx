@@ -175,8 +175,7 @@ const Index = (props) => {
                             <div className="mb-[3rem] text-5xl">Last used:</div>
                             <ListStudents
                                 fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
-                                viewId={false}
-                                style={'flex flex-row space-x-[2rem]'}
+                                admin={false}
                             />
                         </div>
                     )}
