@@ -10,7 +10,7 @@ const DynamicStar = ({ fill }: DynamicStar) => {
         <div className="relative">
             <FaStar color="gray" />
             <div
-                className="absolute top-0 left-0 overflow-hidden"
+                className="absolute left-0 top-0 overflow-hidden"
                 style={{ width: `${starFill}%` }}
             >
                 <FaStar color={'gold'} />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
 import Header from '@/components/Header';
@@ -37,7 +37,7 @@ const Layout = ({ children }: LayoutProps) => {
         initialLoad();
     }, [setMachineName, setMachineUUID]);
     return (
-        <div className="flex flex-col min-h-screen justify-between bg-gradient-radial from-blue-950 to-black">
+        <div className="flex min-h-screen flex-col justify-between bg-gradient-radial from-blue-950 to-black">
             <Header />
             <main className="flex flex-row">
                 {children}
