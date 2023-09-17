@@ -50,6 +50,7 @@ export default async function handler(
                     lifetimeDuration: user.user.lifetimeDuration,
                     admin: user.user.admin,
                     apprentice: user.apprentice,
+                    userMachineId: user.id,
                 }));
 
                 console.log(students);

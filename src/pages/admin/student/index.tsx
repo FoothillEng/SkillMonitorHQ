@@ -11,11 +11,13 @@ const AdminStudentsIndex = (props) => {
             <div className="mb-[5rem] p-[2rem] text-4xl outline outline-4 active:bg-purple-300 ">
                 <Link href={'/admin/student/create'}>New Student</Link>
             </div>
-            <ListStudents
-                fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}`}
-                viewId={true}
-                style={'flex flex-col space-y-[2rem]'}
-            />
+            {machineUUID && (
+                <ListStudents
+                    fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}`}
+                    viewId={true}
+                    style={'flex flex-col space-y-[2rem]'}
+                />
+            )}
         </div>
     );
 };

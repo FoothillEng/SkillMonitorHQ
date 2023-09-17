@@ -13,9 +13,13 @@ interface ListStudentsProps {
     style?: string;
 }
 
-type StudentWithApprentice = User & { apprentice: boolean };
+type StudentWithPartialUMI = User & {
+    apprentice: boolean;
+    userMachineId: number;
+};
+
 const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
-    const [students, setStudents] = useState<StudentWithApprentice[]>([]);
+    const [students, setStudents] = useState<StudentWithPartialUMI[]>([]);
     const [error, setError] = useState<string>('');
 
     useEffect(() => {
@@ -35,6 +39,40 @@ const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
         };
         fetchStudents();
     }, [fetchUrl]);
+
+    const handleChange = (student: StudentWithPartialUMI, current: boolean) => {
+        fetch(`/api/admin/student/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userMachineId: student.userMachineId,
+                apprentice: !current
+            })
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message) {
+                    setError(data.message);
+                } else {
+                    setStudents((prev) =>
+                        prev.map((prevStudent) =>
+                            prevStudent.id === student.id
+                                ? {
+                                      ...prevStudent,
+                                      apprentice: data.apprentice
+                                  }
+                                : prevStudent
+                        )
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setError(error);
+            });
+    };
 
     return (
         <div>
@@ -70,11 +108,17 @@ const ListStudents = ({ fetchUrl, viewId, style }: ListStudentsProps) => {
                                         <FaCheck
                                             size={'5rem'}
                                             className="text-center text-green-500"
+                                            onClick={() =>
+                                                handleChange(student, true)
+                                            }
                                         />
                                     ) : (
                                         <FaTimes
                                             size={'5rem'}
                                             className="text-red-500"
+                                            onClick={() =>
+                                                handleChange(student, false)
+                                            }
                                         />
                                     )}
                                 </td>
