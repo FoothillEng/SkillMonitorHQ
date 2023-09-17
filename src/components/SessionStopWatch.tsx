@@ -1,6 +1,8 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useContext } from 'react';
 
 import type { Session } from '@prisma/client';
+
+import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 
 interface SessionStopWatchProps {
     userId: string;
@@ -21,9 +23,12 @@ const SessionStopWatch = ({
     const intervalIDRef = useRef<NodeJS.Timeout | null>(null);
     const [started, setStarted] = useState(false);
     const [session, setSession] = useState<Session>();
+    const { apprenticeUserMachines } = useContext(ApprenticeContext);
 
     const handleStart = useCallback(async () => {
         if (started) return;
+        // transform apprenticeIds into an array of numbers, each in the format apprentice{}Id
+
         await fetch('/api/admin/session/start', {
             method: 'POST',
             headers: {
@@ -31,7 +36,8 @@ const SessionStopWatch = ({
             },
             body: JSON.stringify({
                 userMachineId,
-                userId
+                userId,
+                apprenticeUserMachines
             })
         })
             .then((res) => res.json())
@@ -41,7 +47,14 @@ const SessionStopWatch = ({
                 console.error(error);
                 setError('An error occurred. Please try again.');
             });
-    }, [setError, setSession, started, userMachineId, userId]);
+    }, [
+        setError,
+        setSession,
+        started,
+        userMachineId,
+        userId,
+        apprenticeUserMachines
+    ]);
 
     const handleStop = useCallback(async () => {
         if (!started) return;
@@ -103,23 +116,23 @@ const SessionStopWatch = ({
 
             {started ? (
                 <button
-                    className="flex items-center mt-[3rem] mx-auto mb-2 p-2"
+                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
                     onClick={() => {
                         stopTimer(), handleStop();
                     }}
                 >
-                    <div className="w-[20rem] outline outline-4 p-4 active:bg-slate-400 text-5xl text-center">
+                    <div className="w-[20rem] p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
                         Stop Session
                     </div>
                 </button>
             ) : (
                 <button
-                    className="flex items-center mt-[3rem] mx-auto mb-2 p-2"
+                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
                     onClick={() => {
                         startTimer(), handleStart();
                     }}
                 >
-                    <div className="w-[30rem] outline outline-4 p-[2rem] active:bg-slate-400 text-5xl text-center">
+                    <div className="w-[30rem] p-[2rem] text-center text-5xl outline outline-4 active:bg-slate-400">
                         Start New Session
                     </div>
                 </button>

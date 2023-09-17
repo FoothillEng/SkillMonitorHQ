@@ -7,6 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 
 import Layout from '@/components/Layout';
 import { MachineContext } from '@/lib/contexts/MachineContext';
+import { ApprenticeProvider } from '@/lib/contexts/ApprenticeContext';
 import { oxygen } from '@/lib/fonts';
 
 interface AppPropsWithSession extends AppProps {
@@ -20,6 +21,7 @@ export default function App({
     // eslint-disable-line
     const [machineUUID, setMachineUUID] = useState<string>('');
     const [machineName, setMachineName] = useState<string>('');
+
     return (
         <SessionProvider session={session}>
             <MachineContext.Provider
@@ -30,9 +32,11 @@ export default function App({
                     setMachineName
                 }}
             >
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
+                <ApprenticeProvider>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </ApprenticeProvider>
             </MachineContext.Provider>
             <style jsx global>
                 {`

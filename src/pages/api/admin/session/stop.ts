@@ -16,68 +16,49 @@ export default async function handler(
                         endTime: new Date(),
                         duration: new Date().getTime() - new Date(startTime).getTime()
                     }
-                }).catch((error) => {
-                    console.error(error);
-                    res.status(500).json({ error: 'Unable to end session.' });
-                });
-
-                const sumMachineHoursSession = await prisma.session.aggregate( // instead of summing all sessions, just add the current session to  userMachine.duration, that way sessinos can be delted safely
-                    {
-                        where: {
-                            userId: session?.userId,
-                            userMachineId: session?.userMachineId,
-                        },
-                        _sum: {
-                            duration: true
-                        },
-                    }
-                ).catch((error) => {
-                    console.error(error);
-                    res.status(500).json({ error: 'An error occurred.' });
-                });
-
-
-                const userMachine = await prisma.userMachine.update({
-                    where: {
-                        id: session?.userMachineId
-                    },
-                    data: {
-                        duration: sumMachineHoursSession && sumMachineHoursSession._sum?.duration !== null ? sumMachineHoursSession._sum.duration : undefined
-                    }
                 })
-                    .catch((error) => {
-                        console.error(error);
-                        res.status(500).json({ error: 'An error occurred.' });
+
+                if (!session || session.duration === null) {
+                    res.status(500).json({ error: 'Unable to end session.' });
+                    return;
+                }
+
+                const updateHours = async (userMachineId: number, duration: number) => {
+                    const userMachine = await prisma.userMachine.update({
+                        where: {
+                            id: userMachineId
+                        },
+                        data: {
+                            duration: {
+                                increment: duration
+                            }
+                        }
+                    })
+
+                    const user = await prisma.user.update({
+                        where: {
+                            id: userMachine?.userId
+                        },
+                        data: {
+                            lifetimeDuration: {
+                                increment: duration
+                            }
+                        },
+                    })
+
+                    return { userMachine, user };
+                }
+
+                const updateUsers = [session.userMachineId, session.apprentice1UMID, session.apprentice2UMID, session.apprentice3UMID]
+                    .filter(Boolean) // remove nulls spprenticeUMIDs
+                    .map(async (userMachineId) => {
+                        const { userMachine, user } = await updateHours(userMachineId as number, session?.duration as number);
+                        return { userMachineDuration: userMachine?.duration, userLifetimeDuration: user?.lifetimeDuration };
                     });
 
-                const sumLifetimeDuration = await prisma.userMachine.aggregate(
-                    {
-                        where: {
-                            userId: session?.userId,
-                        },
-                        _sum: {
-                            duration: true
-                        },
-                    }
-                ).catch((error) => {
-                    console.error(error);
-                    res.status(500).json({ error: 'An error occurred.' });
-                });
+                const results = await Promise.all(updateUsers);
 
-                const user = await prisma.user.update({
-                    where: {
-                        id: session?.userId,
-                    },
-                    data: {
-                        lifetimeDuration: sumLifetimeDuration && sumLifetimeDuration._sum?.duration !== null ? sumLifetimeDuration._sum.duration : undefined
-                    },
-                }).catch((error) => {
-                    console.error(error);
-                    res.status(500).json({ error: 'An error occurred.' });
-                });
-
-
-                res.status(200).json({ session, userMachineDuration: userMachine?.duration, userLifetimeDuration: user?.lifetimeDuration });
+                res.status(200).json({ session, userMachineDuration: results[0].userMachineDuration, userLifetimeDuration: results[0].userLifetimeDuration });
             } catch (error) {
                 console.log(error);
                 res.status(400).json({

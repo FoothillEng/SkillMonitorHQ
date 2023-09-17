@@ -21,7 +21,7 @@ model User {
   lastName         String
   avatar           String
   level            StudentLevel  @default(LEVEL_1)
-  lifetimeDuration Int           @default(0)
+  lifetimeDuration Int           @default(1)
   admin            Boolean       @default(false)
   machines         UserMachine[]
   sessions         Session[]
@@ -57,14 +57,17 @@ model UserMachine {
 }
 
 model Session {
-  id            String      @id @default(uuid())
-  startTime     DateTime    @default(now())
-  endTime       DateTime?
-  duration      Int? //   seconds, computed on session end
-  userMachine   UserMachine @relation(fields: [userMachineId], references: [id])
-  userMachineId Int
-  User          User        @relation(fields: [userId], references: [id])
-  userId        String
+  id              String      @id @default(uuid())
+  startTime       DateTime    @default(now())
+  endTime         DateTime?
+  duration        Int? //   seconds, computed on session end
+  userMachine     UserMachine @relation(fields: [userMachineId], references: [id])
+  userMachineId   Int
+  User            User        @relation(fields: [userId], references: [id])
+  userId          String
+  apprentice1UMID Int?
+  apprentice2UMID Int?
+  apprentice3UMID Int?
 }
 
 model UserLogin {

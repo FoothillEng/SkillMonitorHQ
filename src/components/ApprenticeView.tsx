@@ -7,6 +7,7 @@ import { User } from '@prisma/client';
 import { Toast } from 'flowbite-react';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
+import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 import Student from '@/components/Student';
 import LockScreen from '@/components/LockScreen';
 
@@ -30,14 +31,13 @@ const Apprentice = ({
     const [isOpen, setIsOpen] = useState(false);
     const [apprentice, setApprentice] = useState<User>();
     const { machineUUID } = useContext(MachineContext);
+    const { setApprenticeUserMachines } = useContext(ApprenticeContext);
 
     async function handleSubmit(
         studentId: string,
         setStudentId: any,
         setErrorMessage: any
     ) {
-        console.log(studentId, machineUUID);
-
         try {
             const response = await fetch('/api/apprentice/get', {
                 method: 'POST',
@@ -58,6 +58,18 @@ const Apprentice = ({
                 setApprentice(data.apprentice);
                 setIsOpen(false);
                 onApprenticeAdded();
+                // setApprenticeIds((prev: string[]) => [...prev, studentId]);
+                setApprenticeUserMachines(
+                    (
+                        prev: { apprenticeId: string; userMachineId: number }[]
+                    ) => [
+                        ...prev,
+                        {
+                            apprenticeId: studentId,
+                            userMachineId: data.userMachineId
+                        }
+                    ]
+                );
             }
         } catch (error: any) {
             setErrorMessage(error);

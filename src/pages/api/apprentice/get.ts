@@ -45,13 +45,14 @@ export default async function handler(
                     },
                     include: {
                         user: true,
-                    }
+                    },
                 })
 
                 if (userMachine) {
                     if (userMachine.apprentice) {
                         res.status(200).json({
-                            apprentice: userMachine.user
+                            apprentice: userMachine.user,
+                            userMachineId: userMachine.id
                         });
                     } else {
                         res.status(401).json({
@@ -78,7 +79,8 @@ export default async function handler(
                         }
                     })
                     res.status(200).json({
-                        apprentice: userMachine.user
+                        apprentice: userMachine.user,
+                        userMachineId: userMachine.id
                     });
                 }
 
