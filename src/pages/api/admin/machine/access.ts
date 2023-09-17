@@ -26,7 +26,7 @@ export default async function handler(
                     },
                 }).then(async (userMachine) => {
 
-                    if (userMachine) {
+                    if (userMachine && !userMachine.apprentice) {
                         await prisma.userMachine.update({
                             where: {
                                 id: userMachine.id,
@@ -75,7 +75,7 @@ export default async function handler(
                             res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, });
                         }
                     } else {
-                        // return with a list of allowed machines
+
                         const allowedMachines = await prisma.userMachine.findMany({
                             where: {
                                 userId: userId.toString()
@@ -89,7 +89,7 @@ export default async function handler(
                                 }
                             }
                         });
-                        res.status(200).json({ allowed: false, allowedMachines: allowedMachines });
+                        res.status(200).json({ allowed: false, apprentice: userMachine?.apprentice, allowedMachines: allowedMachines });
                     }
                 }
                 );

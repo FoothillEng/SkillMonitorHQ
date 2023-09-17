@@ -18,6 +18,7 @@ import { CustomToast } from '@/components/ApprenticeView';
 
 interface AccessMachine {
     allowed: boolean;
+    apprentice?: boolean;
     allowedMachines?: Machine[];
     userMachineId?: number;
     averageRating?: number;
@@ -129,7 +130,8 @@ const Index = (props) => {
                                     name: machineArray.machine.name
                                 };
                             }
-                        )
+                        ),
+                        apprentice: data.apprentice
                     });
                 })
                 .catch((error) => {
@@ -270,7 +272,12 @@ const Index = (props) => {
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
                     <div className="text-6xl">
-                        You are not allowed to use this machine.
+                        You are{' '}
+                        {`${
+                            accessMachine.apprentice
+                                ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
+                                : 'not allowed to use this machine'
+                        }`}
                     </div>
                     {accessMachine.allowedMachines && (
                         <div className="mb-[1rem] mt-[2rem] text-4xl">
