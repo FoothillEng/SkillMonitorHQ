@@ -27,15 +27,6 @@ export default async function handler(
                 }).then(async (userMachine) => {
 
                     if (userMachine && !userMachine.apprentice) {
-                        await prisma.userMachine.update({
-                            where: {
-                                id: userMachine.id,
-                            },
-                            data: {
-                                usageCount: userMachine.usageCount + 1, // Increment usage count when session, not login    
-                            }
-                        })
-
                         const lastLogin = await prisma.userLogin.findFirst({
                             where: {
                                 machineId: userMachine.machineId,

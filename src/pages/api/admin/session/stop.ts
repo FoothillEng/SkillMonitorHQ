@@ -31,6 +31,9 @@ export default async function handler(
                         data: {
                             duration: {
                                 increment: duration
+                            },
+                            usageCount: {
+                                increment: 1
                             }
                         }
                     })
@@ -45,6 +48,7 @@ export default async function handler(
                             }
                         },
                     })
+
 
                     return { userMachine, user };
                 }
