@@ -132,11 +132,6 @@ const CreateUser = (props) => {
                         style="w-[50rem]"
                         onChange={handleFieldValueChange}
                     />
-                    {/* <ImageInput
-                        _title="avatar"
-                        title="Avatar"
-                        onChange={handleFieldValueChange}
-                    /> */}
                     <div className="">
                         <CldUploadWidget
                             signatureEndpoint="/api/admin/sign"

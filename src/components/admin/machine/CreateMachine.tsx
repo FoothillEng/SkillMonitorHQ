@@ -64,7 +64,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                         _title="machineName"
                         title="Machine Name"
                         type="text"
-                        style="w-[20rem]"
+                        style="w-[50rem]"
                         onChange={handleFieldValueChange}
                     />
                 </div>
