@@ -21,10 +21,11 @@ export default async function handler(
                             res.status(404).json({
                                 message: 'Machine not found'
                             });
+                        } else {
+                            res.status(200).json({
+                                machine
+                            });
                         }
-                        res.status(200).json({
-                            machine
-                        });
                     })
                 } else {
                     res.status(404).json({
