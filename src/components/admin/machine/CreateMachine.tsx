@@ -57,7 +57,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
         <div className="flex flex-col items-center justify-center text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
                 <h1 className="mb-[3rem] text-center text-6xl">
-                    Register New Machine
+                    Register New Machine For the System
                 </h1>
                 <div className="flex justify-center">
                     <AlphanumericInput

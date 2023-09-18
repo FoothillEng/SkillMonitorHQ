@@ -108,7 +108,7 @@ const CreateUser = (props) => {
         <div className="flex w-screen flex-col items-center text-green">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
                 <h1 className="mb-[10rem] text-center text-9xl">
-                    Register New Student
+                    Register New Student for this Machine
                 </h1>
                 <div className="flex flex-col space-y-[3rem]">
                     <AlphanumericInput
