@@ -30,7 +30,17 @@ const Layout = ({ children }: LayoutProps) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    setMachineName(data.machine.name);
+                    try {
+                        setMachineName(data.machine.name);
+                    } catch (error) {
+                        if (error instanceof TypeError) {
+                            setMachineName(
+                                'Machine not Found, please contact admin'
+                            );
+                        } else {
+                            console.error(error);
+                        }
+                    }
                 })
                 .catch((error) => console.error(error));
         };
