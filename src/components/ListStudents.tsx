@@ -5,7 +5,7 @@ import { CldImage } from 'next-cloudinary';
 
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
-import Student from '@/components/Student';
+import { FormattedTime } from '@/pages/index';
 
 interface ListStudentsProps {
     fetchUrl: string;
@@ -15,6 +15,9 @@ interface ListStudentsProps {
 type StudentWithPartialUMI = User & {
     apprentice: boolean;
     userMachineId: number;
+    duration: number;
+    usageCount: number;
+    averageRating: number;
 };
 
 const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
@@ -83,6 +86,9 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                             <th>First Name</th>
                             <th>Last Name</th>
                             {admin && <th>Apprentice</th>}
+                            {admin && <th>Time on this machine</th>}
+                            {admin && <th>Usage Count</th>}
+                            {admin && <th>Average Rating</th>}
                         </tr>
                     </thead>
                     <tbody className="text-3xl capitalize">
@@ -131,6 +137,16 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                         </div>
                                     )}
                                 </td>
+                                {admin && (
+                                    <td>
+                                        <FormattedTime
+                                            prependedString=""
+                                            milliseconds={student.duration}
+                                        />
+                                    </td>
+                                )}
+                                {admin && <td>{student.usageCount}</td>}
+                                {admin && <td>{student.averageRating}</td>}
                             </tr>
                         ))}
                     </tbody>

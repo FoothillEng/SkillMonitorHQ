@@ -30,7 +30,7 @@ interface FormattedTimeProps {
     milliseconds: number;
 }
 // returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
-const FormattedTime = ({
+export const FormattedTime = ({
     prependedString,
     milliseconds
 }: FormattedTimeProps) => {
@@ -171,8 +171,8 @@ const Index = (props) => {
                         handleSubmit={handleSubmit}
                     />
                     {machineUUID && (
-                        <div className="mt-[3rem] flex flex-col items-center justify-center text-blue-300">
-                            <div className="mb-[3rem] text-5xl">Last used:</div>
+                        <div className="mt-[5rem] flex flex-col items-center justify-center text-blue-300">
+                            <div className="mb-[2rem] text-5xl">Last used:</div>
                             <ListStudents
                                 fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
                                 admin={false}

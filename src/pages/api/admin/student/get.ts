@@ -51,9 +51,10 @@ export default async function handler(
                     admin: user.user.admin,
                     apprentice: user.apprentice,
                     userMachineId: user.id,
+                    duration: user.duration,
+                    usageCount: user.usageCount,
+                    averageRating: user.averageRating,
                 }));
-
-                console.log(students);
 
                 res.status(200).json({
                     students
