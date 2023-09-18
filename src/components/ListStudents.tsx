@@ -140,7 +140,6 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                 {admin && (
                                     <td>
                                         <FormattedTime
-                                            prependedString=""
                                             milliseconds={student.duration}
                                         />
                                     </td>

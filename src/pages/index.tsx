@@ -26,7 +26,7 @@ interface AccessMachine {
 }
 
 interface FormattedTimeProps {
-    prependedString: string;
+    prependedString?: string;
     milliseconds: number;
 }
 // returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
@@ -44,7 +44,7 @@ export const FormattedTime = ({
 
     return (
         <div>
-            {prependedString +
+            {(prependedString ? prependedString : '') +
                 (formattedHours < 10 ? '0' : '') +
                 formattedHours +
                 ':' +

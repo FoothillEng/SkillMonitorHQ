@@ -4,6 +4,8 @@ import type { Session } from '@prisma/client';
 
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 
+import { FormattedTime } from '@/pages/index';
+
 interface SessionStopWatchProps {
     userId: string;
     userMachineId: number;
@@ -107,11 +109,7 @@ const SessionStopWatch = ({
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">
             <div className="text-6xl">
-                <span>
-                    {('0' + Math.floor((time / 60000) % 60)).slice(-2)}:
-                </span>
-                <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-                <span>{('0' + ((time / 10) % 100)).slice(-2)}</span>
+                <FormattedTime milliseconds={time} />
             </div>
 
             {started ? (
