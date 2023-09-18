@@ -32,7 +32,7 @@ export default async function handler(
                                 id: userMachine.id,
                             },
                             data: {
-                                usageCount: userMachine.usageCount + 1,
+                                usageCount: userMachine.usageCount + 1, // Increment usage count when session, not login    
                             }
                         })
 

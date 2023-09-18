@@ -18,8 +18,6 @@ export default async function handler(
                     return;
                 }
 
-                console.log(apprenticeUserMachines);
-
                 const data: any = {
                     userMachineId,
                     userId,
@@ -36,8 +34,6 @@ export default async function handler(
                 if (apprenticeUserMachines[2]) {
                     data.apprentice3UMID = apprenticeUserMachines[2].userMachineId;
                 }
-
-                console.log(data);
 
                 await prisma.session.create({
                     data
