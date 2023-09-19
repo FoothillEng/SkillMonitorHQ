@@ -9,9 +9,9 @@ datasource db {
 }
 
 enum StudentLevel {
-  LEVEL_1
-  LEVEL_2
-  LEVEL_3
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }
 
 model User {
@@ -20,7 +20,7 @@ model User {
   firstName        String
   lastName         String
   avatar           String
-  level            StudentLevel  @default(LEVEL_1)
+  level            StudentLevel  @default(BEGINNER)
   lifetimeDuration Int           @default(1)
   admin            Boolean       @default(false)
   machines         UserMachine[]

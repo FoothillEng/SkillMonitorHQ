@@ -1,4 +1,4 @@
-import { CldImage } from 'next-cloudinary';
+import CldAvatar from '@/components/CldAvatar';
 
 import { User } from '@prisma/client';
 
@@ -17,7 +17,7 @@ const Student = ({ student, viewId, col }: StudentProps) => {
         : student.lastName;
     const truncated = firstName.length + lastName.length > 15;
 
-    const ImageDimensions = col ? [100, 100] : [50, 50];
+    const ImageDimensions = col ? 'MEDIUM' : 'SMALL';
 
     return (
         <div
@@ -26,19 +26,14 @@ const Student = ({ student, viewId, col }: StudentProps) => {
             } items-center space-x-[2rem]`}
         >
             {student && student.avatar && (
-                <CldImage
-                    width={ImageDimensions[0]}
-                    height={ImageDimensions[1]}
-                    sizes="100vw"
-                    src={student.avatar}
-                    rawTransformations={[
-                        'c_crop,g_face/c_scale,w_200,h_200/r_max/e_grayscale/f_auto'
-                    ]}
-                    alt="pfp"
+                <CldAvatar
+                    avatar={student.avatar}
+                    level={student.level}
+                    size={ImageDimensions}
                 />
             )}
 
-            <h1 className="text-3xl capitalize">
+            <h1 className="mt-[1rem] text-3xl capitalize">
                 {firstName}
                 {lastName && ` ${lastName}${truncated ? '.' : ''} `}
             </h1>

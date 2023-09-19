@@ -2,12 +2,11 @@ import { useState, useEffect, useContext } from 'react';
 // import { motion } from 'framer-motion';
 
 import { signIn } from 'next-auth/react';
-
 import { useSession } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
-import { CldImage } from 'next-cloudinary';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
+
 import LockScreen from '@/components/LockScreen';
 import ListStudents from '@/components/ListStudents';
 import StarRating from '@/components/StarRating';
@@ -15,6 +14,7 @@ import DynamicStarRating from '@/components/DynamicStarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
 import ApprenticeView from '@/components/ApprenticeView';
 import { CustomToast } from '@/components/ApprenticeView';
+import CldAvatar from '@/components/CldAvatar';
 
 interface AccessMachine {
     allowed: boolean;
@@ -186,16 +186,12 @@ const Index = (props) => {
                     <div className="flex flex-row text-5xl">
                         <div className="flex flex-col space-x-[2rem]">
                             {nextAuthSession.user &&
-                                nextAuthSession.user?.avatar && (
-                                    <CldImage
-                                        width="300"
-                                        height="300"
-                                        sizes="100vw"
-                                        src={nextAuthSession.user?.avatar}
-                                        rawTransformations={[
-                                            'c_crop,g_face/c_scale,w_200,h_200/r_max/e_grayscale/f_auto'
-                                        ]}
-                                        alt="pfp"
+                                nextAuthSession.user?.avatar &&
+                                nextAuthSession?.user?.level && (
+                                    <CldAvatar
+                                        avatar={nextAuthSession.user.avatar}
+                                        level={nextAuthSession.user.level}
+                                        size={'LARGE'}
                                     />
                                 )}
                             {accessMachine.averageRating && (

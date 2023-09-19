@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { User } from '@prisma/client';
 
-import { CldImage } from 'next-cloudinary';
-
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
 import { FormattedTime } from '@/pages/index';
-
+import CldAvatar from '@/components/CldAvatar';
 interface ListStudentsProps {
     fetchUrl: string;
     admin?: boolean;
@@ -81,62 +79,66 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
             {students && students.length > 0 ? (
                 <table className="border-separate border-spacing-[5rem] text-center">
                     <thead className="text-4xl">
-                        <tr>
-                            <th>Avatar</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            {admin && <th>Apprentice</th>}
-                            {admin && <th>Time on this machine</th>}
-                            {admin && <th>Usage Count</th>}
-                            {admin && <th>Average Rating</th>}
-                        </tr>
+                        {admin && students[0].usageCount !== undefined && (
+                            <tr>
+                                <th>Avatar</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Apprentice</th>
+                                <th>Time on this machine</th>
+                                <th>Usage Count</th>
+                                <th>Average Rating</th>
+                            </tr>
+                        )}
+                        {admin && students[0].usageCount === undefined && (
+                            <tr>
+                                <th>Avatar</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Time on all machines</th>
+                            </tr>
+                        )}
+                        {!admin && (
+                            <tr>
+                                <th>Avatar</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                            </tr>
+                        )}
                     </thead>
                     <tbody className="text-3xl capitalize">
                         {students.map((student) => (
                             <tr key={student.id}>
                                 <td className="flex justify-center">
-                                    <CldImage
-                                        width={50}
-                                        height={50}
-                                        sizes="100vw"
-                                        src={student.avatar}
-                                        rawTransformations={[
-                                            'c_crop,g_face/c_scale,w_200,h_200/r_max/e_grayscale/f_auto'
-                                        ]}
-                                        alt="pfp"
+                                    <CldAvatar
+                                        avatar={student.avatar}
+                                        level={student.level}
+                                        size={'MEDIUM'}
                                     />
                                 </td>
                                 <td> {student.firstName}</td>
                                 <td> {student.lastName}</td>
-                                <td className="flex justify-center">
-                                    {admin && (
-                                        <div>
-                                            {student.apprentice ? (
-                                                <FaCheck
-                                                    size={'5rem'}
-                                                    className="text-center text-green-500"
-                                                    onClick={() =>
-                                                        handleChange(
-                                                            student,
-                                                            true
-                                                        )
-                                                    }
-                                                />
-                                            ) : (
-                                                <FaTimes
-                                                    size={'5rem'}
-                                                    className="text-red-500"
-                                                    onClick={() =>
-                                                        handleChange(
-                                                            student,
-                                                            false
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                        </div>
-                                    )}
-                                </td>
+                                {admin && student.apprentice !== undefined && (
+                                    <td className="flex justify-center">
+                                        {student.apprentice ? (
+                                            <FaCheck
+                                                size={'5rem'}
+                                                className="text-center text-green-500"
+                                                onClick={() =>
+                                                    handleChange(student, true)
+                                                }
+                                            />
+                                        ) : (
+                                            <FaTimes
+                                                size={'5rem'}
+                                                className="text-red-500"
+                                                onClick={() =>
+                                                    handleChange(student, false)
+                                                }
+                                            />
+                                        )}
+                                    </td>
+                                )}
                                 {admin && (
                                     <td>
                                         <FormattedTime

@@ -9,6 +9,7 @@ declare module 'next-auth' {
             lastName: string;
             avatar: string;
             admin: boolean;
+            level: number;
         } & Session['user'];
     }
 }
