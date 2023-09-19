@@ -13,7 +13,7 @@ const AdminStudentsIndex = (props) => {
             </div>
             {machineUUID && (
                 <ListStudents
-                    fetchUrl={`/api/admin/student/get`}
+                    fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}`}
                     admin={true}
                 />
             )}
