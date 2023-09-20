@@ -85,6 +85,12 @@ const SideNav = () => {
                                     subItem={true}
                                 />
                                 <NavItem
+                                    href="/admin/student/createMass"
+                                    icon={IoIosCreate}
+                                    label="Create Students Mass"
+                                    subItem={true}
+                                />
+                                <NavItem
                                     href="/admin/machine"
                                     icon={FiSettings}
                                     label="Settings"

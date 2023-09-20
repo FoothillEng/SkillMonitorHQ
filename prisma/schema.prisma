@@ -19,7 +19,7 @@ model User {
   studentId        Int           @unique
   firstName        String
   lastName         String
-  avatar           String
+  avatar           String        @default("https://res.cloudinary.com/dxj8g5osv/image/upload/v1695244850/yvod98i9tspx7fpwxbm5.png")
   level            StudentLevel  @default(BEGINNER)
   lifetimeDuration Int           @default(1)
   admin            Boolean       @default(false)
