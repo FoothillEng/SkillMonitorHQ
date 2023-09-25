@@ -57,46 +57,81 @@ const CreateUser = (props) => {
         avatar: ''
     });
     const [errorMessage, setErrorMessage] = useState('');
+    const [studentExists, setStudentExists] = useState(false);
     const router = useRouter();
 
     const handleFieldValueChange = (title: string, value: string) => {
+        if (title === 'studentId') {
+            setStudentExists(false);
+        }
         setFormData((prevFormData) => ({
             ...prevFormData,
             [title]: value
         }));
     };
 
-    const checkIfFormIsFilled = () => {
-        if (
-            formData.studentId &&
-            formData.firstName &&
-            formData.lastName &&
-            formData.avatar
-        ) {
-            return true;
+    const fetchStudent = async (studentId: number) => {
+        const res = await fetch('/api/admin/student/getId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ studentId })
+        });
+        const data = await res.json();
+
+        if (data.firstName) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                firstName: data.firstName,
+                lastName: data.lastName
+            }));
+            console.log(formData);
+            setErrorMessage('');
+            setStudentExists(true);
         } else {
-            setErrorMessage('Please fill out all fields');
+            setErrorMessage('Student does not exist with given ID');
+        }
+    };
+
+    const checkIfFormIsFilled = async () => {
+        if (!formData.studentId) {
+            setErrorMessage('Please enter student ID');
             return false;
+        } else {
+            if (studentExists) {
+                if (formData.avatar) {
+                    return true;
+                } else {
+                    setErrorMessage('Please upload student avatar');
+                    return false;
+                }
+            } else {
+                if (formData.studentId.toString().length < 5) {
+                    setErrorMessage(
+                        'Student ID has to be greater than 4 digits'
+                    );
+                    return false;
+                } else {
+                    await fetchStudent(formData.studentId);
+                    return false;
+                }
+            }
         }
     };
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        if (!checkIfFormIsFilled()) return;
-
-        // change studentId to number
-        let formDataCopy = { ...formData };
-        formDataCopy.studentId = parseInt(
-            formData.studentId as unknown as string
-        );
+        if (!(await checkIfFormIsFilled())) return;
+        console.log('running');
 
         await fetch('/api/admin/student/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formDataCopy)
+            body: JSON.stringify(formData)
         })
             .then((res) => {
                 if (!res.ok) {
@@ -191,7 +226,9 @@ const CreateUser = (props) => {
                                             className="h-[6rem] w-[50rem] rounded-full border-4 border-green bg-white text-center text-6xl"
                                             onClick={handleOnClick}
                                         >
-                                            Upload Student Avatar
+                                            {formData.avatar
+                                                ? 'Avatar uploaded'
+                                                : 'Upload Student Avatar'}
                                         </button>
                                     </div>
                                 );
@@ -204,7 +241,13 @@ const CreateUser = (props) => {
                     type="submit"
                 >
                     <div className="hollow-text-3 text-center text-9xl active:bg-slate-400">
-                        Submit
+                        {formData.studentId
+                            ? studentExists
+                                ? formData.avatar
+                                    ? 'Submit'
+                                    : 'Click Upload Student Avatar'
+                                : 'Get Student'
+                            : 'Enter Student ID'}
                     </div>
                 </button>
             </form>

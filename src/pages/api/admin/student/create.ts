@@ -10,15 +10,22 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                const { studentId, firstName, lastName, avatar } = req.body;
+                let { studentId, firstName, lastName, avatar } = req.body;
+
+                if (avatar === '') {
+                    return res.status(401).json({ message: 'Avatar cannot be empty' });
+                }
+
+                studentId = parseInt(studentId);
 
                 const user = await prisma.user.findUnique({
                     where: { studentId },
                 });
 
                 if (user !== null) {
-                    return res.status(403).send({ message: 'User already exists' });
+                    return res.status(403).send({ message: 'Student already exists' });
                 }
+
 
                 await prisma.user.create({
                     data: {
