@@ -12,7 +12,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
 
-    const handleFieldValueChange = (title: string, value: string) => {
+    const handleFieldValueChange = (value: string) => {
         setMachineName(value);
     };
 
@@ -42,7 +42,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
             })
             .then(() => {
                 setReload(true);
-                router.push('/admin/machine');
+                setMachineName('');
             })
             .catch((error) => {
                 if (error.message === '403') {
@@ -60,12 +60,11 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                     Register New Machine For the System
                 </h1>
                 <div className="flex justify-center">
-                    <AlphanumericInput
-                        _title="machineName"
-                        title="Machine Name"
+                    <input
+                        className="h-[6rem] w-[50rem] rounded-full border-4 border-green text-center text-6xl"
                         type="text"
-                        style="w-[50rem]"
-                        onChange={handleFieldValueChange}
+                        onChange={(e) => handleFieldValueChange(e.target.value)}
+                        placeholder="Machine Name"
                     />
                 </div>
                 <button

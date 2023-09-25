@@ -7,15 +7,21 @@ import { CldUploadWidget } from 'next-cloudinary';
 interface AlphanumericInputProps {
     title: string;
     _title: string;
-    type: 'text' | 'number';
+    parentValue: string;
+    setParentValue: (value: string) => void;
+    type: 'text' | 'number' | 'file';
     style?: string;
+    readOnly?: boolean;
     onChange: (title: string, value: string) => void;
 }
 export const AlphanumericInput = ({
     title,
     _title,
+    parentValue,
+    setParentValue,
     type,
     style,
+    readOnly,
     onChange
 }: AlphanumericInputProps) => {
     const [input, setInput] = useState('');
@@ -24,7 +30,9 @@ export const AlphanumericInput = ({
         if (type === 'number') {
             if (value.length > 6) return;
         }
-        setInput(value);
+
+        setParentValue(value);
+
         onChange(_title, value);
     };
     return (
@@ -34,7 +42,8 @@ export const AlphanumericInput = ({
                 type={type}
                 onChange={(e) => handleFieldValueChange(e.target.value)}
                 placeholder={`Enter ${title} here`}
-                value={input}
+                value={parentValue}
+                readOnly={readOnly}
             />
         </div>
     );
@@ -114,6 +123,10 @@ const CreateUser = (props) => {
                     <AlphanumericInput
                         _title="studentId"
                         title="Student ID"
+                        parentValue={formData.studentId.toString()}
+                        setParentValue={(value) =>
+                            handleFieldValueChange('studentId', value)
+                        }
                         type="number"
                         style="w-[50rem]"
                         onChange={handleFieldValueChange}
@@ -121,15 +134,25 @@ const CreateUser = (props) => {
                     <AlphanumericInput
                         _title="firstName"
                         title="First Name"
+                        parentValue={formData.firstName}
+                        setParentValue={(value) =>
+                            handleFieldValueChange('firstName', value)
+                        }
                         type="text"
                         style="w-[50rem]"
+                        readOnly={true}
                         onChange={handleFieldValueChange}
                     />
                     <AlphanumericInput
                         _title="lastName"
                         title="Last Name"
+                        parentValue={formData.lastName}
+                        setParentValue={(value) =>
+                            handleFieldValueChange('lastName', value)
+                        }
                         type="text"
                         style="w-[50rem]"
+                        readOnly={true}
                         onChange={handleFieldValueChange}
                     />
                     <div className="">
