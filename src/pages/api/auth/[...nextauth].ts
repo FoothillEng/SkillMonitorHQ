@@ -66,7 +66,14 @@ export const authOptions: AuthOptions = {
             // Allows relative callback URLs
             if (url.startsWith("/")) return `${baseUrl}${url}`
             // Allows callback URLs on the same origin
-            else if (new URL(url).origin === baseUrl) return url
+            else if (new URL(url).origin === baseUrl) {
+                const callbackUrl = new URL(url).searchParams.get("callbackUrl")
+
+                if (callbackUrl) {
+                    return callbackUrl
+                }
+                return url
+            }
             return baseUrl
         }
     },
@@ -75,7 +82,7 @@ export const authOptions: AuthOptions = {
         signOut: '/',
     },
     secret: process.env.NEXTAUTH_SECRET,
-    session: { strategy: "jwt", maxAge: 5 * 60 }, // 60 minutes ??
+    session: { strategy: "jwt", maxAge: 15 * 60 }, // 60 minutes ??
 
 
     jwt: {
