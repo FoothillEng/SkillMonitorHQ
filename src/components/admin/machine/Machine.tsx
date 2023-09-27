@@ -42,7 +42,8 @@ const Machine = ({
             }`}
         >
             <div className="text-3xl">
-                {machine.name} - {machine.id} - {machine.uuid}
+                {/* {machine.name} - {machine.id} - {machine.uuid} */}
+                {machine.name}
             </div>
         </div>
     );
