@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 
 import { CldUploadWidget } from 'next-cloudinary';
 
+import { Dialog } from '@headlessui/react';
+
+import LockScreen from '@/components/LockScreen';
 interface AlphanumericInputProps {
     title: string;
     _title: string;
@@ -14,7 +17,7 @@ interface AlphanumericInputProps {
     readOnly?: boolean;
     onChange: (title: string, value: string) => void;
 }
-export const AlphanumericInput = ({
+const AlphanumericInput = ({
     title,
     _title,
     parentValue,
@@ -24,8 +27,6 @@ export const AlphanumericInput = ({
     readOnly,
     onChange
 }: AlphanumericInputProps) => {
-    const [input, setInput] = useState('');
-
     const handleFieldValueChange = (value: string) => {
         if (type === 'number') {
             if (value.length > 6) return;
@@ -35,6 +36,7 @@ export const AlphanumericInput = ({
 
         onChange(_title, value);
     };
+
     return (
         <div className="flex flex-col items-center justify-center">
             <input
@@ -45,6 +47,67 @@ export const AlphanumericInput = ({
                 value={parentValue}
                 readOnly={readOnly}
             />
+        </div>
+    );
+};
+
+interface StudentIdInputProps {
+    parentValue: string;
+    setParentValue: (value: string) => void;
+}
+
+const StudentIdInput = ({
+    parentValue,
+    setParentValue
+}: StudentIdInputProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleFieldValueChange = (value: string) => {
+        if (value.length > 6) return;
+
+        setParentValue(value);
+    };
+
+    const handleSubmit = async (
+        studentId: string,
+        setStudentId: any,
+        setError: any
+    ) => {
+        const parsedStudentId = parseInt(studentId);
+
+        if (isNaN(parsedStudentId)) handleFieldValueChange('0');
+        else handleFieldValueChange(parsedStudentId.toString());
+        setIsOpen(false);
+    };
+
+    return (
+        <div
+            className="mt-[5rem] flex items-center justify-center font-oxygen"
+            onClick={() => setIsOpen(true)}
+        >
+            <div className="flex flex-col items-center">
+                <div className="h-[6rem] w-[50rem] rounded-full border-4 border-green bg-white text-center text-6xl">
+                    {parentValue === '0' ? 'Enter Student ID' : parentValue}
+                </div>
+            </div>
+
+            <Dialog
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                className="relative z-50"
+            >
+                <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+                <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+                    <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-green-500 text-center">
+                        <LockScreen
+                            placeholder="Enter Apprentice ID"
+                            start={parentValue === '0' ? '' : parentValue}
+                            handleSubmit={handleSubmit}
+                        />
+                    </Dialog.Panel>
+                </div>
+            </Dialog>
         </div>
     );
 };
@@ -154,17 +217,12 @@ const CreateUser = (props) => {
                 <h1 className="mb-[10rem] text-center text-9xl">
                     Register New Student for this System
                 </h1>
-                <div className="flex flex-col space-y-[3rem]">
-                    <AlphanumericInput
-                        _title="studentId"
-                        title="Student ID"
+                <div className="flex flex-col items-center space-y-[3rem]">
+                    <StudentIdInput
                         parentValue={formData.studentId.toString()}
                         setParentValue={(value) =>
                             handleFieldValueChange('studentId', value)
                         }
-                        type="number"
-                        style="w-[50rem]"
-                        onChange={handleFieldValueChange}
                     />
                     <AlphanumericInput
                         _title="firstName"

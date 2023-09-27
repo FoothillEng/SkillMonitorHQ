@@ -31,11 +31,12 @@ export const NumberBox = ({ value, onNumberClick }: NumberBoxProps) => {
 
 interface LockScreenProps {
     placeholder: string;
+    start?: string;
     handleSubmit: (studentId: string, setStudentId: any, setError: any) => void;
 }
 
-const LockScreen = ({ placeholder, handleSubmit }: LockScreenProps) => {
-    const [studentId, setStudentId] = useState<string>('');
+const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
+    const [studentId, setStudentId] = useState<string>(start || '');
     const [error, setError] = useState<string>('');
 
     const handleInput = (
