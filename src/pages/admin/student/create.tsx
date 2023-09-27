@@ -149,7 +149,6 @@ const CreateUser = (props) => {
                 firstName: data.firstName,
                 lastName: data.lastName
             }));
-            console.log(formData);
             setErrorMessage('');
             setStudentExists(true);
         } else {
@@ -187,8 +186,6 @@ const CreateUser = (props) => {
         e.preventDefault();
 
         if (!(await checkIfFormIsFilled())) return;
-        console.log('running');
-
         await fetch('/api/admin/student/create', {
             method: 'POST',
             headers: {

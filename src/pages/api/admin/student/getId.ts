@@ -49,11 +49,7 @@ export default async function handler(
                         });
                 })
 
-                const time1 = Date.now();
                 let data = await Promise.race([promise1, getStudentData]);
-                const time2 = Date.now();
-                console.log(data, time2 - time1);
-
 
                 if (data === false) {
                     return res.status(403).send({ message: 'Student ID not found' });
