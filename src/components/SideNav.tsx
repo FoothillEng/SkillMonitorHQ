@@ -59,7 +59,8 @@ const SideNav = () => {
                             label="Dashboard"
                         />
                         <div className="my-[1rem] border-t-2 border-blue-300" />
-                        {session.user?.admin && (
+                        {(session.user?.role === 'TEACHER' ||
+                            session.user?.role === 'ADMIN') && (
                             <div>
                                 <NavItem
                                     href="/admin/"
@@ -102,7 +103,6 @@ const SideNav = () => {
                         {user && (
                             <Student
                                 student={user}
-                                // viewId={session.user?.admin}
                                 viewId={false}
                                 col={false}
                             />

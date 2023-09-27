@@ -31,7 +31,7 @@ export const authOptions: AuthOptions = {
             session.user.firstName = token.firstName;
             session.user.lastName = token.lastName;
             session.user.avatar = token.avatar;
-            session.user.admin = token.admin;
+            session.user.role = token.role;
             session.user.level = token.level;
             session.user.isFirstLogin = token.isFirstLogin;
             session.user.message = token.message;
@@ -44,7 +44,7 @@ export const authOptions: AuthOptions = {
                 token.firstName = (user as User).firstName;
                 token.lastName = (user as User).lastName;
                 token.avatar = (user as User).avatar;
-                token.admin = (user as User).admin;
+                token.role = (user as User).role;
                 token.level = (user as User).level;
             }
 

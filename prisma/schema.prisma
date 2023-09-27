@@ -14,6 +14,12 @@ enum StudentLevel {
   ADVANCED
 }
 
+enum Role {
+  STUDENT
+  ADMIN
+  TEACHER
+}
+
 model User {
   id               String        @id @default(uuid())
   studentId        Int           @unique
@@ -22,7 +28,7 @@ model User {
   avatar           String        @default("https://res.cloudinary.com/dxj8g5osv/image/upload/v1695244850/yvod98i9tspx7fpwxbm5.png")
   level            StudentLevel  @default(BEGINNER)
   lifetimeDuration Int           @default(1)
-  admin            Boolean       @default(false)
+  role             Role          @default(STUDENT)
   machines         UserMachine[]
   sessions         Session[]
   UserLogin        UserLogin[]

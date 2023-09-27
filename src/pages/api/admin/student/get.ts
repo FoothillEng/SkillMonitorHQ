@@ -41,7 +41,7 @@ export default async function handler(
                         avatar: user.user.avatar,
                         level: user.user.level,
                         lifetimeDuration: user.user.lifetimeDuration,
-                        admin: user.user.admin,
+                        role: user.user.role,
                         apprentice: user.apprentice,
                         userMachineId: user.id,
                         duration: user.duration,
@@ -62,7 +62,7 @@ export default async function handler(
                             avatar: true,
                             level: true,
                             lifetimeDuration: true,
-                            admin: true
+                            role: true,
                         }
                     });
 

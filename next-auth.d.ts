@@ -8,7 +8,7 @@ declare module 'next-auth' {
             firstName: string;
             lastName: string;
             avatar: string;
-            admin: boolean;
+            role: string;
             level: number;
         } & Session['user'];
     }

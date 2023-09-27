@@ -49,7 +49,7 @@ export default async function handler(
                     avatar: login.user.avatar,
                     level: login.user.level,
                     lifetimeDuration: login.user.lifetimeDuration,
-                    admin: login.user.admin,
+                    role: login.user.role,
                 }))
 
                 res.status(200).json({ students: transformedLogins })
