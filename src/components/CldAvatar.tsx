@@ -38,7 +38,7 @@ const CldAvatar = ({ avatar, level, size }: CldAvatarProps) => {
             // sizes="100vw" ??
             src={avatar}
             rawTransformations={[
-                'c_crop,g_face/c_scale,w_200,h_200/r_max/e_grayscale/f_auto'
+                'c_crop,g_face/c_scale,w_200,h_200/r_max/f_auto'
             ]}
             className={studentAvatarClass(level, size)}
             alt="pfp"
