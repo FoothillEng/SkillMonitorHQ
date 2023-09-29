@@ -54,11 +54,13 @@ const AlphanumericInput = ({
 interface StudentIdInputProps {
     parentValue: string;
     setParentValue: (value: string) => void;
+    placeholder: string;
 }
 
-const StudentIdInput = ({
+export const StudentIdInput = ({
     parentValue,
-    setParentValue
+    setParentValue,
+    placeholder
 }: StudentIdInputProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -101,7 +103,7 @@ const StudentIdInput = ({
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
                     <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-green-500 text-center">
                         <LockScreen
-                            placeholder="Enter Apprentice ID"
+                            placeholder={placeholder}
                             start={parentValue === '0' ? '' : parentValue}
                             handleSubmit={handleSubmit}
                         />
@@ -220,6 +222,7 @@ const CreateUser = (props) => {
                         setParentValue={(value) =>
                             handleFieldValueChange('studentId', value)
                         }
+                        placeholder="Enter Student ID"
                     />
                     <AlphanumericInput
                         _title="firstName"
@@ -295,7 +298,7 @@ const CreateUser = (props) => {
                     className="mx-auto mb-2 mt-64 flex cursor-pointer items-center p-2"
                     type="submit"
                 >
-                    <div className="hollow-text-3 text-center text-9xl active:bg-slate-400">
+                    <div className="text-center text-9xl active:bg-slate-400">
                         {formData.studentId
                             ? studentExists
                                 ? formData.avatar

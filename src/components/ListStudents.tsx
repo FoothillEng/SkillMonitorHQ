@@ -5,6 +5,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 
 import { FormattedTime } from '@/pages/index';
 import CldAvatar from '@/components/CldAvatar';
+
 interface ListStudentsProps {
     fetchUrl: string;
     admin?: boolean;
@@ -84,6 +85,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                 <th>Avatar</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>Student ID</th>
                                 <th>Apprentice</th>
                                 <th>Time on this machine</th>
                                 <th>Usage Count</th>
@@ -95,6 +97,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                 <th>Avatar</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>Student ID</th>
                                 <th>Time on all machines</th>
                             </tr>
                         )}
@@ -118,6 +121,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                 </td>
                                 <td> {student.firstName}</td>
                                 <td> {student.lastName}</td>
+                                <td> {student.studentId}</td>
                                 {admin && student.apprentice !== undefined && (
                                     <td className="flex justify-center">
                                         {student.apprentice ? (
@@ -153,7 +157,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                     </tbody>
                 </table>
             ) : (
-                <div className="text-xl text-gray-500">
+                <div className="text-4xl text-gray-500">
                     No students available.
                 </div>
             )}
