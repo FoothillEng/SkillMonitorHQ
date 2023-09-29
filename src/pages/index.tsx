@@ -163,7 +163,7 @@ const Index = (props) => {
     };
 
     return (
-        <div className="flex w-screen flex-col items-center justify-center font-oxygen text-green">
+        <div className="flex w-screen flex-col items-center justify-center font-oxygen tracking-[.3rem] text-white">
             {!nextAuthSession && (
                 <>
                     <LockScreen
@@ -204,7 +204,7 @@ const Index = (props) => {
                                 </div>
                             )}
                         </div>
-                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start">
+                        <div className="text-fhs-yellow ml-[10rem] flex flex-col space-y-[3rem] text-start">
                             <div className="w-[50rem] text-6xl capitalize">
                                 {nextAuthSession.user?.firstName +
                                     ' ' +

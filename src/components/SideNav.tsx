@@ -31,8 +31,8 @@ const NavItem = ({ href, icon, label, subItem, onClick }: NavItemProps) => {
             }`}
             onClick={onClick}
         >
-            <Icon />
-            <span className="ml-3">{label}</span>
+            <Icon size={'4rem'} />
+            <span className="ml-[1.5rem]">{label}</span>
         </Link>
     );
 };
@@ -51,7 +51,7 @@ const SideNav = () => {
     return (
         <div>
             {session && (
-                <div className="fixed left-[3rem] top-[20rem] z-40 h-screen w-[30rem] font-oxygen text-blue-300">
+                <div className="fixed left-[3rem] top-[20rem] z-40 h-screen w-[30rem] font-oxygen text-white">
                     <div className="h-full overflow-y-auto px-3 py-4 text-4xl">
                         <NavItem
                             href="/"
@@ -101,11 +101,13 @@ const SideNav = () => {
                             </div>
                         )}
                         {user && (
-                            <Student
-                                student={user}
-                                viewId={false}
-                                col={false}
-                            />
+                            <div className="ml-[2rem]">
+                                <Student
+                                    student={user}
+                                    viewId={false}
+                                    col={false}
+                                />
+                            </div>
                         )}
 
                         <NavItem

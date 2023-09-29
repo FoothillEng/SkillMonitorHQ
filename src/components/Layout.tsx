@@ -47,7 +47,7 @@ const Layout = ({ children }: LayoutProps) => {
         initialLoad();
     }, [setMachineName, setMachineUUID]);
     return (
-        <div className="flex min-h-screen flex-col justify-between bg-gradient-radial from-blue-950 to-black">
+        <div className="flex min-h-screen flex-col justify-between bg-black">
             <Header />
             <main className="flex flex-row">
                 {children}
