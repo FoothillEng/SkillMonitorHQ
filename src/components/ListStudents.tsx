@@ -121,7 +121,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                 </td>
                                 <td> {student.firstName}</td>
                                 <td> {student.lastName}</td>
-                                <td> {student.studentId}</td>
+                                {admin && <td>{student.studentId}</td>}
                                 {admin && student.apprentice !== undefined && (
                                     <td className="flex justify-center">
                                         {student.apprentice ? (
