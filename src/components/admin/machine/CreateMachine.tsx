@@ -54,14 +54,14 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center text-green">
+        <div className="flex flex-col items-center justify-center">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
                 <h1 className="mb-[3rem] text-center text-6xl">
                     Register New Machine For the System
                 </h1>
                 <div className="flex justify-center">
                     <input
-                        className="h-[6rem] w-[50rem] rounded-full border-4 border-green text-center text-6xl"
+                        className="border-fhs-yellow h-[6rem] w-[50rem] rounded-full border-4 text-center text-6xl"
                         type="text"
                         onChange={(e) => handleFieldValueChange(e.target.value)}
                         placeholder="Machine Name"

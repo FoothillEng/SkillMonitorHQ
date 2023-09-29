@@ -15,7 +15,7 @@ interface NumberBoxProps {
 export const NumberBox = ({ value, onNumberClick }: NumberBoxProps) => {
     return (
         <div
-            className="flex h-[8rem] w-[12rem] items-center justify-center rounded border-4 border-green text-center text-6xl active:bg-green-400" // Added flex classes
+            className="border-fhs-blue active:bg-fhs-blue flex h-[8rem] w-[12rem] items-center justify-center rounded border-4 text-center text-6xl" // Added flex classes
             onClick={() => onNumberClick(value)}
         >
             {typeof value === 'number' ? (
@@ -56,15 +56,15 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
 
     return (
         <div className="text-center font-oxygen">
-            <div className="text-blue-300">
+            <div className="text-fhs-yellow">
                 {studentId === '' ? (
-                    <h1 className="text-center text-6xl">{placeholder}</h1>
+                    <h1 className=" text-center text-6xl">{placeholder}</h1>
                 ) : (
                     <h1 className="text-6xl">{studentId}</h1>
                 )}
             </div>
             <form
-                className="mt-[10rem] flex items-center justify-center text-green"
+                className="text-fhs-blue mt-[10rem] flex items-center justify-center"
                 onSubmit={() => handleSubmit(studentId, setStudentId, setError)}
             >
                 <div className="grid grid-cols-3 gap-[3rem]">

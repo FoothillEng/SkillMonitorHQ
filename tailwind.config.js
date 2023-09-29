@@ -83,6 +83,8 @@ module.exports = {
           '900': '#452b87',
           '950': '#2a1a5b',
         },
+        'fhs-yellow': '#f7c44d',
+        'fhs-blue': '#215ba1'
       },
     },
     fontFamily: {

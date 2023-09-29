@@ -35,7 +35,7 @@ const AdminStudentsIndex = (props) => {
     };
 
     return (
-        <div className="flex w-screen flex-col items-center font-oxygen text-green">
+        <div className="flex w-screen flex-col items-center font-oxygen">
             <form
                 onSubmit={handleSubmit}
                 className="mb-[5rem] flex flex-col items-center  p-[2rem] text-4xl active:bg-purple-300 "
