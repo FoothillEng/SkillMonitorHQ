@@ -7,7 +7,7 @@ const AdminMachineIndex = (props) => {
     const [reload, setReload] = useState<boolean>(false);
 
     return (
-        <div className="flex w-screen flex-col items-center justify-around font-oxygen">
+        <div className="flex w-screen flex-col items-center justify-around font-oxygen text-white">
             <div className="mb-[5rem] text-6xl">Machine Settings</div>
             <ListMachines reload={reload} setReload={setReload} />
             <CreateMachine setReload={setReload} />
