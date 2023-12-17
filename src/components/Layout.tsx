@@ -1,7 +1,7 @@
 import { useEffect, useContext, useRef } from 'react';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
-import AuthSessionTimer from '@/components/AuthSessionTimer';
+import AutoLogoutTimer from '@/components/AutoLogoutTimer';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SideNav from '@/components/SideNav';
@@ -49,7 +49,7 @@ const Layout = ({ children }: LayoutProps) => {
     }, [setMachineName, setMachineUUID]);
     return (
         <div className="flex min-h-screen flex-col justify-between bg-black">
-            <AuthSessionTimer />
+            <AutoLogoutTimer />
             <Header />
             <main className="flex flex-row">
                 {children}

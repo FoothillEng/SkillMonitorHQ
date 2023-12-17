@@ -7,7 +7,7 @@ import { Dialog } from '@headlessui/react';
 import LockScreen from '@/components/LockScreen';
 import { FormattedTime } from '@/pages/index';
 
-const AuthSessionTimer = () => {
+const AutoLogoutTimer = () => {
     const [time, setTime] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const [error, setError] = useState('');
@@ -124,4 +124,4 @@ const AuthSessionTimer = () => {
     );
 };
 
-export default AuthSessionTimer;
+export default AutoLogoutTimer;
