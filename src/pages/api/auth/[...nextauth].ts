@@ -52,7 +52,6 @@ export const authOptions: AuthOptions = {
             if (trigger === 'signIn') {
                 token.isFirstLogin = true;
             } else if (trigger === "update" && session?.realExpTime) {
-                console.log("updated: ", token, session)
                 token.realExpTime = session.realExpTime;
                 // session.user.timeRemaining = session.user.realExpTime - Math.floor(Date.now() / 1000);
                 // session.user.realExpTime = token.realExpTime;
