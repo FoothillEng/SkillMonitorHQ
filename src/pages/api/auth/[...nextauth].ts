@@ -35,6 +35,7 @@ export const authOptions: AuthOptions = {
             session.user.level = token.level;
             session.user.isFirstLogin = token.isFirstLogin;
             session.user.message = token.message;
+            session.user.realExpTime = token.realExpTime;
             return session;
         },
         jwt({ token, user, account, trigger, session }) {
@@ -50,7 +51,16 @@ export const authOptions: AuthOptions = {
 
             if (trigger === 'signIn') {
                 token.isFirstLogin = true;
+            } else if (trigger === "update" && session?.realExpTime) {
+                console.log("updated: ", token, session)
+                token.realExpTime = session.realExpTime;
+                // session.user.timeRemaining = session.user.realExpTime - Math.floor(Date.now() / 1000);
+                // session.user.realExpTime = token.realExpTime;
             } else {
+                if (token.iat) {
+                    if (token.realExpTime === undefined) token.realExpTime = token.iat as number + 1800; // 30 minutes
+                }
+
                 if (!(token.isFirstLogin === false)) {
                     const indexPageHasLoaded = session?.message === "ab247ac550e244a1f71147fb444a4ef101cc49bd32edb912ea35076b15e147de"; // just means page is loaded
                     if (indexPageHasLoaded) {
@@ -82,7 +92,7 @@ export const authOptions: AuthOptions = {
         signOut: '/',
     },
     secret: process.env.NEXTAUTH_SECRET,
-    session: { strategy: "jwt", maxAge: 20 }, // 60 minutes =  15 * 60 
+    session: { strategy: "jwt", maxAge: 15 * 60 }, // 60 minutes =  15 * 60 
 
 
     jwt: {
