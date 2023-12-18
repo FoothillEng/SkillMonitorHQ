@@ -7,8 +7,8 @@ module.exports = {
   ],
   theme: {
     screens: {
-        'sm': '1100px', // vertical
-        'md': '1500px', // horizontal
+        'sm': '1200', // vertical
+        'md': '2000px', // horizontal
       },
     extend: {
       backgroundImage: {

@@ -79,7 +79,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
         <div>
             {students && students.length > 0 ? (
                 <table className="border-separate border-spacing-[5rem] text-center">
-                    <thead className="text-4xl">
+                    <thead className="text-6xl md:text-4xl">
                         {admin && students[0].usageCount !== undefined && (
                             <tr>
                                 <th>Avatar</th>
@@ -109,7 +109,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                             </tr>
                         )}
                     </thead>
-                    <tbody className="text-3xl capitalize">
+                    <tbody className="text-5xl capitalize md:text-3xl">
                         {students.map((student) => (
                             <tr key={student.id}>
                                 <td className="flex justify-center">

@@ -15,7 +15,7 @@ interface NumberBoxProps {
 export const NumberBox = ({ value, onNumberClick }: NumberBoxProps) => {
     return (
         <div
-            className="border-fhs-blue active:bg-fhs-blue flex h-[8rem] w-[12rem] items-center justify-center rounded border-4 text-center text-6xl" // Added flex classes
+            className="flex h-[20rem] w-[20rem] items-center justify-center rounded border-[1rem] border-fhs-blue text-center text-9xl active:bg-fhs-blue md:h-[15rem] md:w-[15rem] md:text-6xl" // Added flex classes
             onClick={() => onNumberClick(value)}
         >
             {typeof value === 'number' ? (
@@ -55,19 +55,19 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
     };
 
     return (
-        <div className="text-center font-oxygen">
+        <div className="text-center font-oxygen text-9xl md:text-7xl">
             <div className="text-fhs-yellow">
                 {studentId === '' ? (
-                    <h1 className=" text-center text-6xl">{placeholder}</h1>
+                    <h1 className="text-center">{placeholder}</h1>
                 ) : (
-                    <h1 className="text-6xl">{studentId}</h1>
+                    <h1>{studentId}</h1>
                 )}
             </div>
             <form
-                className="text-fhs-blue mt-[10rem] flex items-center justify-center"
+                className="mt-[10rem] flex items-center justify-center text-fhs-blue"
                 onSubmit={() => handleSubmit(studentId, setStudentId, setError)}
             >
-                <div className="grid grid-cols-3 gap-[3rem]">
+                <div className="grid grid-cols-3 gap-[5rem] md:gap-[3rem]">
                     {Array.from([
                         1,
                         2,
@@ -78,8 +78,8 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
                         7,
                         8,
                         9,
-                        0,
                         BsBackspace,
+                        0,
                         AiOutlineEnter
                     ]).map((number) => (
                         <NumberBox

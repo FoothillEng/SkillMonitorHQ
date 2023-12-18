@@ -171,8 +171,10 @@ const Index = (props) => {
                         handleSubmit={handleSubmit}
                     />
                     {machineUUID && (
-                        <div className="mt-[5rem] flex flex-col items-center justify-center text-blue-300">
-                            <div className="mb-[2rem] text-5xl">Last used:</div>
+                        <div className="mt-[20rem] flex flex-col items-center justify-center text-fhs-blue md:mt-[10rem]">
+                            <div className="mb-[2rem] text-8xl md:text-5xl">
+                                Last used:
+                            </div>
                             <ListStudents
                                 fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
                                 admin={false}
@@ -204,7 +206,7 @@ const Index = (props) => {
                                 </div>
                             )}
                         </div>
-                        <div className="text-fhs-yellow ml-[10rem] flex flex-col space-y-[3rem] text-start">
+                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-fhs-yellow">
                             <div className="w-[50rem] text-6xl capitalize">
                                 {nextAuthSession.user?.firstName +
                                     ' ' +
