@@ -8,7 +8,9 @@ const Header = () => {
     return (
         <div className="mb-[5rem] mt-[4rem] w-full font-oxygen text-fhs-blue">
             <div className="flex items-center justify-center text-center text-9xl uppercase">
-                <div>SkillMonitorHQ {machineName && <>{machineName}</>}</div>
+                {(machineName && <div>{machineName}</div>) || (
+                    <div>SkillMonitor HQ</div>
+                )}
             </div>
             <div className="fixed right-[5rem] top-[5rem]">
                 <Image
