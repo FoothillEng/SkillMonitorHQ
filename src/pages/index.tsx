@@ -258,7 +258,9 @@ const Index = (props) => {
                                         }
                                         setError={setError}
                                     />
-                                    <ApprenticeView />
+                                    {nextAuthSession.user?.runningSession && (
+                                        <ApprenticeView />
+                                    )}
                                 </div>
                             )
                         )}
