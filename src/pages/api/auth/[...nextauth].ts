@@ -36,6 +36,8 @@ export const authOptions: AuthOptions = {
             session.user.isFirstLogin = token.isFirstLogin;
             session.user.message = token.message;
             session.user.realExpTime = token.realExpTime;
+            session.user.runningSession = token.runningSession; // im just using this for global state now lol
+            session.user.forceStopSession = token.forceStopSession;
             return session;
         },
         jwt({ token, user, account, trigger, session }) {
@@ -55,9 +57,18 @@ export const authOptions: AuthOptions = {
                 token.realExpTime = session.realExpTime;
                 // session.user.timeRemaining = session.user.realExpTime - Math.floor(Date.now() / 1000);
                 // session.user.realExpTime = token.realExpTime;
+            } else if (trigger === "update" && session?.forceStopSession !== undefined) {
+                token.forceStopSession = session.forceStopSession;
+            } else if (trigger === "update" && session?.runningSession !== undefined) {
+                token.runningSession = session.runningSession;
             } else {
                 if (token.iat) {
-                    if (token.realExpTime === undefined) token.realExpTime = token.iat as number + 1800; // 30 minutes
+                    if (token.realExpTime === undefined) {  // first time login??
+                        token.realExpTime = token.iat as number + 1800;  // 30 minutes
+                        token.runningSession = false;
+                        token.forceStopSession = false;
+                    }
+
                 }
 
                 if (!(token.isFirstLogin === false)) {
@@ -91,7 +102,7 @@ export const authOptions: AuthOptions = {
         signOut: '/',
     },
     secret: process.env.NEXTAUTH_SECRET,
-    session: { strategy: "jwt", maxAge: 15 * 60 }, // 60 minutes =  15 * 60 
+    session: { strategy: "jwt", maxAge: 30 }, // 60 minutes =  15 * 60 
 
 
     jwt: {

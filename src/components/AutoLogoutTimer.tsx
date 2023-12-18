@@ -23,7 +23,11 @@ const AutoLogoutTimer = () => {
                     Math.floor(Date.now() / 1000);
 
                 if (timeRemaining <= 0) {
-                    signOut();
+                    if (!nextAuthSession?.user.forceStopSession)
+                        update({ forceStopSession: true });
+                    setTimeout(() => {
+                        signOut();
+                    }, 5000);
                 }
 
                 setTime(timeRemaining * 1000);
@@ -42,7 +46,7 @@ const AutoLogoutTimer = () => {
                 clearInterval(intervalId2);
             };
         }
-    }, [nextAuthSession?.user, status]);
+    }, [nextAuthSession?.user, status, update]);
 
     const handleSubmit1 = async (
         studentId: string,

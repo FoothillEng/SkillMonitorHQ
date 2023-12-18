@@ -1,6 +1,7 @@
-import { useState, useCallback, useRef, useContext } from 'react';
+import { useState, useCallback, useRef, useContext, useEffect } from 'react';
 
 import type { Session } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 
@@ -27,6 +28,8 @@ const SessionStopWatch = ({
     const [session, setSession] = useState<Session>();
     const { apprenticeUserMachines } = useContext(ApprenticeContext);
 
+    const { data: nextAuthSession, update } = useSession();
+
     const handleStart = useCallback(async () => {
         if (started) return;
         // transform apprenticeIds into an array of numbers, each in the format apprentice{}Id
@@ -44,7 +47,10 @@ const SessionStopWatch = ({
         })
             .then((res) => res.json())
             .then((res) => setSession(res.session))
-            .then(() => setStarted(true))
+            .then(() => {
+                setStarted(true);
+                update({ runningSession: true });
+            })
             .catch((error) => {
                 console.error(error);
                 setError('An error occurred. Please try again.');
@@ -52,6 +58,7 @@ const SessionStopWatch = ({
     }, [
         setError,
         setSession,
+        update,
         started,
         userMachineId,
         userId,
@@ -76,7 +83,10 @@ const SessionStopWatch = ({
                     setUserMachineDuration(res.userMachineDuration),
                     setUserLifetimeDuration(res.userLifetimeDuration);
             })
-            .then(() => setStarted(false))
+            .then(() => {
+                setStarted(false);
+                update({ runningSession: false });
+            })
             .catch((error) => {
                 console.error(error);
                 setError('An error occurred. Please try again.');
@@ -86,6 +96,7 @@ const SessionStopWatch = ({
         setSession,
         setUserMachineDuration,
         setUserLifetimeDuration,
+        update,
         started,
         session
     ]);
@@ -105,6 +116,12 @@ const SessionStopWatch = ({
             setTime(0);
         }
     }, []);
+
+    useEffect(() => {
+        if (nextAuthSession?.user?.forceStopSession) {
+            handleStop();
+        }
+    }, [nextAuthSession?.user?.forceStopSession, handleStop]);
 
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">

@@ -16,7 +16,8 @@ const Header = () => {
                 <Image
                     src="/falcon.png"
                     width={100}
-                    height={100}
+                    height={0}
+                    className="h-auto"
                     alt="Picture of the author"
                 />
             </div>

@@ -60,46 +60,47 @@ const SideNav = () => {
                         />
                         <div className="my-[1rem] border-t-2 border-blue-300" />
                         {(session.user?.role === 'TEACHER' ||
-                            session.user?.role === 'ADMIN') && (
-                            <div>
-                                <NavItem
-                                    href="/admin/"
-                                    icon={AiFillHome}
-                                    label="Admin Home"
-                                />
-                                <NavItem
-                                    href="/admin/student"
-                                    icon={FaUsers}
-                                    label="All Students"
-                                    subItem={true}
-                                />
-                                <NavItem
-                                    href="/admin/student/machineStudents"
-                                    icon={FaUsers}
-                                    label="Machine Students"
-                                    subItem={true}
-                                />
-                                <NavItem
-                                    href="/admin/student/create"
-                                    icon={IoIosCreate}
-                                    label="Create Student"
-                                    subItem={true}
-                                />
-                                <NavItem
-                                    href="/admin/student/createMass"
-                                    icon={IoIosCreate}
-                                    label="Create Students Mass"
-                                    subItem={true}
-                                />
-                                <NavItem
-                                    href="/admin/machine"
-                                    icon={FiSettings}
-                                    label="Settings"
-                                    subItem={true}
-                                />
-                                <div className="mb-[2rem] mt-[1rem] border-t-2 border-blue-300" />
-                            </div>
-                        )}
+                            session.user?.role === 'ADMIN') &&
+                            !session?.user.runningSession && (
+                                <div>
+                                    <NavItem
+                                        href="/admin/"
+                                        icon={AiFillHome}
+                                        label="Admin Home"
+                                    />
+                                    <NavItem
+                                        href="/admin/student"
+                                        icon={FaUsers}
+                                        label="All Students"
+                                        subItem={true}
+                                    />
+                                    <NavItem
+                                        href="/admin/student/machineStudents"
+                                        icon={FaUsers}
+                                        label="Machine Students"
+                                        subItem={true}
+                                    />
+                                    <NavItem
+                                        href="/admin/student/create"
+                                        icon={IoIosCreate}
+                                        label="Create Student"
+                                        subItem={true}
+                                    />
+                                    <NavItem
+                                        href="/admin/student/createMass"
+                                        icon={IoIosCreate}
+                                        label="Create Students Mass"
+                                        subItem={true}
+                                    />
+                                    <NavItem
+                                        href="/admin/machine"
+                                        icon={FiSettings}
+                                        label="Settings"
+                                        subItem={true}
+                                    />
+                                    <div className="mb-[2rem] mt-[1rem] border-t-2 border-blue-300" />
+                                </div>
+                            )}
                         {user && (
                             <div className="ml-[2rem]">
                                 <Student
