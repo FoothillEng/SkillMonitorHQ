@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { BsBackspace } from 'react-icons/bs';
 import { AiOutlineEnter } from 'react-icons/ai';
 
-import { CustomToast } from '@/components/ApprenticeView';
+// import { CustomToast } from '@/components/ApprenticeView';
 
 interface NumberBoxProps {
     value: number | typeof BsBackspace | typeof AiOutlineEnter;
@@ -90,7 +90,7 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
                     ))}
                 </div>
             </form>
-            {error && <CustomToast text={error} />}
+            {/* {error && <CustomToast text={error} />} */}
         </div>
     );
 };

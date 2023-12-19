@@ -139,7 +139,7 @@ const AutoLogoutTimer = () => {
                                 />
 
                                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                                    <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-green-500 text-center">
+                                    <Dialog.Panel className="mx-auto flex h-[95rem] w-[65rem] items-center justify-center rounded bg-green-500 text-center">
                                         {(!adminSet && (
                                             <LockScreen
                                                 placeholder={'Enter Admin ID'}

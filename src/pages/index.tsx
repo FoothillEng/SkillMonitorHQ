@@ -13,7 +13,7 @@ import StarRating from '@/components/StarRating';
 import DynamicStarRating from '@/components/DynamicStarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
 import ApprenticeView from '@/components/ApprenticeView';
-import { CustomToast } from '@/components/ApprenticeView';
+// import { CustomToast } from '@/components/ApprenticeView';
 import CldAvatar from '@/components/CldAvatar';
 
 interface AccessMachine {
@@ -172,7 +172,7 @@ const Index = (props) => {
                     />
                     {machineUUID && (
                         <div className="mt-[20rem] flex flex-col items-center justify-center text-fhs-blue md:mt-[10rem]">
-                            <div className="mb-[2rem] text-8xl md:text-5xl">
+                            <div className="mb-[2rem] text-8xl md:text-6xl">
                                 Last used:
                             </div>
                             <ListStudents
