@@ -9,13 +9,27 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                const { sessionId, startTime } = req.body;
+                const { sessionId, startTime, apprenticeUserMachines } = req.body;
+
+                let data: any = {
+                    endTime: new Date(),
+                    duration: Math.floor(new Date().getTime() - new Date(startTime).getTime())
+                };
+
+                if (apprenticeUserMachines[0]) {
+                    data.apprentice1UMID = apprenticeUserMachines[0].userMachineId;
+                }
+
+                if (apprenticeUserMachines[1]) {
+                    data.apprentice2UMID = apprenticeUserMachines[1].userMachineId;
+                }
+
+                if (apprenticeUserMachines[2]) {
+                    data.apprentice3UMID = apprenticeUserMachines[2].userMachineId;
+                }
                 const session = await prisma.session.update({
                     where: { id: sessionId },
-                    data: {
-                        endTime: new Date(),
-                        duration: new Date().getTime() - new Date(startTime).getTime()
-                    }
+                    data: data
                 })
 
                 if (!session || session.duration === null) {

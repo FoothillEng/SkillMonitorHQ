@@ -9,9 +9,9 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                const { userMachineId, userId, apprenticeUserMachines } = req.body;
+                const { userMachineId, userId } = req.body;
 
-                if (!userMachineId || !userId || !apprenticeUserMachines) {
+                if (!userMachineId || !userId) {
                     res.status(400).json({
                         message: 'A value was not provided'
                     });
@@ -22,18 +22,6 @@ export default async function handler(
                     userMachineId,
                     userId,
                 };
-
-                if (apprenticeUserMachines[0]) {
-                    data.apprentice1UMID = apprenticeUserMachines[0].userMachineId;
-                }
-
-                if (apprenticeUserMachines[1]) {
-                    data.apprentice2UMID = apprenticeUserMachines[1].userMachineId;
-                }
-
-                if (apprenticeUserMachines[2]) {
-                    data.apprentice3UMID = apprenticeUserMachines[2].userMachineId;
-                }
 
                 await prisma.session.create({
                     data

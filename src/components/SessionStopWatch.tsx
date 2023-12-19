@@ -41,8 +41,7 @@ const SessionStopWatch = ({
             },
             body: JSON.stringify({
                 userMachineId,
-                userId,
-                apprenticeUserMachines
+                userId
             })
         })
             .then((res) => res.json())
@@ -55,15 +54,7 @@ const SessionStopWatch = ({
                 console.error(error);
                 setError('An error occurred. Please try again.');
             });
-    }, [
-        setError,
-        setSession,
-        update,
-        started,
-        userMachineId,
-        userId,
-        apprenticeUserMachines
-    ]);
+    }, [setError, setSession, update, started, userMachineId, userId]);
 
     const handleStop = useCallback(async () => {
         if (!started) return;
@@ -74,7 +65,8 @@ const SessionStopWatch = ({
             },
             body: JSON.stringify({
                 sessionId: session?.id,
-                startTime: session?.startTime
+                startTime: session?.startTime,
+                apprenticeUserMachines
             })
         })
             .then((res) => res.json())
@@ -98,7 +90,8 @@ const SessionStopWatch = ({
         setUserLifetimeDuration,
         update,
         started,
-        session
+        session,
+        apprenticeUserMachines
     ]);
 
     const startTimer = useCallback(() => {
