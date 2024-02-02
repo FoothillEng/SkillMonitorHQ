@@ -13,7 +13,6 @@ import StarRating from '@/components/StarRating';
 import DynamicStarRating from '@/components/DynamicStarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
 import ApprenticeView from '@/components/ApprenticeView';
-// import { CustomToast } from '@/components/ApprenticeView';
 import CldAvatar from '@/components/CldAvatar';
 
 interface AccessMachine {
@@ -301,7 +300,7 @@ const Index = (props) => {
             )}
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
-                    <CustomToast text={error} />
+                    error
                 </div>
             )}
         </div>
