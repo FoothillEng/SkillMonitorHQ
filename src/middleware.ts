@@ -11,8 +11,12 @@ export default withAuth({
             if (req.nextUrl.pathname.startsWith("/admin") || req.nextUrl.pathname.startsWith("/api/admin")) {
                 return token?.role === "TEACHER" || token?.role === "ADMIN"
             }
-            if (tokenExists) return true;
+
+            const safeRoutes = ['/', '/api/machine/get', '/api/checkLastLogin']
+            if (tokenExists || safeRoutes.includes(req.nextUrl.pathname)) return true;
+
             return false;
+
         },
     },
 })
