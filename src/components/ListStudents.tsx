@@ -75,87 +75,106 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
             });
     };
 
+    const avatarVariants: { [key: number]: string; } = {
+        0: '',
+        1: 'opacity-50 ml-[3rem]',
+        2: 'opacity-25 ml-[3rem]'
+    }
+
     return (
         <div>
             {students && students.length > 0 ? (
-                <table className="border-separate border-spacing-[5rem] text-center">
-                    <thead className="text-6xl md:text-5xl">
-                        {admin && students[0].usageCount !== undefined && (
-                            <tr>
-                                <th>Avatar</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Student ID</th>
-                                <th>Apprentice</th>
-                                <th>Time on this machine</th>
-                                <th>Usage Count</th>
-                                <th>Average Rating</th>
-                            </tr>
-                        )}
-                        {admin && students[0].usageCount === undefined && (
-                            <tr>
-                                <th>Avatar</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Student ID</th>
-                                <th>Time on all machines</th>
-                            </tr>
-                        )}
-                        {!admin && (
-                            <tr>
-                                <th>Avatar</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                            </tr>
-                        )}
-                    </thead>
-                    <tbody className="text-5xl capitalize md:text-4xl">
-                        {students.map((student) => (
-                            <tr key={student.id}>
-                                <td className="flex justify-center">
-                                    <CldAvatar
-                                        avatar={student.avatar}
-                                        level={student.level}
-                                        size={'MEDIUM'}
-                                    />
-                                </td>
-                                <td> {student.firstName}</td>
-                                <td> {student.lastName}</td>
-                                {admin && <td>{student.studentId}</td>}
-                                {admin && student.apprentice !== undefined && (
+                <div>
+                    {admin ? (
+                    <table className="border-separate border-spacing-[5rem] text-center">
+                        <thead className="text-6xl md:text-5xl">
+                            {students[0].usageCount !== undefined && (
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Student ID</th>
+                                    <th>Apprentice</th>
+                                    <th>Time on this machine</th>
+                                    <th>Usage Count</th>
+                                    <th>Average Rating</th>
+                                </tr>
+                            )}
+                            {students[0].usageCount === undefined && (
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Student ID</th>
+                                    <th>Time on all machines</th>
+                                </tr>
+                            )}
+                        </thead>
+                        <tbody className="text-5xl capitalize md:text-4xl">
+                            {students.map((student) => (
+                                <tr key={student.id}>
                                     <td className="flex justify-center">
-                                        {student.apprentice ? (
-                                            <FaCheck
-                                                size={'5rem'}
-                                                className="text-center text-white"
-                                                onClick={() =>
-                                                    handleChange(student, true)
-                                                }
-                                            />
-                                        ) : (
-                                            <FaTimes
-                                                size={'5rem'}
-                                                className="text-red-500"
-                                                onClick={() =>
-                                                    handleChange(student, false)
-                                                }
-                                            />
-                                        )}
-                                    </td>
-                                )}
-                                {admin && (
-                                    <td>
-                                        <FormattedTime
-                                            milliseconds={student.duration}
+                                        <CldAvatar
+                                            avatar={student.avatar}
+                                            level={student.level}
+                                            size={'MEDIUM'}
                                         />
                                     </td>
-                                )}
-                                {admin && <td>{student.usageCount}</td>}
-                                {admin && <td>{student.averageRating}</td>}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                    <td> {student.firstName}</td>
+                                    <td> {student.lastName}</td>
+                                    {<td>{student.studentId}</td>}
+                                    {student.apprentice !== undefined && (
+                                        <td className="flex justify-center">
+                                            {student.apprentice ? (
+                                                <FaCheck
+                                                    size={'5rem'}
+                                                    className="text-center text-white"
+                                                    onClick={() =>
+                                                        handleChange(student, true)
+                                                    }
+                                                />
+                                            ) : (
+                                                <FaTimes
+                                                    size={'5rem'}
+                                                    className="text-red-500"
+                                                    onClick={() =>
+                                                        handleChange(student, false)
+                                                    }
+                                                />
+                                            )}
+                                        </td>
+                                    )}
+                                    {(
+                                        <td>
+                                            <FormattedTime
+                                                milliseconds={student.duration}
+                                            />
+                                        </td>
+                                    )}
+                                    {<td>{student.usageCount}</td>}
+                                    {<td>{student.averageRating}</td>}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    ) : (
+                        
+                       <div className='flex flex-row'>
+                        {students.map((student, idx) => (
+                                <div key={student.id}>
+                                    <div className={`flex ${avatarVariants[idx]}`}>
+                                        <CldAvatar
+                                            avatar={student.avatar}
+                                            level={student.level}
+                                            size={'MEDIUM'}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                       </div>
+                        
+                    )};
+                </div>
             ) : (
                 <div className="text-4xl text-gray-500">
                     No students available.
