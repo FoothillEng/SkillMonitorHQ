@@ -170,7 +170,7 @@ const Index = (props) => {
                         handleSubmit={handleSubmit}
                     />
                     {machineUUID && (
-                        <div className="mt-[20rem] flex flex-col items-center justify-center text-fhs-blue md:mt-[10rem]">
+                        <div className="mt-[10rem] md:mt-[5rem] flex flex-col items-center justify-center text-fhs-blue">
                             <div className="mb-[2rem] text-8xl md:text-6xl">
                                 Last used:
                             </div>

@@ -14,10 +14,10 @@ const Header = () => {
             </div>
             <div className="fixed right-[5rem] top-[5rem]">
                 <Image
-                    src="/falcon.png"
+                    src="/falcon.png"   
                     width={100}
                     height={0}
-                    className="h-auto"
+                    className='h-auto w-auto'
                     alt="Picture of the author"
                 />
             </div>
