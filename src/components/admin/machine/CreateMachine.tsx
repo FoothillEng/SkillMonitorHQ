@@ -61,7 +61,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                 </h1>
                 <div className="flex justify-center">
                     <input
-                        className="border-fhs-yellow h-[6rem] w-[50rem] rounded-full border-4 text-center text-6xl"
+                        className="border-secondary h-[6rem] w-[50rem] rounded-full border-4 text-center text-6xl"
                         type="text"
                         onChange={(e) => handleFieldValueChange(e.target.value)}
                         placeholder="Machine Name"

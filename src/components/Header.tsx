@@ -6,7 +6,7 @@ import { MachineContext } from '@/lib/contexts/MachineContext';
 const Header = () => {
     const { machineName } = useContext(MachineContext);
     return (
-        <div className="mb-[5rem] mt-[4rem] w-full font-oxygen text-fhs-blue">
+        <div className="mb-[5rem] mt-[4rem] w-full font-oxygen text-primary">
             <div className="flex items-center justify-center text-center text-9xl uppercase">
                 {(machineName && <div>{machineName}</div>) || (
                     <div>SkillMonitor HQ</div>

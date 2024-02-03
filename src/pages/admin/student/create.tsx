@@ -40,7 +40,7 @@ const AlphanumericInput = ({
     return (
         <div className="flex flex-col items-center justify-center">
             <input
-                className={`h-[6rem] rounded-full border-4 border-green text-center text-6xl ${style}`}
+                className={`h-[6rem] rounded-full border-4 border-primary text-center text-6xl ${style}`}
                 type={type}
                 onChange={(e) => handleFieldValueChange(e.target.value)}
                 placeholder={`Enter ${title} here`}
@@ -88,7 +88,7 @@ export const StudentIdInput = ({
             onClick={() => setIsOpen(true)}
         >
             <div className="flex flex-col items-center">
-                <div className="h-[6rem] w-[50rem] rounded-full border-4 border-green bg-white text-center text-6xl">
+                <div className="h-[6rem] w-[50rem] rounded-full border-4 border-primary bg-white text-center text-6xl">
                     {parentValue === '0' ? 'Enter Student ID' : parentValue}
                 </div>
             </div>
@@ -101,7 +101,7 @@ export const StudentIdInput = ({
                 <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                    <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-green-500 text-center">
+                    <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-primary text-center">
                         <LockScreen
                             placeholder={placeholder}
                             start={parentValue === '0' ? '' : parentValue}
@@ -211,7 +211,7 @@ const CreateUser = (props) => {
     }
 
     return (
-        <div className="flex w-screen flex-col items-center text-green">
+        <div className="flex w-screen flex-col items-center text-secondary">
             <form onSubmit={handleSubmit} className="mt-[5rem]">
                 <h1 className="mb-[10rem] text-center text-9xl">
                     Register New Student for this System
@@ -281,7 +281,7 @@ const CreateUser = (props) => {
                                 return (
                                     <div className="flex flex-col items-center justify-center">
                                         <button
-                                            className="h-[6rem] w-[50rem] rounded-full border-4 border-green bg-white text-center text-6xl"
+                                            className="h-[6rem] w-[50rem] rounded-full border-4 border-primary bg-white text-center text-6xl"
                                             onClick={handleOnClick}
                                         >
                                             {formData.avatar

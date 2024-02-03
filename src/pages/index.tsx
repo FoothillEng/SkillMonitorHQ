@@ -174,7 +174,7 @@ const Index = (props) => {
                         handleSubmit={handleSubmit}
                     />
                     {machineUUID && (
-                        <div className="mt-[10rem] md:mt-[5rem] flex flex-col items-center justify-center text-fhs-blue">
+                        <div className="mt-[10rem] md:mt-[5rem] flex flex-col items-center justify-center text-primary">
                             <div className="mb-[2rem] text-8xl md:text-6xl">
                                 Last used:
                             </div>
@@ -209,7 +209,7 @@ const Index = (props) => {
                                 </div>
                             )}
                         </div>
-                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-fhs-yellow">
+                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-secondary">
                             <div className="w-[50rem] text-6xl capitalize">
                                 {nextAuthSession.user?.firstName +
                                     ' ' +

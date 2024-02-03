@@ -104,7 +104,7 @@ const StarRating = ({
 
     return (
         <div className="flex flex-col items-center">
-            <div className="text-fhs-blue text-6xl mb-[10rem]">
+            <div className="text-primary text-6xl mb-[10rem]">
                 Rate the cleanliness of the last user
             </div>
             <div className='flex flex-row space-x-[5rem]'>
