@@ -120,7 +120,7 @@ const Index = (props) => {
                         setUserMachineDuration(data.userMachineDuration);
                         setUserLifetimeDuration(data.userLifetimeDuration);
                     }
-                    setUILoading(false)
+                    setUILoading(false);
 
                     if (!data.allowedMachines) return;
 
@@ -174,8 +174,8 @@ const Index = (props) => {
                         handleSubmit={handleSubmit}
                     />
                     {machineUUID && (
-                        <div className="mt-[10rem] md:mt-[5rem] flex flex-col items-center justify-center text-primary">
-                            <div className="mb-[2rem] text-8xl md:text-6xl">
+                        <div className="mt-[8rem] flex flex-col items-center justify-center text-primary md:mt-[10rem]">
+                            <div className="mb-[5rem] text-8xl md:text-6xl">
                                 Last used:
                             </div>
                             <ListStudents
@@ -271,9 +271,10 @@ const Index = (props) => {
                 </div>
             )}
 
-            {UILoading && (status == "loading" || status == "authenticated") && (
-                <div className="text-6xl">Loading...</div>
-            )}
+            {UILoading &&
+                (status == 'loading' || status == 'authenticated') && (
+                    <div className="text-6xl">Loading...</div>
+                )}
 
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
@@ -310,8 +311,7 @@ const Index = (props) => {
             )}
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
-                    {
-                    JSON.stringify(accessMachine)}
+                    {JSON.stringify(accessMachine)}
                 </div>
             )}
         </div>
