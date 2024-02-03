@@ -2,18 +2,22 @@ import { FaStar } from 'react-icons/fa';
 
 interface DynamicStar {
     fill?: number;
+    size?: number;
+    [key: string]: any; // Allow for dynamic props
 }
-const DynamicStar = ({ fill }: DynamicStar) => {
+
+export const DynamicStar = ({ fill, size, ...props }: DynamicStar) => {
     const starFill = fill ? fill * 100 : 0;
+    const starSize = size ? size : 30;
 
     return (
-        <div className="relative">
-            <FaStar color="gray" />
+        <div className="relative" {...props}>
+            <FaStar color="gray" size={size}/>
             <div
                 className="absolute left-0 top-0 overflow-hidden"
                 style={{ width: `${starFill}%` }}
             >
-                <FaStar color={'gold'} />
+                <FaStar color={'gold'} size={size} />
             </div>
         </div>
     );
