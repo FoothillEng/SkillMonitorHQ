@@ -153,6 +153,8 @@ const CreateUser = (props) => {
             }));
             setErrorMessage('');
             setStudentExists(true);
+        } else if (res.status === 409) {
+            setErrorMessage('Student in system with that ID');
         } else {
             setErrorMessage('Student does not exist with given ID');
         }
