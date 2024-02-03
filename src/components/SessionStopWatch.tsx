@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 
-import { FormattedTime } from '@/pages/index';
+import FormattedTime from '@/components/FormattedTime';
 
 interface SessionStopWatchProps {
     userId: string;
@@ -118,29 +118,30 @@ const SessionStopWatch = ({
 
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">
-            <div className="text-6xl">
-                <FormattedTime milliseconds={time} />
-            </div>
-
             {started ? (
-                <button
-                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
-                    onClick={() => {
-                        stopTimer(), handleStop();
-                    }}
-                >
-                    <div className="w-[20rem] p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
-                        Stop Session
+                <div>
+                    <div className="text-6xl">
+                        <FormattedTime milliseconds={time} />
                     </div>
-                </button>
+                    <button
+                        className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
+                        onClick={() => {
+                            stopTimer(), handleStop();
+                        }}
+                    >
+                        <div className="w-[20rem] p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
+                            Stop Session
+                        </div>
+                    </button>
+                </div>
             ) : (
                 <button
-                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
+                    className="mx-auto mb-2 mt-[3rem] flex items-center p-[2rem]"
                     onClick={() => {
                         startTimer(), handleStart();
                     }}
                 >
-                    <div className="w-[30rem] p-[2rem] text-center text-5xl outline outline-4 active:bg-slate-400">
+                    <div className="w-[80rem] p-[2rem] text-center text-9xl outline outline-4 active:bg-slate-400">
                         Start New Session
                     </div>
                 </button>

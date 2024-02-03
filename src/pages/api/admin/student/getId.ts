@@ -22,7 +22,7 @@ export default async function handler(
 
 
                 if (user !== null) {
-                    return res.status(403).send({ message: 'Student already exists' });
+                    return res.status(409).send({ message: 'Student already exists' });
                 }
 
                 const promise1 = new Promise((resolve, reject) => { // not really needed since .on('end') will fire if no data is found

@@ -5,7 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { Dialog } from '@headlessui/react';
 
 import LockScreen from '@/components/LockScreen';
-import { FormattedTime } from '@/pages/index';
+import FormattedTime from '@/components/FormattedTime';
 
 const AutoLogoutTimer = () => {
     const [time, setTime] = useState(0);
@@ -112,8 +112,8 @@ const AutoLogoutTimer = () => {
     return (
         <div className="fixed right-[5rem] top-[50rem] text-lg text-white">
             {nextAuthSession && (
-                <div className="text-center font-oxygen text-fhs-yellow">
-                    <div className="flex h-[10rem] w-[40rem] flex-col justify-center p-[5rem] outline outline-4 outline-fhs-blue">
+                <div className="text-center font-oxygen text-secondary">
+                    <div className="flex h-[10rem] w-[40rem] flex-col justify-center p-[5rem] outline outline-4 outline-primary">
                         {/* <h1 className="text-4xl"> :</h1> */}
                         <div className="text-3xl">
                             <FormattedTime

@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 
+import Title from '@/components/Title';
 import ListStudents from '@/components/ListStudents';
 import { StudentIdInput } from '@/pages/admin/student/create';
 import { MachineContext } from '@/lib/contexts/MachineContext';
@@ -36,9 +37,10 @@ const AdminStudentsIndex = (props) => {
 
     return (
         <div className="flex w-screen flex-col items-center font-oxygen">
+            <Title title="Machine Stats" />
             <form
                 onSubmit={handleSubmit}
-                className="mb-[5rem] flex flex-col items-center  p-[2rem] text-4xl active:bg-purple-300 "
+                className="mb-[5rem] flex flex-col items-center p-[2rem] text-4xl active:bg-purple-300 "
             >
                 <div className="text-5xl">Add Student to this Machine</div>
                 <div className="mt-[1rem] text-3xl">

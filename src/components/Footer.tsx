@@ -1,8 +1,9 @@
 const Footer = () => {
     return (
-        <footer className="mt-10 px-24 py-20">
+        <footer className="mb-[5rem] mt-[3rem]">
             <span className="block text-center text-xl text-white">
-                © 2023 SkillMonitorHQ™ All Rights Reserved.
+                © 2024 Foothill High School Engineering Department All Rights
+                Reserved.
             </span>
         </footer>
     );

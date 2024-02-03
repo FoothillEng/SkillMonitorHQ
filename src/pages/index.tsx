@@ -10,10 +10,10 @@ import { MachineContext } from '@/lib/contexts/MachineContext';
 import LockScreen from '@/components/LockScreen';
 import ListStudents from '@/components/ListStudents';
 import StarRating from '@/components/StarRating';
+import FormattedTime from '@/components/FormattedTime';
 import DynamicStarRating from '@/components/DynamicStarRating';
 import SessionStopWatch from '@/components/SessionStopWatch';
 import ApprenticeView from '@/components/ApprenticeView';
-// import { CustomToast } from '@/components/ApprenticeView';
 import CldAvatar from '@/components/CldAvatar';
 
 interface AccessMachine {
@@ -25,38 +25,6 @@ interface AccessMachine {
     lastLoginId?: number;
 }
 
-interface FormattedTimeProps {
-    prependedString?: string;
-    milliseconds: number;
-}
-// returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
-export const FormattedTime = ({
-    prependedString,
-    milliseconds
-}: FormattedTimeProps) => {
-    const seconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-
-    const formattedSeconds = seconds % 60;
-    const formattedMinutes = minutes % 60;
-    const formattedHours = hours % 60;
-
-    return (
-        <div>
-            {(prependedString ? prependedString : '') +
-                (formattedHours < 10 ? '0' : '') +
-                formattedHours +
-                ':' +
-                (formattedMinutes < 10 ? '0' : '') +
-                formattedMinutes +
-                ':' +
-                (formattedSeconds < 10 ? '0' : '') +
-                formattedSeconds}
-        </div>
-    );
-};
-
 const Index = (props) => {
     const [error, setError] = useState('');
     const [accessMachine, setAccessMachine] = useState<AccessMachine>({
@@ -67,8 +35,9 @@ const Index = (props) => {
     const [userLifetimeDuration, setUserLifetimeDuration] =
         useState<number>(-1); // [milliseconds]
     const [wasCalled, setWasCalled] = useState(false);
-    const { data: nextAuthSession, update } = useSession();
+    const { data: nextAuthSession, update, status } = useSession();
     const { machineUUID } = useContext(MachineContext);
+    const [UILoading, setUILoading] = useState(true);
 
     const handleStarRatingClick = async () => {
         setAccessMachine((prevAccessMachine) => ({
@@ -99,7 +68,7 @@ const Index = (props) => {
 
         const setMachineUsage = async () => {
             await fetch(
-                `/api/admin/machine/access?machineUUID=${machineUUID}&userId=${userId}&isFirstLogin=${isFirstLogin}`,
+                `/api/machine/checkAccess?machineUUID=${machineUUID}&userId=${userId}&isFirstLogin=${isFirstLogin}`,
                 {
                     method: 'GET',
                     headers: {
@@ -120,7 +89,10 @@ const Index = (props) => {
                         setUserMachineDuration(data.userMachineDuration);
                         setUserLifetimeDuration(data.userLifetimeDuration);
                     }
+                    setUILoading(false);
+
                     if (!data.allowedMachines) return;
+
                     setAccessMachine({
                         allowed: false,
                         allowedMachines: data.allowedMachines.map(
@@ -171,8 +143,8 @@ const Index = (props) => {
                         handleSubmit={handleSubmit}
                     />
                     {machineUUID && (
-                        <div className="mt-[20rem] flex flex-col items-center justify-center text-fhs-blue md:mt-[10rem]">
-                            <div className="mb-[2rem] text-8xl md:text-6xl">
+                        <div className="mt-[8rem] flex flex-col items-center justify-center text-primary md:mt-[10rem]">
+                            <div className="mb-[5rem] text-8xl md:text-6xl">
                                 Last used:
                             </div>
                             <ListStudents
@@ -206,7 +178,7 @@ const Index = (props) => {
                                 </div>
                             )}
                         </div>
-                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-fhs-yellow">
+                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-secondary">
                             <div className="w-[50rem] text-6xl capitalize">
                                 {nextAuthSession.user?.firstName +
                                     ' ' +
@@ -228,7 +200,7 @@ const Index = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-[7rem]">
+                    <div className="mt-[10rem]">
                         {accessMachine.lastLoginId &&
                         accessMachine.lastLoginId > 0 ? (
                             <div className="text-5xl">
@@ -268,22 +240,29 @@ const Index = (props) => {
                 </div>
             )}
 
+            {UILoading &&
+                (status == 'loading' || status == 'authenticated') && (
+                    <div className="text-6xl">Loading...</div>
+                )}
+
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
-                    <div className="text-6xl">
-                        You are{' '}
-                        {`${
-                            accessMachine.apprentice
-                                ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
-                                : 'not allowed to use this machine'
-                        }`}
-                    </div>
+                    {!UILoading && (
+                        <div className="text-6xl">
+                            You are{' '}
+                            {`${
+                                accessMachine.apprentice
+                                    ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
+                                    : 'not authorized to use this machine'
+                            }`}
+                        </div>
+                    )}
                     {accessMachine.allowedMachines && (
-                        <div className="mb-[1rem] mt-[2rem] text-4xl">
-                            Machines you are allowed to use:
+                        <div className="mb-[1rem] mt-[10rem] text-5xl">
+                            Machines you are authorized to use:
                             {accessMachine.allowedMachines.length === 0 && (
-                                <div className="text-red">
-                                    You are not allowed to use any machines.
+                                <div className="mt-[2rem] text-red">
+                                    You are not authorized to use any machines.
                                 </div>
                             )}
                             <div className="flex flex-col space-y-[1rem]">
@@ -301,7 +280,7 @@ const Index = (props) => {
             )}
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
-                    <CustomToast text={error} />
+                    {JSON.stringify(accessMachine)}
                 </div>
             )}
         </div>
