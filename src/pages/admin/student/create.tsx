@@ -127,7 +127,7 @@ const CreateUser = (props) => {
     return (
         <div className="flex w-screen flex-col items-center text-secondary">
             <div className="mt-[2rem]">
-                <Title title="Register New Student to SMHQ" />;
+                <Title title="Register New Student to SMHQ" />
                 <div className="flex flex-col items-center space-y-[3rem]">
                     {!studentExists ? (
                         <div>
