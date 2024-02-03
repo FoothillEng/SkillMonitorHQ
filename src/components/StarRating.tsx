@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { DynamicStar } from './DynamicStarRating';
 
 interface StarRatingProps {
@@ -18,8 +18,11 @@ const StarRating = ({
 }: StarRatingProps) => {
     const [rating, setRating] = useState(OSCILLATION_DEFAULT);
     const [index, setIndex] = useState(0);
+    const oscillating = useRef(true);
+
 
     useEffect(() => { // oscillate the stars
+        if (!oscillating.current) return; 
         const interval = setInterval(() => {
             if (index < 3) {
                 setRating((prevRating) => {
@@ -46,6 +49,7 @@ const StarRating = ({
             }else {
                 clearInterval(interval);
                 setTimeout(() => {
+                    if (!oscillating.current) return;
                     setRating(OSCILLATION_DEFAULT);
                     setIndex(0);
                 }, 1000);
@@ -53,9 +57,24 @@ const StarRating = ({
         }, 100);
 
         return () => clearInterval(interval);
-    }, [index]);
+    }, [index, oscillating]);
 
     const handleRatingClick = async (clickedRating: number) => {
+        oscillating.current = false;
+
+        setRating((prevRating) => {
+            const newRating = [...prevRating];
+            for (let i = 0; i < 5; i++) {
+                if (i < clickedRating) {
+                    newRating[i] = 1;
+                } else {
+                    newRating[i] = 0;
+                }
+            }
+            console.log(clickedRating,newRating);
+            return newRating;
+        });
+        
         try {
             // Send an API request to record the rating
             await fetch('/api/updateRating', {
