@@ -8,8 +8,8 @@ import SMHQLogo from '../../public/SMHQ.png';
 const Header = () => {
     const { machineName } = useContext(MachineContext);
     return (
-        <div className="mb-[5rem] mt-[4rem] w-full font-oxygen text-primary">
-            <div className="flex items-center justify-center text-center text-9xl uppercase">
+        <div className="mb-[3rem] mt-[4rem] w-full font-oxygen text-primary">
+            <div className="flex items-center justify-center text-center text-8xl uppercase">
                 {(machineName && <div>{machineName}</div>) || (
                     <div>SkillMonitor HQ</div>
                 )}
