@@ -8,6 +8,9 @@ const AdminStudentsIndex = (props) => {
     const { machineUUID } = useContext(MachineContext);
     return (
         <div className="flex w-screen flex-col items-center font-oxygen text-white ">
+            <h1 className='text-9xl text-center mb-[5rem]'>
+                Stats for all machines
+            </h1>
             <div className="mb-[5rem] p-[2rem] text-4xl outline outline-4 active:bg-purple-300 ">
                 <Link href={'/admin/student/create'}>New Student</Link>
             </div>

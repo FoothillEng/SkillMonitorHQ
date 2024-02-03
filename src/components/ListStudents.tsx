@@ -86,26 +86,24 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
             {students && students.length > 0 ? (
                 <div>
                     {admin ? (
-                    <table className="border-separate border-spacing-[5rem] text-center">
+                    <table className="border-separate border-spacing-[3rem] text-center">
                         <thead className="text-6xl md:text-5xl">
                             {students[0].usageCount !== undefined && (
                                 <tr>
                                     <th>Avatar</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    {/* <th>Student ID</th> */}
                                     <th>Apprentice</th>
-                                    <th>Time on this machine</th>
-                                    <th>Usage Count</th>
-                                    <th>Average Rating</th>
+                                    <th>Time</th>
+                                    <th>Usage #</th>
+                                    <th>Avg. Rating</th>
                                 </tr>
                             )}
-                            {students[0].usageCount === undefined && (
+                            {students[0].usageCount === undefined && ( // whats this for lol
                                 <tr>
                                     <th>Avatar</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    {/* <th>Student ID</th> */}
                                     <th>Time on all machines</th>
                                 </tr>
                             )}
@@ -120,9 +118,8 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                             size={'MEDIUM'}
                                         />
                                     </td>
-                                    <td> {student.firstName}</td>
-                                    <td> {student.lastName}</td>
-                                    {<td>{student.studentId}</td>}
+                                    <td> {student.firstName}  {student.lastName}</td>
+                                    {/* {<td>{student.studentId}</td>} */}
                                     {student.apprentice !== undefined && (
                                         <td className="flex justify-center">
                                             {student.apprentice ? (
@@ -159,7 +156,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                     </table>
                     ) : (
                         
-                       <div className='flex flex-row'>
+                        <div className='flex flex-row'>
                         {students.map((student, idx) => (
                                 <div key={student.id}>
                                     <div className={`flex ${avatarVariants[idx]}`}>
@@ -171,7 +168,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                     </div>
                                 </div>
                             ))}
-                       </div>
+                        </div>
                         
                     )};
                 </div>
