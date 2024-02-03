@@ -66,8 +66,9 @@ const Index = (props) => {
     const [userLifetimeDuration, setUserLifetimeDuration] =
         useState<number>(-1); // [milliseconds]
     const [wasCalled, setWasCalled] = useState(false);
-    const { data: nextAuthSession, update } = useSession();
+    const { data: nextAuthSession, update, status } = useSession();
     const { machineUUID } = useContext(MachineContext);
+    const [UILoading, setUILoading] = useState(true);
 
     const handleStarRatingClick = async () => {
         setAccessMachine((prevAccessMachine) => ({
@@ -119,7 +120,10 @@ const Index = (props) => {
                         setUserMachineDuration(data.userMachineDuration);
                         setUserLifetimeDuration(data.userLifetimeDuration);
                     }
+                    setUILoading(false)
+
                     if (!data.allowedMachines) return;
+
                     setAccessMachine({
                         allowed: false,
                         allowedMachines: data.allowedMachines.map(
@@ -227,7 +231,7 @@ const Index = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-[7rem]">
+                    <div className="mt-[10rem]">
                         {accessMachine.lastLoginId &&
                         accessMachine.lastLoginId > 0 ? (
                             <div className="text-5xl">
@@ -267,16 +271,22 @@ const Index = (props) => {
                 </div>
             )}
 
+            {UILoading && (status == "loading" || status == "authenticated") && (
+                <div className="text-6xl">Loading...</div>
+            )}
+
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
-                    <div className="text-6xl">
-                        You are{' '}
-                        {`${
-                            accessMachine.apprentice
-                                ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
-                                : 'not allowed to use this machine'
-                        }`}
-                    </div>
+                    {!UILoading && (
+                        <div className="text-6xl">
+                            You are{' '}
+                            {`${
+                                accessMachine.apprentice
+                                    ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
+                                    : 'not allowed to use this machine'
+                            }`}
+                        </div>
+                    )}
                     {accessMachine.allowedMachines && (
                         <div className="mb-[1rem] mt-[2rem] text-4xl">
                             Machines you are allowed to use:
