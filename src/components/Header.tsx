@@ -3,6 +3,8 @@ import Image from 'next/image';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
 
+import SMHQLogo from '../../public/SMHQ.png';
+
 const Header = () => {
     const { machineName } = useContext(MachineContext);
     return (
@@ -14,11 +16,11 @@ const Header = () => {
             </div>
             <div className="fixed right-[5rem] top-[5rem]">
                 <Image
-                    src="/falcon.png"   
-                    width={100}
-                    height={0}
-                    className='h-auto w-auto'
-                    alt="Picture of the author"
+                    src={SMHQLogo}
+                    width={200}
+                    height={200}
+                    // className="h-[20rem] w-auto"
+                    alt="Picture of the logo"
                 />
             </div>
         </div>
