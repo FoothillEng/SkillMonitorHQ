@@ -98,7 +98,7 @@ const Index = (props) => {
 
         const setMachineUsage = async () => {
             await fetch(
-                `/api/admin/machine/access?machineUUID=${machineUUID}&userId=${userId}&isFirstLogin=${isFirstLogin}`,
+                `/api/machine/checkAccess?machineUUID=${machineUUID}&userId=${userId}&isFirstLogin=${isFirstLogin}`,
                 {
                     method: 'GET',
                     headers: {
@@ -300,7 +300,8 @@ const Index = (props) => {
             )}
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
-                    error
+                    {
+                    JSON.stringify(accessMachine)}
                 </div>
             )}
         </div>
