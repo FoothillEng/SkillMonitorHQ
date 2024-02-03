@@ -295,7 +295,7 @@ const CreateUser = (props) => {
                     </div>
                 </div>
                 <button
-                    className="mx-auto mb-2 mt-64 flex cursor-pointer items-center p-2"
+                    className="mx-auto mb-2 mt-64 flex items-center p-2"
                     type="submit"
                 >
                     <div className="text-center text-9xl active:bg-slate-400">

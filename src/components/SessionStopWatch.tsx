@@ -118,11 +118,12 @@ const SessionStopWatch = ({
 
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">
-            <div className="text-6xl">
-                <FormattedTime milliseconds={time} />
-            </div>
 
             {started ? (
+                <div>
+                     <div className="text-6xl">
+                <FormattedTime milliseconds={time} />
+            </div>
                 <button
                     className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
                     onClick={() => {
@@ -133,14 +134,15 @@ const SessionStopWatch = ({
                         Stop Session
                     </div>
                 </button>
+            </div>
             ) : (
                 <button
-                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
+                    className="mx-auto mb-2 mt-[3rem] flex items-center p-[2rem]"
                     onClick={() => {
                         startTimer(), handleStart();
                     }}
                 >
-                    <div className="w-[30rem] p-[2rem] text-center text-5xl outline outline-4 active:bg-slate-400">
+                    <div className="w-[80rem] p-[2rem] text-center text-9xl outline outline-4 active:bg-slate-400">
                         Start New Session
                     </div>
                 </button>

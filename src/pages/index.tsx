@@ -283,16 +283,16 @@ const Index = (props) => {
                             {`${
                                 accessMachine.apprentice
                                     ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
-                                    : 'not allowed to use this machine'
+                                    : 'not authorized to use this machine'
                             }`}
                         </div>
                     )}
                     {accessMachine.allowedMachines && (
-                        <div className="mb-[1rem] mt-[2rem] text-4xl">
-                            Machines you are allowed to use:
+                        <div className="mb-[1rem] mt-[10rem] text-5xl">
+                            Machines you are authorized to use:
                             {accessMachine.allowedMachines.length === 0 && (
-                                <div className="text-red">
-                                    You are not allowed to use any machines.
+                                <div className="mt-[2rem] text-red">
+                                    You are not authorized to use any machines.
                                 </div>
                             )}
                             <div className="flex flex-col space-y-[1rem]">
