@@ -1,117 +1,23 @@
-import { useState } from 'react';
-import { FormEvent } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 import { CldUploadWidget } from 'next-cloudinary';
 
-import { Dialog } from '@headlessui/react';
-
 import LockScreen from '@/components/LockScreen';
-interface AlphanumericInputProps {
-    title: string;
-    _title: string;
-    parentValue: string;
-    setParentValue: (value: string) => void;
-    type: 'text' | 'number' | 'file';
-    style?: string;
-    readOnly?: boolean;
-    onChange: (title: string, value: string) => void;
-}
-const AlphanumericInput = ({
-    title,
-    _title,
-    parentValue,
-    setParentValue,
-    type,
-    style,
-    readOnly,
-    onChange
-}: AlphanumericInputProps) => {
-    const handleFieldValueChange = (value: string) => {
-        if (type === 'number') {
-            if (value.length > 6) return;
-        }
-
-        setParentValue(value);
-
-        onChange(_title, value);
-    };
-
-    return (
-        <div className="flex flex-col items-center justify-center">
-            <input
-                className={`h-[6rem] rounded-full border-4 border-primary text-center text-6xl ${style}`}
-                type={type}
-                onChange={(e) => handleFieldValueChange(e.target.value)}
-                placeholder={`Enter ${title} here`}
-                value={parentValue}
-                readOnly={readOnly}
-            />
-        </div>
-    );
-};
 
 interface StudentIdInputProps {
-    parentValue: string;
-    setParentValue: (value: string) => void;
-    placeholder: string;
+    handleSubmit: (value: string) => void;
 }
 
-export const StudentIdInput = ({
-    parentValue,
-    setParentValue,
-    placeholder
-}: StudentIdInputProps) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const handleFieldValueChange = (value: string) => {
-        if (value.length > 6) return;
-
-        setParentValue(value);
-    };
-
-    const handleSubmit = async (
-        studentId: string,
-        setStudentId: any,
-        setError: any
-    ) => {
+export const StudentIdInput = ({ handleSubmit }: StudentIdInputProps) => {
+    const submit = async (studentId: string) => {
         const parsedStudentId = parseInt(studentId);
 
-        if (isNaN(parsedStudentId)) handleFieldValueChange('0');
-        else handleFieldValueChange(parsedStudentId.toString());
-        setIsOpen(false);
+        if (isNaN(parsedStudentId)) handleSubmit('0');
+        else handleSubmit(parsedStudentId.toString());
     };
 
-    return (
-        <div
-            className="mt-[5rem] flex items-center justify-center font-oxygen"
-            onClick={() => setIsOpen(true)}
-        >
-            <div className="flex flex-col items-center">
-                <div className="h-[6rem] w-[50rem] rounded-full border-4 border-primary bg-white text-center text-6xl">
-                    {parentValue === '0' ? 'Enter Student ID' : parentValue}
-                </div>
-            </div>
-
-            <Dialog
-                open={isOpen}
-                onClose={() => setIsOpen(false)}
-                className="relative z-50"
-            >
-                <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-
-                <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                    <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-primary text-center">
-                        <LockScreen
-                            placeholder={placeholder}
-                            start={parentValue === '0' ? '' : parentValue}
-                            handleSubmit={handleSubmit}
-                        />
-                    </Dialog.Panel>
-                </div>
-            </Dialog>
-        </div>
-    );
+    return <LockScreen placeholder="12345" handleSubmit={submit} />;
 };
 
 const CreateUser = (props) => {
@@ -160,34 +66,33 @@ const CreateUser = (props) => {
         }
     };
 
-    const checkIfFormIsFilled = async () => {
-        if (!formData.studentId) {
-            setErrorMessage('Please enter student ID');
-            return false;
-        } else {
-            if (studentExists) {
-                if (formData.avatar) {
-                    return true;
-                } else {
-                    setErrorMessage('Please upload student avatar');
-                    return false;
-                }
+    const handleSubmit = useCallback(async () => {
+        const checkIfFormIsFilled = async () => {
+            console.log(formData);
+            if (!formData.studentId) {
+                setErrorMessage('Please enter student ID');
+                return false;
             } else {
-                if (formData.studentId.toString().length < 5) {
-                    setErrorMessage(
-                        'Student ID has to be greater than 4 digits'
-                    );
-                    return false;
+                if (studentExists) {
+                    if (formData.avatar) {
+                        return true;
+                    } else {
+                        setErrorMessage('Please upload student avatar');
+                        return false;
+                    }
                 } else {
-                    await fetchStudent(formData.studentId);
-                    return false;
+                    if (formData.studentId.toString().length < 5) {
+                        setErrorMessage(
+                            'Student ID has to be greater than 4 digits'
+                        );
+                        return false;
+                    } else {
+                        await fetchStudent(formData.studentId);
+                        return false;
+                    }
                 }
             }
-        }
-    };
-
-    async function handleSubmit(e: FormEvent) {
-        e.preventDefault();
+        };
 
         if (!(await checkIfFormIsFilled())) return;
         await fetch('/api/admin/student/create', {
@@ -210,107 +115,93 @@ const CreateUser = (props) => {
                     setErrorMessage('Please fill out all fields correctly');
                 }
             });
-    }
+    }, [formData, router, studentExists]);
+
+    useEffect(() => {
+        if (formData.studentId && !formData.firstName) {
+            handleSubmit();
+        }
+    }, [formData.studentId, formData.firstName, handleSubmit]);
 
     return (
         <div className="flex w-screen flex-col items-center text-secondary">
-            <form onSubmit={handleSubmit} className="mt-[5rem]">
-                <h1 className="mb-[10rem] text-center text-9xl">
-                    Register New Student for this System
+            <div className="mt-[2rem]">
+                <h1 className="mb-[3rem] text-center text-8xl">
+                    Register New Student to SMHQ
                 </h1>
                 <div className="flex flex-col items-center space-y-[3rem]">
-                    <StudentIdInput
-                        parentValue={formData.studentId.toString()}
-                        setParentValue={(value) =>
-                            handleFieldValueChange('studentId', value)
-                        }
-                        placeholder="Enter Student ID"
-                    />
-                    <AlphanumericInput
-                        _title="firstName"
-                        title="First Name"
-                        parentValue={formData.firstName}
-                        setParentValue={(value) =>
-                            handleFieldValueChange('firstName', value)
-                        }
-                        type="text"
-                        style="w-[50rem]"
-                        readOnly={true}
-                        onChange={handleFieldValueChange}
-                    />
-                    <AlphanumericInput
-                        _title="lastName"
-                        title="Last Name"
-                        parentValue={formData.lastName}
-                        setParentValue={(value) =>
-                            handleFieldValueChange('lastName', value)
-                        }
-                        type="text"
-                        style="w-[50rem]"
-                        readOnly={true}
-                        onChange={handleFieldValueChange}
-                    />
-                    <div className="">
-                        <CldUploadWidget
-                            signatureEndpoint="/api/admin/sign"
-                            uploadPreset="ml_default"
-                            options={{
-                                maxFileSize: 5000000,
-                                croppingAspectRatio: 1,
-                                singleUploadAutoClose: true,
-                                showPoweredBy: false,
-                                showUploadMoreButton: false
-                            }}
-                            onSuccess={(result) => {
-                                if (
-                                    result.info &&
-                                    typeof result.info === 'object'
-                                ) {
-                                    handleFieldValueChange(
-                                        'avatar',
-                                        (result.info as { secure_url: string })
-                                            .secure_url
-                                    );
-                                }
-                            }}
-                        >
-                            {({ open }) => {
-                                function handleOnClick(e) {
-                                    e.preventDefault();
-                                    open();
-                                }
+                    {!studentExists ? (
+                        <div>
+                            <div className="mb-[3rem] text-center text-5xl text-primary">
+                                Step #1: Enter Student ID
+                            </div>
+                            <StudentIdInput
+                                handleSubmit={(value) => {
+                                    handleFieldValueChange('studentId', value);
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="mb-[3rem] text-center text-5xl text-primary">
+                                Step #2: Confirm Student Information and Upload
+                                Avatar
+                            </div>
+                            <div className="mb-[4rem] text-center text-5xl text-primary">
+                                {formData.firstName} {formData.lastName}
+                            </div>
+                            <div className="">
+                                <CldUploadWidget
+                                    signatureEndpoint="/api/admin/sign"
+                                    uploadPreset="ml_default"
+                                    options={{
+                                        maxFileSize: 5000000,
+                                        croppingAspectRatio: 1,
+                                        singleUploadAutoClose: true,
+                                        showPoweredBy: false,
+                                        showUploadMoreButton: false
+                                    }}
+                                    onSuccess={(result) => {
+                                        if (
+                                            result.info &&
+                                            typeof result.info === 'object'
+                                        ) {
+                                            handleFieldValueChange(
+                                                'avatar',
+                                                (
+                                                    result.info as {
+                                                        secure_url: string;
+                                                    }
+                                                ).secure_url
+                                            );
+                                        }
+                                    }}
+                                >
+                                    {({ open }) => {
+                                        function handleOnClick(e) {
+                                            e.preventDefault();
+                                            open();
+                                        }
 
-                                return (
-                                    <div className="flex flex-col items-center justify-center">
-                                        <button
-                                            className="h-[6rem] w-[50rem] rounded-full border-4 border-primary bg-white text-center text-6xl"
-                                            onClick={handleOnClick}
-                                        >
-                                            {formData.avatar
-                                                ? 'Avatar uploaded'
-                                                : 'Upload Student Avatar'}
-                                        </button>
-                                    </div>
-                                );
-                            }}
-                        </CldUploadWidget>
-                    </div>
+                                        return (
+                                            <div className="flex flex-col items-center justify-center">
+                                                <button
+                                                    className="h-[6rem] w-[50rem] rounded-full border-4 border-primary bg-white text-center text-6xl"
+                                                    onClick={handleOnClick}
+                                                >
+                                                    {formData.avatar
+                                                        ? 'Avatar uploaded'
+                                                        : 'Upload Student Avatar'}
+                                                </button>
+                                            </div>
+                                        );
+                                    }}
+                                </CldUploadWidget>
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <button
-                    className="mx-auto mb-2 mt-64 flex items-center p-2"
-                    type="submit"
-                >
-                    <div className="text-center text-9xl active:bg-slate-400">
-                        {formData.studentId
-                            ? studentExists
-                                ? formData.avatar
-                                    ? 'Submit'
-                                    : 'Click Upload Student Avatar'
-                                : 'Get Student'
-                            : 'Enter Student ID'}
-                    </div>
-                </button>
-            </form>
+            </div>
             {errorMessage && (
                 <div className="mt-[5rem] text-3xl text-red-500">
                     {errorMessage}
