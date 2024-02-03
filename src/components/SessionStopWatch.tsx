@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 
-import { FormattedTime } from '@/pages/index';
+import FormattedTime from '@/components/FormattedTime';
 
 interface SessionStopWatchProps {
     userId: string;
@@ -118,23 +118,22 @@ const SessionStopWatch = ({
 
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">
-
             {started ? (
                 <div>
-                     <div className="text-6xl">
-                <FormattedTime milliseconds={time} />
-            </div>
-                <button
-                    className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
-                    onClick={() => {
-                        stopTimer(), handleStop();
-                    }}
-                >
-                    <div className="w-[20rem] p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
-                        Stop Session
+                    <div className="text-6xl">
+                        <FormattedTime milliseconds={time} />
                     </div>
-                </button>
-            </div>
+                    <button
+                        className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
+                        onClick={() => {
+                            stopTimer(), handleStop();
+                        }}
+                    >
+                        <div className="w-[20rem] p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
+                            Stop Session
+                        </div>
+                    </button>
+                </div>
             ) : (
                 <button
                     className="mx-auto mb-2 mt-[3rem] flex items-center p-[2rem]"

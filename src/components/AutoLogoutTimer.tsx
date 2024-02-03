@@ -5,7 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { Dialog } from '@headlessui/react';
 
 import LockScreen from '@/components/LockScreen';
-import { FormattedTime } from '@/pages/index';
+import FormattedTime from '@/components/FormattedTime';
 
 const AutoLogoutTimer = () => {
     const [time, setTime] = useState(0);

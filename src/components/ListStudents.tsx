@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
-import { FormattedTime } from '@/pages/index';
+import FormattedTime from '@/components/FormattedTime';
 import CldAvatar from '@/components/CldAvatar';
 
 interface ListStudentsProps {
@@ -75,91 +75,104 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
             });
     };
 
-    const avatarVariants: { [key: number]: string; } = {
+    const avatarVariants: { [key: number]: string } = {
         0: '',
         1: 'opacity-50 ml-[3rem]',
         2: 'opacity-25 ml-[3rem]'
-    }
+    };
 
     return (
         <div>
             {students && students.length > 0 ? (
                 <div>
                     {admin ? (
-                    <table className="border-separate border-spacing-[3rem] text-center">
-                        <thead className="text-6xl md:text-5xl">
-                            {students[0].usageCount !== undefined && (
-                                <tr>
-                                    <th>Avatar</th>
-                                    <th>Name</th>
-                                    {/* <th>Student ID</th> */}
-                                    <th>Apprentice</th>
-                                    <th>Time</th>
-                                    <th>Usage #</th>
-                                    <th>Avg. Rating</th>
-                                </tr>
-                            )}
-                            {students[0].usageCount === undefined && ( // whats this for lol
-                                <tr>
-                                    <th>Avatar</th>
-                                    <th>Name</th>
-                                    {/* <th>Student ID</th> */}
-                                    <th>Time on all machines</th>
-                                </tr>
-                            )}
-                        </thead>
-                        <tbody className="text-5xl capitalize md:text-4xl">
-                            {students.map((student) => (
-                                <tr key={student.id}>
-                                    <td className="flex justify-center">
-                                        <CldAvatar
-                                            avatar={student.avatar}
-                                            level={student.level}
-                                            size={'MEDIUM'}
-                                        />
-                                    </td>
-                                    <td> {student.firstName}  {student.lastName}</td>
-                                    {/* {<td>{student.studentId}</td>} */}
-                                    {student.apprentice !== undefined && (
+                        <table className="border-separate border-spacing-[3rem] text-center">
+                            <thead className="text-6xl md:text-5xl">
+                                {students[0].usageCount !== undefined && (
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        {/* <th>Student ID</th> */}
+                                        <th>Apprentice</th>
+                                        <th>Time</th>
+                                        <th>Usage #</th>
+                                        <th>Avg. Rating</th>
+                                    </tr>
+                                )}
+                                {students[0].usageCount === undefined && ( // whats this for lol
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        {/* <th>Student ID</th> */}
+                                        <th>Time on all machines</th>
+                                    </tr>
+                                )}
+                            </thead>
+                            <tbody className="text-5xl capitalize md:text-4xl">
+                                {students.map((student) => (
+                                    <tr key={student.id}>
                                         <td className="flex justify-center">
-                                            {student.apprentice ? (
-                                                <FaCheck
-                                                    size={'5rem'}
-                                                    className="text-center text-white"
-                                                    onClick={() =>
-                                                        handleChange(student, true)
-                                                    }
-                                                />
-                                            ) : (
-                                                <FaTimes
-                                                    size={'5rem'}
-                                                    className="text-red-500"
-                                                    onClick={() =>
-                                                        handleChange(student, false)
-                                                    }
-                                                />
-                                            )}
-                                        </td>
-                                    )}
-                                    {(
-                                        <td>
-                                            <FormattedTime
-                                                milliseconds={student.duration}
+                                            <CldAvatar
+                                                avatar={student.avatar}
+                                                level={student.level}
+                                                size={'MEDIUM'}
                                             />
                                         </td>
-                                    )}
-                                    {<td>{student.usageCount}</td>}
-                                    {<td>{student.averageRating}</td>}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        <td>
+                                            {' '}
+                                            {student.firstName}{' '}
+                                            {student.lastName}
+                                        </td>
+                                        {/* {<td>{student.studentId}</td>} */}
+                                        {student.apprentice !== undefined && (
+                                            <td className="flex justify-center">
+                                                {student.apprentice ? (
+                                                    <FaCheck
+                                                        size={'5rem'}
+                                                        className="text-center text-white"
+                                                        onClick={() =>
+                                                            handleChange(
+                                                                student,
+                                                                true
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <FaTimes
+                                                        size={'5rem'}
+                                                        className="text-red-500"
+                                                        onClick={() =>
+                                                            handleChange(
+                                                                student,
+                                                                false
+                                                            )
+                                                        }
+                                                    />
+                                                )}
+                                            </td>
+                                        )}
+                                        {
+                                            <td>
+                                                <FormattedTime
+                                                    milliseconds={
+                                                        student.duration
+                                                    }
+                                                />
+                                            </td>
+                                        }
+                                        {<td>{student.usageCount}</td>}
+                                        {<td>{student.averageRating}</td>}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     ) : (
-                        
-                        <div className='flex flex-row'>
-                        {students.map((student, idx) => (
+                        <div className="flex flex-row">
+                            {students.map((student, idx) => (
                                 <div key={student.id}>
-                                    <div className={`flex ${avatarVariants[idx]}`}>
+                                    <div
+                                        className={`flex ${avatarVariants[idx]}`}
+                                    >
                                         <CldAvatar
                                             avatar={student.avatar}
                                             level={student.level}
@@ -169,8 +182,8 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                 </div>
                             ))}
                         </div>
-                        
-                    )};
+                    )}
+                    ;
                 </div>
             ) : (
                 <div className="text-4xl text-gray-500">

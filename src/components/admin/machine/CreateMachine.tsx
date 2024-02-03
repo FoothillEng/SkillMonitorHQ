@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { AlphanumericInput } from '@/pages/admin/student/create';
-
 interface CreateMachineProps {
     setReload: (reload: boolean) => void;
 }
@@ -61,7 +59,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                 </h1>
                 <div className="flex justify-center">
                     <input
-                        className="border-secondary h-[6rem] w-[50rem] rounded-full border-4 text-center text-6xl"
+                        className="h-[6rem] w-[50rem] rounded-full border-4 border-secondary text-center text-6xl"
                         type="text"
                         onChange={(e) => handleFieldValueChange(e.target.value)}
                         placeholder="Machine Name"
