@@ -18,7 +18,7 @@ export const StudentIdInput = ({ handleSubmit }: StudentIdInputProps) => {
         else handleSubmit(parsedStudentId.toString());
     };
 
-    return <LockScreen placeholder="12345" handleSubmit={submit} />;
+    return <LockScreen placeholder="Type ID Below" handleSubmit={submit} />;
 };
 
 const CreateUser = (props) => {
@@ -125,13 +125,13 @@ const CreateUser = (props) => {
     }, [formData.studentId, formData.firstName, handleSubmit]);
 
     return (
-        <div className="flex w-screen flex-col items-center text-secondary">
-            <div className="mt-[2rem]">
-                <Title title="Register New Student to SMHQ" />
-                <div className="flex flex-col items-center space-y-[3rem]">
+        <div className="flex w-screen flex-col items-center font-oxygen text-secondary">
+            <div className="mb-[2rem]">
+                <Title title="Register a new student to SMHQ" />
+                <div className="flex flex-col items-center space-y-[5rem]">
                     {!studentExists ? (
                         <div>
-                            <div className="mb-[3rem] text-center text-5xl text-primary">
+                            <div className="mb-[8rem] border-4 border-primary p-[1rem] text-center text-5xl text-primary">
                                 Step #1: Enter Student ID
                             </div>
                             <StudentIdInput
@@ -142,7 +142,7 @@ const CreateUser = (props) => {
                         </div>
                     ) : (
                         <div>
-                            <div className="mb-[3rem] text-center text-5xl text-primary">
+                            <div className="mb-[10rem] border-4 border-primary p-[1rem] text-center text-5xl text-primary">
                                 Step #2: Confirm Student Information and Upload
                                 Avatar
                             </div>

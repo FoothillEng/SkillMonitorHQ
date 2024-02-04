@@ -64,7 +64,7 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
                 )}
             </div>
             <form
-                className="mt-[3rem] flex items-center justify-center text-primary"
+                className="mt-[5rem] flex items-center justify-center text-primary"
                 onSubmit={() => handleSubmit(studentId, setStudentId, setError)}
             >
                 <div className="grid grid-cols-3 gap-[5rem] md:gap-[1.5rem]">

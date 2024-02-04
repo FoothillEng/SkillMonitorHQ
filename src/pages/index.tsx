@@ -155,6 +155,7 @@ const Index = (props) => {
                     )}
                 </>
             )}
+
             {nextAuthSession && accessMachine.allowed && (
                 <div className="flex flex-col text-center">
                     <div className="flex flex-row text-5xl">

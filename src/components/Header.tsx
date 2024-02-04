@@ -19,8 +19,10 @@ const Header = () => {
                     src={SMHQLogo}
                     width={200}
                     height={200}
-                    // className="h-[20rem] w-auto"
+                    // sizes={'100vw'}
+                    // className="h-[20rem] w-[20rem]"
                     alt="Picture of the logo"
+                    priority
                 />
             </div>
         </div>

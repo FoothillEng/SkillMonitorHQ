@@ -46,11 +46,7 @@ const AdminStudentsIndex = (props) => {
                 <div className="mt-[1rem] text-3xl">
                     Note: student must be on system already
                 </div>
-                <StudentIdInput
-                    parentValue={studentId}
-                    setParentValue={setStudentId}
-                    placeholder="Enter Student ID"
-                />
+                <StudentIdInput handleSubmit={setStudentId} />
                 <button
                     className="mx-auto mb-2 mt-[2rem] flex items-center p-4 outline outline-4"
                     type="submit"
