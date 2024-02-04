@@ -53,13 +53,13 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <form onSubmit={handleSubmit} className="mt-[5rem]">
+            <div className="mt-[5rem]">
                 <div className="mb-[3rem] text-center text-6xl">
                     Register New Machine For the System
                 </div>
                 <div className="flex justify-center">
                     <input
-                        className="h-[6rem] w-[50rem] rounded-full border-4 border-secondary text-center text-6xl"
+                        className="h-[6rem] w-[50rem] rounded-full border-4 border-secondary text-center text-6xl text-primary"
                         type="text"
                         onChange={(e) => handleFieldValueChange(e.target.value)}
                         placeholder="Machine Name"
@@ -67,13 +67,13 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
                 </div>
                 <button
                     className="mx-auto mb-2 mt-[3rem] flex items-center p-2"
-                    type="submit"
+                    onClick={handleSubmit}
                 >
                     <div className="p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
                         Submit
                     </div>
                 </button>
-            </form>
+            </div>
             {errorMessage && (
                 <div className="mt-[5rem] text-3xl text-red-500">
                     {errorMessage}

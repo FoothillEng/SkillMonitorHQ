@@ -38,10 +38,7 @@ const AdminStudentsIndex = (props) => {
     return (
         <div className="flex w-screen flex-col items-center font-oxygen">
             <Title title="Machine Stats" />
-            <form
-                onSubmit={handleSubmit}
-                className="mb-[5rem] flex flex-col items-center p-[2rem] text-4xl active:bg-purple-300 "
-            >
+            <div className="mb-[5rem] flex flex-col items-center p-[2rem] text-4xl active:bg-purple-300 ">
                 <div className="text-5xl">Add Student to this Machine</div>
                 <div className="mt-[1rem] text-3xl">
                     Note: student must be on system already
@@ -49,7 +46,7 @@ const AdminStudentsIndex = (props) => {
                 <StudentIdInput handleSubmit={setStudentId} />
                 <button
                     className="mx-auto mb-2 mt-[2rem] flex items-center p-4 outline outline-4"
-                    type="submit"
+                    onClick={handleSubmit}
                 >
                     <div className="text-center text-5xl active:bg-slate-400">
                         {studentId !== '0' ? 'Submit' : 'Enter a Student ID'}
@@ -58,7 +55,7 @@ const AdminStudentsIndex = (props) => {
                 {error && (
                     <div className="mt-[2rem] text-5xl text-red">{error}</div>
                 )}
-            </form>
+            </div>
             {machineUUID && (
                 <ListStudents
                     fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}&key=${key}`}
