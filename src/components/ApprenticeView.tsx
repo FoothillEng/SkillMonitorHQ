@@ -4,24 +4,9 @@ import { FaPlus, FaUserCheck } from 'react-icons/fa';
 import { Dialog } from '@headlessui/react';
 import { User } from '@prisma/client';
 
-import { Toast } from 'flowbite-react';
-
 import { MachineContext } from '@/lib/contexts/MachineContext';
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
 import Student from '@/components/Student';
-import LockScreen from '@/components/LockScreen';
-
-// export const CustomToast = ({ text }: { text: string }) => {
-//     return (
-//         <Toast className="mt-[2rem]">
-//             <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg  bg-cyan-800 text-cyan-200">
-//                 <FaUserCheck className="h-5 w-5" />
-//             </div>
-//             <div className="ml-3 text-3xl font-normal">{text}</div>
-//             <Toast.Toggle />
-//         </Toast>
-//     );
-// };
 
 const Apprentice = ({
     onApprenticeAdded
