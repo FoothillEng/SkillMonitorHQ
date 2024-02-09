@@ -97,8 +97,8 @@ const AutoLogoutTimer = () => {
             return;
         }
 
-        if (hours < 1 || hours > 24) {
-            setError('Please enter a number between 1 and 24');
+        if (hours < 1 || hours > 48) {
+            setError('Please enter a number between 1 and 48');
             return;
         }
 
@@ -107,6 +107,7 @@ const AutoLogoutTimer = () => {
         });
 
         setIsOpen(false);
+        setAdminSet(false);
     };
 
     return (
@@ -150,7 +151,7 @@ const AutoLogoutTimer = () => {
                                         )) || (
                                             <LockScreen
                                                 placeholder={
-                                                    'Enter Total # of Hours'
+                                                    'Enter total # of hours to add to session time (1-48)'
                                                 }
                                                 start={''}
                                                 handleSubmit={handleSubmit2}
