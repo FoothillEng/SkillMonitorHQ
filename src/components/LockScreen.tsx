@@ -64,10 +64,7 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
                     <h1>{studentId}</h1>
                 )}
             </div>
-            <form
-                className="mt-[5rem] flex items-center justify-center text-primary"
-                onSubmit={() => handleSubmit(studentId, setStudentId, setError)}
-            >
+            <div className="mt-[5rem] flex items-center justify-center text-primary">
                 <div className="grid grid-cols-3 gap-[5rem] md:gap-[1.5rem]">
                     {Array.from([
                         1,
@@ -90,7 +87,7 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
                         />
                     ))}
                 </div>
-            </form>
+            </div>
             {error && (
                 <p className="mt-[2rem] text-5xl text-red-500">{error}</p>
             )}

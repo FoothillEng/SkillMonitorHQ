@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
@@ -121,7 +121,10 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                         <td>
                                             {' '}
                                             {student.firstName}{' '}
-                                            {student.lastName}
+                                            {(
+                                                student.lastName as string
+                                            ).charAt(0)}
+                                            .
                                         </td>
                                         {/* {<td>{student.studentId}</td>} */}
                                         {student.apprentice !== undefined && (
@@ -129,7 +132,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                                 {student.apprentice ? (
                                                     <FaCheck
                                                         size={'5rem'}
-                                                        className="text-center text-white"
+                                                        className="text-center text-green"
                                                         onClick={() =>
                                                             handleChange(
                                                                 student,
@@ -183,7 +186,6 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                             ))}
                         </div>
                     )}
-                    ;
                 </div>
             ) : (
                 <div className="text-4xl text-gray-500">

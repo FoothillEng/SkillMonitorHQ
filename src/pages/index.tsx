@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 // import { motion } from 'framer-motion';
 
-import { signIn } from 'next-auth/react';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
@@ -265,7 +264,7 @@ const Index = (props) => {
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
                     {!UILoading && (
-                        <div className="text-6xl">
+                        <div className="w-[100rem] text-6xl">
                             You are{' '}
                             {`${
                                 accessMachine.apprentice
@@ -275,17 +274,20 @@ const Index = (props) => {
                         </div>
                     )}
                     {accessMachine.allowedMachines && (
-                        <div className="mb-[1rem] mt-[10rem] text-5xl">
+                        <div className="mt-[10rem] text-5xl text-primary">
                             Machines you are authorized to use:
                             {accessMachine.allowedMachines.length === 0 && (
-                                <div className="mt-[2rem] text-red">
+                                <div className="mt-[3rem] text-red">
                                     You are not authorized to use any machines.
                                 </div>
                             )}
-                            <div className="flex flex-col space-y-[1rem]">
+                            <div className="mt-[3rem] flex flex-col space-y-[1rem]">
                                 {accessMachine.allowedMachines.map(
                                     (machine) => (
-                                        <div key={machine.id}>
+                                        <div
+                                            className="text-secondary"
+                                            key={machine.id}
+                                        >
                                             {machine.name}
                                         </div>
                                     )
