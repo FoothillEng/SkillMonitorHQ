@@ -4,13 +4,12 @@ interface TitleProps {
 
 const Title = ({ title }: TitleProps) => {
     return (
-        <div
-            id="title"
-            className="fixed left-0 right-0 top-[13rem] text-center text-6xl"
-        >
+        <div id="title" className="mb-[3rem] text-center text-6xl text-white">
             {title}
         </div>
     );
 };
 
 export default Title;
+
+// mb-[3rem]
