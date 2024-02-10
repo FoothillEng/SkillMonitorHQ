@@ -37,7 +37,7 @@ export const authOptions: AuthOptions = {
             session.user.message = token.message;
             session.user.realExpTime = token.realExpTime;
             session.user.runningSession = token.runningSession; // im just using this for global state now lol
-            session.user.forceStopSession = token.forceStopSession;
+            session.user.forceStopSession = token.forceStopSession; // when timer runs out, force stop Session
             return session;
         },
         jwt({ token, user, account, trigger, session }) {

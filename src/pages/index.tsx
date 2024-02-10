@@ -134,6 +134,22 @@ const Index = (props) => {
         }
     };
 
+    useEffect(() => {
+        if (UILoading) return;
+        if (accessMachine.allowed) return;
+        const timeRemaining =
+            nextAuthSession?.user.realExpTime - Math.floor(Date.now() / 1000);
+        if (timeRemaining < 60) return;
+        update({
+            realExpTime: Date.now() / 1000 + 59 // 1 minute
+        });
+    }, [
+        UILoading,
+        nextAuthSession?.user?.realExpTime,
+        accessMachine.allowed,
+        update
+    ]);
+
     return (
         <div className="flex w-screen flex-col items-center justify-center font-oxygen tracking-[.3rem] text-white">
             {!nextAuthSession && (
