@@ -8,9 +8,10 @@ import Student from '@/components/Student';
 
 import { AiFillDashboard, AiFillHome } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
+import { FaUserEdit } from 'react-icons/fa';
 import { FaUsers } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
-import { IoIosCreate } from 'react-icons/io';
+import { FaUserCog } from 'react-icons/fa';
 import { IconType } from 'react-icons';
 
 interface NavItemProps {
@@ -51,7 +52,7 @@ const SideNav = () => {
     return (
         <div>
             {session && (
-                <div className="fixed left-[3rem] top-[20rem] z-40 h-screen w-[30rem] font-oxygen text-white">
+                <div className="fixed left-[3rem] top-[20rem] z-40 h-screen w-[33rem] font-oxygen text-white">
                     <div className="h-full overflow-y-auto px-3 py-4 text-4xl">
                         <NavItem
                             href="/"
@@ -69,34 +70,34 @@ const SideNav = () => {
                                         label="Admin Home"
                                     />
                                     <NavItem
-                                        href="/admin/student"
-                                        icon={FaUsers}
-                                        label="All Students"
-                                        subItem={true}
-                                    />
-                                    <NavItem
                                         href="/admin/student/machineStudents"
-                                        icon={FaUsers}
+                                        icon={FaUserCog}
                                         label="Machine Students"
                                         subItem={true}
                                     />
                                     <NavItem
+                                        href="/admin/student"
+                                        icon={FaUsers}
+                                        label="SMHQ Students"
+                                        subItem={true}
+                                    />
+                                    <NavItem
                                         href="/admin/student/create"
-                                        icon={IoIosCreate}
+                                        icon={FaUserEdit}
                                         label="Create Student"
                                         subItem={true}
                                     />
                                     <NavItem
                                         href="/admin/machine"
                                         icon={FiSettings}
-                                        label="Settings"
+                                        label="Machine Settings"
                                         subItem={true}
                                     />
                                     <div className="mb-[2rem] mt-[1rem] border-t-2 border-blue-300" />
                                 </div>
                             )}
                         {user && (
-                            <div className="ml-[2rem]">
+                            <div className="mb-[3rem] ml-[2rem] mt-[2rem]">
                                 <Student
                                     student={user}
                                     viewId={false}
