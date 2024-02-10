@@ -23,7 +23,7 @@ const Header = () => {
                 )}
             </div>
             <div
-                className="fixed right-[5rem] top-[5rem] h-[20rem] w-[20rem] border-4 border-secondary"
+                className="fixed right-[5rem] top-[5rem] h-[20rem] w-[20rem]"
                 onClick={handleTour}
             >
                 <Image
