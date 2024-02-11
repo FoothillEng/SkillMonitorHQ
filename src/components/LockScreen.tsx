@@ -57,7 +57,7 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
             id="NumPad"
             className="text-center font-oxygen text-7xl md:text-7xl"
         >
-            <div className="text-secondary-200">
+            <div className="text-secondary-400">
                 {studentId === '' ? (
                     <h1 className="text-center">{placeholder}</h1>
                 ) : (

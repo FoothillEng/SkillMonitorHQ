@@ -129,7 +129,7 @@ const SessionStopWatch = ({
                             stopTimer(), handleStop();
                         }}
                     >
-                        <div className="w-[20rem] p-4 text-center text-5xl outline outline-4 active:bg-slate-400">
+                        <div className="w-[30rem] p-[2rem] text-center text-5xl text-primary outline outline-[1rem] outline-primary active:bg-slate-400">
                             Stop Session
                         </div>
                     </button>

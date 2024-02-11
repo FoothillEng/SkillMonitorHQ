@@ -34,7 +34,7 @@ const Machine = ({ machine }: MachineProps) => {
                 machineUUID === machine.uuid ? 'text-red-400' : ''
             }`}
         >
-            <div className="text-3xl">{machine.name}</div>
+            <div className="text-5xl">{machine.name}</div>
         </div>
     );
 };
