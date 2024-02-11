@@ -85,15 +85,15 @@ export const authOptions: AuthOptions = {
         async redirect({ url, baseUrl }) {
             // Allows relative callback URLs
             if (url.startsWith("/")) return `${baseUrl}${url}`
-            // Allows callback URLs on the same origin
-            else if (new URL(url).origin === baseUrl) {
-                const callbackUrl = new URL(url).searchParams.get("callbackUrl")
+            // Allows callback URLs on the same origin - Disabled for now since there is no use case
+            // else if (new URL(url).origin === baseUrl) {
+            //     const callbackUrl = new URL(url).searchParams.get("callbackUrl")
 
-                if (callbackUrl) {
-                    return callbackUrl
-                }
-                return url
-            }
+            //     if (callbackUrl) {
+            //         return callbackUrl
+            //     }
+            //     return url
+            // }
             return baseUrl
         }
     },
