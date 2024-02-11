@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, use } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 import { CldUploadWidget } from 'next-cloudinary';
@@ -7,6 +7,11 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 
 import Title from '@/components/Title';
 import LockScreen from '@/components/LockScreen';
+
+import dynamic from 'next/dynamic';
+const Tour = dynamic(() => import('@/lib/tours/Tour'), {
+    ssr: false
+});
 
 interface StudentIdInputProps {
     handleSubmit: (value: string) => void;
@@ -145,6 +150,7 @@ const CreateUser = (props) => {
 
     return (
         <div className="flex w-screen flex-col items-center font-oxygen text-secondary">
+            <Tour TourType="Register Student" />
             <div className="mb-[2rem]">
                 <Title title="Register a new student to SMHQ" />
                 <div className="flex flex-col items-center space-y-[5rem]">
