@@ -6,14 +6,14 @@ const studentAvatarClass = (level: StudentLevel, width: string) => {
         level === 'BEGINNER'
             ? 'outline-purple-500'
             : level === 'INTERMEDIATE'
-            ? 'outline-yellow-500'
-            : 'outline-blue-500'
+              ? 'outline-yellow-500'
+              : 'outline-blue-500'
     } ${
-        width === 'SMALL'
-            ? 'outline-4'
-            : width === 'MEDIUM'
-            ? 'outline-8'
-            : 'outline-[1.5rem]'
+        width === 'small' || width === 'medium'
+            ? 'outline-[.5rem]'
+            : width === 'large'
+              ? 'outline-[1rem]'
+              : 'outline-[1.5rem]'
     }`;
     return classes;
 };
@@ -21,13 +21,14 @@ const studentAvatarClass = (level: StudentLevel, width: string) => {
 interface CldAvatarProps {
     avatar: string;
     level: StudentLevel;
-    size: 'SMALL' | 'MEDIUM' | 'LARGE';
+    size: 'small' | 'medium' | 'large' | 'extraLarge';
 }
 
 const sizeMap = {
-    SMALL: [50, 50],
-    MEDIUM: [100, 100],
-    LARGE: [300, 300]
+    small: [50, 50],
+    medium: [100, 100],
+    large: [200, 200],
+    extraLarge: [300, 300]
 };
 
 const CldAvatar = ({ avatar, level, size }: CldAvatarProps) => {

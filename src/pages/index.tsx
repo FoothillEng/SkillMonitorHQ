@@ -181,7 +181,7 @@ const Index = (props) => {
                                     <CldAvatar
                                         avatar={nextAuthSession.user.avatar}
                                         level={nextAuthSession.user.level}
-                                        size={'LARGE'}
+                                        size={'extraLarge'}
                                     />
                                 )}
                             {accessMachine.averageRating && (

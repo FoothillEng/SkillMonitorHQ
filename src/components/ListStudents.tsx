@@ -87,7 +87,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                 <div>
                     {admin ? (
                         <table className="border-separate border-spacing-[3rem] text-center">
-                            <thead className="text-6xl md:text-5xl">
+                            <thead className="text-6xl text-secondary-500 md:text-5xl">
                                 {students[0].usageCount !== undefined && (
                                     <tr>
                                         <th>Avatar</th>
@@ -115,7 +115,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                             <CldAvatar
                                                 avatar={student.avatar}
                                                 level={student.level}
-                                                size={'MEDIUM'}
+                                                size={'medium'}
                                             />
                                         </td>
                                         <td>
@@ -179,7 +179,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                         <CldAvatar
                                             avatar={student.avatar}
                                             level={student.level}
-                                            size={'MEDIUM'}
+                                            size={'large'}
                                         />
                                     </div>
                                 </div>

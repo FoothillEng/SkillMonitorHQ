@@ -1,12 +1,16 @@
 import { useState, useContext } from 'react';
 
-import { FaPlus, FaUserCheck } from 'react-icons/fa';
-import { Dialog } from '@headlessui/react';
 import { User } from '@prisma/client';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
+
+import CldAvatar from '@/components/CldAvatar';
+import { FaPlus, FaUserCheck } from 'react-icons/fa';
+import { Dialog } from '@headlessui/react';
+
 import Student from '@/components/Student';
+import LockScreen from '@/components/LockScreen';
 
 const Apprentice = ({
     onApprenticeAdded
@@ -63,11 +67,17 @@ const Apprentice = ({
 
     return (
         <div
-            className="mt-[5rem] flex h-[20rem] w-[20rem] items-center justify-center font-oxygen outline outline-[1rem]"
+            className={`mt-[5rem] flex h-[30rem] w-[30rem] items-center justify-center font-oxygen ${
+                apprentice ? '' : 'outline outline-[1rem]'
+            }`}
             onClick={() => setIsOpen(true)}
         >
             {apprentice ? (
-                <Student student={apprentice} viewId={false} col={true} />
+                <CldAvatar
+                    avatar={apprentice.avatar}
+                    level={apprentice.level}
+                    size={'extraLarge'}
+                />
             ) : (
                 <FaPlus size="15rem" />
             )}
@@ -80,7 +90,7 @@ const Apprentice = ({
                 <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                    <Dialog.Panel className="mx-auto flex h-[65rem] w-[50rem] items-center justify-center rounded bg-white text-center">
+                    <Dialog.Panel className="mx-auto flex h-[75rem] w-[55rem] items-center justify-center rounded bg-white text-center">
                         <LockScreen
                             placeholder="Enter Apprentice ID"
                             handleSubmit={handleSubmit}
