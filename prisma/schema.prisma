@@ -35,11 +35,12 @@ model User {
 }
 
 model Machine {
-  id        Int           @id @default(autoincrement())
-  uuid      String        @unique @default(uuid())
-  name      String        @unique
-  users     UserMachine[]
-  UserLogin UserLogin[]
+  id           Int            @id @default(autoincrement())
+  uuid         String         @unique @default(uuid())
+  name         String         @unique
+  users        UserMachine[]
+  UserLogin    UserLogin[]
+  TestQuestion TestQuestion[]
 
   @@unique([id, uuid])
 }
@@ -93,4 +94,16 @@ model StudentBody {
   studentId Int
   firstName String
   lastName  String
+}
+
+model TestQuestion {
+  id            Int     @id @default(autoincrement())
+  text          String
+  choice1       String
+  choice2       String
+  choice3       String
+  choice4       String
+  correctChoice Int
+  machine       Machine @relation(fields: [machineId], references: [id])
+  machineId     Int
 }
