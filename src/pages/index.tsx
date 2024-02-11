@@ -300,6 +300,7 @@ const Index = (props) => {
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
                     {JSON.stringify(accessMachine)}
+                    {JSON.stringify(error)}
                 </div>
             )}
         </div>
