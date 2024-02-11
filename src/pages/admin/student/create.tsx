@@ -219,7 +219,12 @@ const CreateUser = (props) => {
                                             croppingAspectRatio: 1,
                                             singleUploadAutoClose: true,
                                             showPoweredBy: false,
-                                            showUploadMoreButton: false
+                                            showUploadMoreButton: false,
+                                            sources: [
+                                                'local',
+                                                'camera',
+                                                'google_drive'
+                                            ]
                                         }}
                                         onSuccess={(result) => {
                                             if (

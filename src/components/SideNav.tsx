@@ -82,6 +82,12 @@ const SideNav = () => {
                                         subItem={true}
                                     />
                                     <NavItem
+                                        href="/admin/teacher"
+                                        icon={FaUserEdit}
+                                        label="New Students"
+                                        subItem={true}
+                                    />
+                                    <NavItem
                                         href="/admin/machine/machineStudents"
                                         icon={FaUserCog}
                                         label="Machine Students"

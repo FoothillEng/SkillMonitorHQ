@@ -1,7 +1,5 @@
-import fs from 'fs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { parse } from 'fast-csv';
 import { prisma } from '@/lib/prisma';
 
 
@@ -25,37 +23,14 @@ export default async function handler(
                     return res.status(409).send({ message: 'Student already exists' });
                 }
 
-                const promise1 = new Promise((resolve, reject) => { // not really needed since .on('end') will fire if no data is found
-                    setTimeout(resolve, 5000, false);
+                const data = await prisma.studentBody.findFirst({
+                    where: { studentId },
                 });
-                let found = false;
-                const getStudentData = new Promise((resolve, reject) => {
-                    fs.createReadStream(process.cwd() + "/src/lib/students.csv")
-                        .pipe(parse())
-                        .on('error', () => resolve(false))
-                        .on('data', (row: any) => {
-                            if (row[0] === studentId.toString()) {
-                                found = true;
-                                resolve({
-                                    firstName: row[2], // note in docs, order is Id, last name, first name
-                                    lastName: row[1]
-                                })
-                            }
-                        })
-                        .on('end', () => {
-                            if (!found) {
-                                resolve(false);
-                            }
-                        });
-                })
 
-                let data = await Promise.race([promise1, getStudentData]);
-
-                if (data === false) {
-                    return res.status(403).send({ message: 'Student ID not found' });
+                if (data) {
+                    return res.status(200).send({ firstName: data.firstName, lastName: data.lastName });
                 } else {
-                    let coolName = data as Name
-                    return res.status(200).send({ firstName: coolName.firstName, lastName: coolName.lastName });
+                    return res.status(403).send({ message: 'Student ID not found' });
                 }
 
             } catch (error) {
