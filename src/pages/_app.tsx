@@ -34,7 +34,7 @@ const App = ({ Component, pageProps }) => {
                     }
                 `}
             </style>
-            <Analytics mode={'production'} />
+            <Analytics />
         </SessionProvider>
     );
 };
