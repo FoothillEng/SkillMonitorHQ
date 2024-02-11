@@ -49,21 +49,17 @@ export default async function handler(
                     }
 
                     // Read and process the CSV file
-                    const csvData: RawUser[] = [];
+                    const studentData: User[] = [];
                     const parserStream = fs.createReadStream(file[0].filepath)
                         .pipe(parse({ headers: true }))
                         .on('data', (row: RawUser) => {
-                            // Process each row as needed
-                            if (row['ID'] && row['First Name'] && row['Last Name']) {
-                                csvData.push(row);
-                            }
-                        })
-                        .on('end', async () => {
-                            let studentData: User[] = csvData.map((row) => ({
+                            studentData.push({
                                 studentId: parseInt(row['ID']),
                                 firstName: row['First Name'],
                                 lastName: row['Last Name'],
-                            }));
+                            });
+                        })
+                        .on('end', async () => {
 
                             await prisma.studentBody.deleteMany({});
 
