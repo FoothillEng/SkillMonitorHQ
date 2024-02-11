@@ -30,7 +30,7 @@ export default async function handler(
                 });
                 let found = false;
                 const getStudentData = new Promise((resolve, reject) => {
-                    fs.createReadStream("./src/lib/students.csv")
+                    fs.createReadStream(process.cwd() + "/src/lib/students.csv")
                         .pipe(parse())
                         .on('error', () => resolve(false))
                         .on('data', (row: any) => {
