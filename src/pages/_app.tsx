@@ -13,13 +13,10 @@ import { oxygen } from '@/lib/fonts';
 interface AppPropsWithSession extends AppProps {
     session: Session;
 }
-// fix
-export default function App({
-        Component,
-        pageProps: { session, ...pageProps }
-    }) {
+
+const App = ({ Component, pageProps }: AppPropsWithSession) => {
     return (
-        <SessionProvider session={session}>
+        <SessionProvider session={pageProps.session}>
             <MachineProvider>
                 <ApprenticeProvider>
                     <TourProvider>
@@ -38,4 +35,6 @@ export default function App({
             </style>
         </SessionProvider>
     );
-}
+};
+
+export default App;
