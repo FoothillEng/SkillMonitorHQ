@@ -1,14 +1,16 @@
 import { useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 
 import Title from '@/components/Title';
-import ListStudents from '@/components/ListStudents';
-import { StudentIdInput } from '@/pages/admin/student/create';
+
 import { MachineContext } from '@/lib/contexts/MachineContext';
 
-const AdminStudentsIndex = (props) => {
-    const { machineUUID } = useContext(MachineContext);
+import { StudentIdInput } from '@/pages/admin/student/create';
+
+const AdminMachineAdd: React.FC = (props) => {
+    const { machineName, machineUUID } = useContext(MachineContext);
     const [error, setError] = useState<string>('');
-    const [key, setKey] = useState(0);
+    const router = useRouter();
 
     const handleSubmit = async (studentId: string) => {
         if (studentId.length < 5) {
@@ -24,21 +26,22 @@ const AdminStudentsIndex = (props) => {
                 studentId,
                 machineUUID
             })
-        });
-        if (res.status !== 200) {
-            setError('Error adding student to machine');
-            return;
-        }
-        setKey(key + 1); // force re-render of student list
+        })
+            .then((res) => {
+                if (res.status !== 200) {
+                    setError('Error adding student to machine');
+                    return;
+                }
+            })
+            .then(() => router.push('/admin/machine/machineStudents'));
         // how to forcible rerednder a component to reset its state. need to reset StudentIDInput if want to addm ultple studnts ti current machien~
     };
 
     return (
-        <div className="flex w-screen flex-col items-center font-oxygen">
-            <Title title="Machine Stats" />
-            <div className="mb-[5rem] flex flex-col items-center p-[2rem] text-4xl ">
-                <div className="text-5xl">Add Student to this Machine</div>
-                <div className="mb-[5rem] mt-[2rem] text-3xl">
+        <div className="flex w-screen flex-col items-center font-oxygen text-white">
+            <Title title={`Add student to ${machineName}`} />
+            <div className="flex flex-col items-center p-[2rem] text-4xl ">
+                <div className="mb-[5rem] text-3xl">
                     Note: student must be on system already
                 </div>
                 <StudentIdInput
@@ -50,14 +53,8 @@ const AdminStudentsIndex = (props) => {
                     <div className="mt-[2rem] text-5xl text-red">{error}</div>
                 )}
             </div>
-            {machineUUID && (
-                <ListStudents
-                    fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}&key=${key}`}
-                    admin={true}
-                />
-            )}
         </div>
     );
 };
 
-export default AdminStudentsIndex;
+export default AdminMachineAdd;
