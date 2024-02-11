@@ -22,7 +22,7 @@ const CreateMachine = ({ setReload }: CreateMachineProps) => {
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!checkIfFormIsFilled()) return;
 

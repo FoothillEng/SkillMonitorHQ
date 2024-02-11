@@ -242,7 +242,9 @@ const CreateUser = (props) => {
                                         }}
                                     >
                                         {({ open }) => {
-                                            function handleOnClick(e) {
+                                            function handleOnClick(
+                                                e: React.MouseEvent<HTMLButtonElement>
+                                            ) {
                                                 e.preventDefault();
                                                 open();
                                             }
