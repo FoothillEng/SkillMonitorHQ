@@ -17,7 +17,7 @@ const Student = ({ student, viewId, col }: StudentProps) => {
         : student.lastName;
     const truncated = firstName.length + lastName.length > 15;
 
-    const ImageDimensions = col ? 'MEDIUM' : 'SMALL';
+    const ImageDimensions = col ? 'medium' : 'small';
 
     return (
         <div

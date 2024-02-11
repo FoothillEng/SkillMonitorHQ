@@ -120,6 +120,5 @@ module.exports = {
     fontFamily: {
       oxygen: ['var(--font-oxygen)'],
     }
-  },
-    plugins: [require('flowbite/plugin')],
+  }
 }

@@ -5,19 +5,12 @@ import { MachineContext } from '@/lib/contexts/MachineContext';
 
 interface MachineProps {
     machine: Machine;
-    currentMachineUUID: string;
-    setCurrentMachineUUID: (machineUUID: string) => void;
 }
-const Machine = ({
-    machine,
-    currentMachineUUID,
-    setCurrentMachineUUID
-}: MachineProps) => {
+const Machine = ({ machine }: MachineProps) => {
     const { setMachineUUID, setMachineName, machineUUID } =
         useContext(MachineContext);
 
     const handleOnClick = async () => {
-        setCurrentMachineUUID(machine.uuid);
         setMachineUUID(machine.uuid);
         localStorage.setItem('machineUUID', machine.uuid);
 
@@ -41,10 +34,7 @@ const Machine = ({
                 machineUUID === machine.uuid ? 'text-red-400' : ''
             }`}
         >
-            <div className="text-3xl">
-                {/* {machine.name} - {machine.id} - {machine.uuid} */}
-                {machine.name}
-            </div>
+            <div className="text-5xl">{machine.name}</div>
         </div>
     );
 };

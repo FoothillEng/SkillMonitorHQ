@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { BsBackspace } from 'react-icons/bs';
 import { AiOutlineEnter } from 'react-icons/ai';
 
-// import { CustomToast } from '@/components/ApprenticeView';
-
 interface NumberBoxProps {
     value: number | typeof BsBackspace | typeof AiOutlineEnter;
     onNumberClick: (
@@ -55,18 +53,18 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
     };
 
     return (
-        <div className="text-center font-oxygen text-7xl md:text-7xl">
-            <div className="text-secondary-200">
+        <div
+            id="NumPad"
+            className="text-center font-oxygen text-7xl md:text-7xl"
+        >
+            <div className="text-secondary-400">
                 {studentId === '' ? (
                     <h1 className="text-center">{placeholder}</h1>
                 ) : (
                     <h1>{studentId}</h1>
                 )}
             </div>
-            <form
-                className="mt-[3rem] flex items-center justify-center text-primary"
-                onSubmit={() => handleSubmit(studentId, setStudentId, setError)}
-            >
+            <div className="mt-[5rem] flex items-center justify-center text-primary">
                 <div className="grid grid-cols-3 gap-[5rem] md:gap-[1.5rem]">
                     {Array.from([
                         1,
@@ -89,8 +87,10 @@ const LockScreen = ({ placeholder, start, handleSubmit }: LockScreenProps) => {
                         />
                     ))}
                 </div>
-            </form>
-            {/* {error && <CustomToast text={error} />} */}
+            </div>
+            {error && (
+                <p className="mt-[2rem] text-5xl text-red-500">{error}</p>
+            )}
         </div>
     );
 };

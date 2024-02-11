@@ -3,8 +3,15 @@ import { useRouter } from 'next/router';
 
 import { CldUploadWidget } from 'next-cloudinary';
 
+import { FaCheck, FaTimes } from 'react-icons/fa';
+
 import Title from '@/components/Title';
 import LockScreen from '@/components/LockScreen';
+
+import dynamic from 'next/dynamic';
+const Tour = dynamic(() => import('@/lib/tours/Tour'), {
+    ssr: false
+});
 
 interface StudentIdInputProps {
     handleSubmit: (value: string) => void;
@@ -18,7 +25,7 @@ export const StudentIdInput = ({ handleSubmit }: StudentIdInputProps) => {
         else handleSubmit(parsedStudentId.toString());
     };
 
-    return <LockScreen placeholder="12345" handleSubmit={submit} />;
+    return <LockScreen placeholder="Type ID Below" handleSubmit={submit} />;
 };
 
 const CreateUser = (props) => {
@@ -30,6 +37,7 @@ const CreateUser = (props) => {
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [studentExists, setStudentExists] = useState(false);
+    const [confirmStudent, setConfirmStudent] = useState(false);
     const router = useRouter();
 
     const handleFieldValueChange = (title: string, value: string) => {
@@ -61,7 +69,7 @@ const CreateUser = (props) => {
             setErrorMessage('');
             setStudentExists(true);
         } else if (res.status === 409) {
-            setErrorMessage('Student in system with that ID');
+            setErrorMessage('Student already exists in system with ID');
         } else {
             setErrorMessage('Student does not exist with given ID');
         }
@@ -69,7 +77,6 @@ const CreateUser = (props) => {
 
     const handleSubmit = useCallback(async () => {
         const checkIfFormIsFilled = async () => {
-            console.log(formData);
             if (!formData.studentId) {
                 setErrorMessage('Please enter student ID');
                 return false;
@@ -122,16 +129,34 @@ const CreateUser = (props) => {
         if (formData.studentId && !formData.firstName) {
             handleSubmit();
         }
-    }, [formData.studentId, formData.firstName, handleSubmit]);
+        if (formData.studentId && formData.firstName && formData.avatar) {
+            handleSubmit();
+        }
+    }, [formData.studentId, formData.firstName, formData.avatar, handleSubmit]);
+
+    const handleConfirmStudent = (value: boolean) => {
+        setConfirmStudent(value);
+        if (!value) {
+            setStudentExists(false);
+            setFormData({
+                // reset because student was not confirmed
+                studentId: 0,
+                firstName: '',
+                lastName: '',
+                avatar: ''
+            });
+        }
+    };
 
     return (
-        <div className="flex w-screen flex-col items-center text-secondary">
-            <div className="mt-[2rem]">
-                <Title title="Register New Student to SMHQ" />
-                <div className="flex flex-col items-center space-y-[3rem]">
+        <div className="flex w-screen flex-col items-center font-oxygen text-secondary">
+            <Tour TourType="Register Student" />
+            <div className="mb-[2rem]">
+                <Title title="Register a new student to SMHQ" />
+                <div className="flex flex-col items-center space-y-[5rem]">
                     {!studentExists ? (
                         <div>
-                            <div className="mb-[3rem] text-center text-5xl text-primary">
+                            <div className="mb-[8rem] border-4 border-primary p-[1rem] text-center text-5xl text-primary">
                                 Step #1: Enter Student ID
                             </div>
                             <StudentIdInput
@@ -142,61 +167,102 @@ const CreateUser = (props) => {
                         </div>
                     ) : (
                         <div>
-                            <div className="mb-[3rem] text-center text-5xl text-primary">
-                                Step #2: Confirm Student Information and Upload
-                                Avatar
-                            </div>
-                            <div className="mb-[4rem] text-center text-5xl text-primary">
-                                {formData.firstName} {formData.lastName}
-                            </div>
-                            <div className="">
-                                <CldUploadWidget
-                                    signatureEndpoint="/api/admin/sign"
-                                    uploadPreset="ml_default"
-                                    options={{
-                                        maxFileSize: 5000000,
-                                        croppingAspectRatio: 1,
-                                        singleUploadAutoClose: true,
-                                        showPoweredBy: false,
-                                        showUploadMoreButton: false
-                                    }}
-                                    onSuccess={(result) => {
-                                        if (
-                                            result.info &&
-                                            typeof result.info === 'object'
-                                        ) {
-                                            handleFieldValueChange(
-                                                'avatar',
-                                                (
-                                                    result.info as {
-                                                        secure_url: string;
+                            {!confirmStudent ? (
+                                <div>
+                                    <div className="mb-[8rem] border-4 border-primary p-[1rem] text-center text-5xl text-primary">
+                                        Step #2: Confirm Student Name
+                                    </div>
+                                    <div
+                                        id="studentInfo"
+                                        className="mb-[4rem] text-center text-8xl text-primary"
+                                    >
+                                        {formData.firstName} {formData.lastName}
+                                        <div className="mt-[15rem] flex flex-row justify-around">
+                                            <div className="border-[1rem] border-green p-[3rem] ">
+                                                <FaCheck
+                                                    size={'7rem'}
+                                                    className="text-center text-green"
+                                                    onClick={() =>
+                                                        handleConfirmStudent(
+                                                            true
+                                                        )
                                                     }
-                                                ).secure_url
-                                            );
-                                        }
-                                    }}
-                                >
-                                    {({ open }) => {
-                                        function handleOnClick(e) {
-                                            e.preventDefault();
-                                            open();
-                                        }
-
-                                        return (
-                                            <div className="flex flex-col items-center justify-center">
-                                                <button
-                                                    className="h-[6rem] w-[50rem] rounded-full border-4 border-primary bg-white text-center text-6xl"
-                                                    onClick={handleOnClick}
-                                                >
-                                                    {formData.avatar
-                                                        ? 'Avatar uploaded'
-                                                        : 'Upload Student Avatar'}
-                                                </button>
+                                                />
                                             </div>
-                                        );
-                                    }}
-                                </CldUploadWidget>
-                            </div>
+                                            <div className="border-[1rem] border-red p-[3rem] ">
+                                                <FaTimes
+                                                    size={'7rem'}
+                                                    className="text-red"
+                                                    onClick={() =>
+                                                        handleConfirmStudent(
+                                                            false
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div id="uploadAvatar">
+                                    <div className="mb-[8rem] border-4 border-primary p-[1rem] text-center text-5xl text-primary">
+                                        Step #3: Upload Student Avatar
+                                    </div>
+                                    <div className="mb-[4rem] text-center text-8xl text-primary">
+                                        {formData.firstName} {formData.lastName}
+                                    </div>
+                                    <CldUploadWidget
+                                        signatureEndpoint="/api/admin/sign"
+                                        uploadPreset="ml_default"
+                                        options={{
+                                            maxFileSize: 5000000,
+                                            croppingAspectRatio: 1,
+                                            singleUploadAutoClose: true,
+                                            showPoweredBy: false,
+                                            showUploadMoreButton: false
+                                        }}
+                                        onSuccess={(result) => {
+                                            if (
+                                                result.info &&
+                                                typeof result.info === 'object'
+                                            ) {
+                                                handleFieldValueChange(
+                                                    'avatar',
+                                                    (
+                                                        result.info as {
+                                                            secure_url: string;
+                                                        }
+                                                    ).secure_url
+                                                );
+                                            } else {
+                                                setErrorMessage(
+                                                    'Error uploading avatar'
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        {({ open }) => {
+                                            function handleOnClick(e) {
+                                                e.preventDefault();
+                                                open();
+                                            }
+
+                                            return (
+                                                <div className="flex flex-col items-center justify-center">
+                                                    <button
+                                                        className="h-[8rem] w-[50rem] rounded-full border-4 border-primary text-center text-6xl"
+                                                        onClick={handleOnClick}
+                                                    >
+                                                        {formData.avatar
+                                                            ? 'Avatar uploaded'
+                                                            : 'Upload Student Avatar'}
+                                                    </button>
+                                                </div>
+                                            );
+                                        }}
+                                    </CldUploadWidget>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

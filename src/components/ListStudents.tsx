@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
@@ -87,7 +87,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                 <div>
                     {admin ? (
                         <table className="border-separate border-spacing-[3rem] text-center">
-                            <thead className="text-6xl md:text-5xl">
+                            <thead className="text-6xl text-secondary-500 md:text-5xl">
                                 {students[0].usageCount !== undefined && (
                                     <tr>
                                         <th>Avatar</th>
@@ -115,13 +115,16 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                             <CldAvatar
                                                 avatar={student.avatar}
                                                 level={student.level}
-                                                size={'MEDIUM'}
+                                                size={'medium'}
                                             />
                                         </td>
                                         <td>
                                             {' '}
                                             {student.firstName}{' '}
-                                            {student.lastName}
+                                            {(
+                                                student.lastName as string
+                                            ).charAt(0)}
+                                            .
                                         </td>
                                         {/* {<td>{student.studentId}</td>} */}
                                         {student.apprentice !== undefined && (
@@ -129,7 +132,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                                 {student.apprentice ? (
                                                     <FaCheck
                                                         size={'5rem'}
-                                                        className="text-center text-white"
+                                                        className="text-center text-green"
                                                         onClick={() =>
                                                             handleChange(
                                                                 student,
@@ -176,14 +179,13 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                         <CldAvatar
                                             avatar={student.avatar}
                                             level={student.level}
-                                            size={'MEDIUM'}
+                                            size={'large'}
                                         />
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
-                    ;
                 </div>
             ) : (
                 <div className="text-4xl text-gray-500">

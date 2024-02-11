@@ -1,13 +1,13 @@
 import '@/styles/globals.css';
-import { useState } from 'react';
 import type { AppProps } from 'next/app';
 import type { Session } from 'next-auth';
 
 import { SessionProvider } from 'next-auth/react';
 
 import Layout from '@/components/Layout';
-import { MachineContext } from '@/lib/contexts/MachineContext';
+import { MachineProvider } from '@/lib/contexts/MachineContext';
 import { ApprenticeProvider } from '@/lib/contexts/ApprenticeContext';
+import { TourProvider } from '@/lib/contexts/TourContext';
 import { oxygen } from '@/lib/fonts';
 
 interface AppPropsWithSession extends AppProps {
@@ -18,26 +18,17 @@ export default function App({
         Component,
         pageProps: { session, ...pageProps }
     }) {
-    // eslint-disable-line
-    const [machineUUID, setMachineUUID] = useState<string>('');
-    const [machineName, setMachineName] = useState<string>('');
-
     return (
         <SessionProvider session={session}>
-            <MachineContext.Provider
-                value={{
-                    machineUUID,
-                    setMachineUUID,
-                    machineName,
-                    setMachineName
-                }}
-            >
+            <MachineProvider>
                 <ApprenticeProvider>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
+                    <TourProvider>
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </TourProvider>
                 </ApprenticeProvider>
-            </MachineContext.Provider>
+            </MachineProvider>
             <style jsx global>
                 {`
                     :root {

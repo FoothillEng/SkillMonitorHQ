@@ -9,7 +9,6 @@ interface ListMachinesProps {
 }
 const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
     const [machines, setMachines] = useState<MachineType[]>([]);
-    const [currentMachineUUID, setCurrentMachineUUID] = useState<string>('');
 
     useEffect(() => {
         const fetchMachines = async () => {
@@ -29,16 +28,11 @@ const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="mb-[2rem] text-5xl">Current Machines:</div>
+            <div className="mb-[2rem] text-7xl">Registered Machines:</div>
             {machines && machines.length > 0 && (
                 <div className="flex flex-col">
                     {machines.map((machine) => (
-                        <Machine
-                            key={machine.id}
-                            currentMachineUUID={currentMachineUUID}
-                            setCurrentMachineUUID={setCurrentMachineUUID}
-                            machine={machine}
-                        />
+                        <Machine key={machine.id} machine={machine} />
                     ))}
                 </div>
             )}

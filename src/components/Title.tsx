@@ -3,7 +3,16 @@ interface TitleProps {
 }
 
 const Title = ({ title }: TitleProps) => {
-    return <div className="fixed top-[13rem] text-6xl">{title}</div>;
+    return (
+        <div
+            id="title"
+            className="mb-[3rem] text-center text-6xl text-primary-400"
+        >
+            {title}
+        </div>
+    );
 };
 
 export default Title;
+
+// mb-[3rem]
