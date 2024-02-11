@@ -5,9 +5,16 @@ import Machine from '@/components/admin/machine/Machine';
 
 interface ListMachinesProps {
     reload: boolean;
+    highlight: boolean;
     setReload: (reload: boolean) => void;
+    handleOnClick: (machine: MachineType) => void;
 }
-const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
+const ListMachines = ({
+    reload,
+    highlight,
+    setReload,
+    handleOnClick
+}: ListMachinesProps) => {
     const [machines, setMachines] = useState<MachineType[]>([]);
 
     useEffect(() => {
@@ -19,7 +26,12 @@ const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
                 }
             })
                 .then((response) => response.json())
-                .then((data) => setMachines(data.machines))
+                .then((data) => {
+                    const sortedMachines = data.machines.sort((a, b) =>
+                        a.name.localeCompare(b.name)
+                    );
+                    setMachines(sortedMachines);
+                })
                 .catch((error) => console.error(error));
         };
         fetchMachines();
@@ -28,11 +40,15 @@ const ListMachines = ({ reload, setReload }: ListMachinesProps) => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="mb-[2rem] text-7xl">Registered Machines:</div>
             {machines && machines.length > 0 && (
-                <div className="flex flex-col">
+                <div className=" space-y-[2rem]">
                     {machines.map((machine) => (
-                        <Machine key={machine.id} machine={machine} />
+                        <Machine
+                            key={machine.id}
+                            machine={machine}
+                            highlight={highlight}
+                            handleOnClick={handleOnClick}
+                        />
                     ))}
                 </div>
             )}
