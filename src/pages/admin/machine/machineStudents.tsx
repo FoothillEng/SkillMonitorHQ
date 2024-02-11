@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import Link from 'next/link';
 
 import Title from '@/components/Title';
 import ListStudents from '@/components/ListStudents';
@@ -10,6 +11,9 @@ const AdminStudentsIndex = (props) => {
     return (
         <div className="flex w-screen flex-col items-center font-oxygen text-white">
             <Title title="Machine Stats" />
+            <div className="mb-[5rem] p-[2rem] text-4xl outline outline-4 active:bg-purple-300 ">
+                <Link href={'/admin/student/create'}>Add Student</Link>
+            </div>
             {machineUUID && (
                 <ListStudents
                     fetchUrl={`/api/admin/student/get?machineUUID=${machineUUID}`}
