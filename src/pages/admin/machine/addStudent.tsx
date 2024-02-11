@@ -26,14 +26,15 @@ const AdminMachineAdd: React.FC = (props) => {
                 studentId,
                 machineUUID
             })
-        })
-            .then((res) => {
-                if (res.status !== 200) {
-                    setError('Error adding student to machine');
-                    return;
-                }
-            })
-            .then(() => router.push('/admin/machine/machineStudents'));
+        }).then((res) => {
+            if (res.status === 200) {
+                router.push('/admin/machine/machineStudents');
+            } else if (res.status === 401) {
+                setError('Student is already on the machine');
+            } else if (res.status === 404) {
+                setError('Student not found');
+            }
+        });
         // how to forcible rerednder a component to reset its state. need to reset StudentIDInput if want to addm ultple studnts ti current machien~
     };
 
