@@ -70,12 +70,6 @@ const SideNav = () => {
                                         label="Admin Home"
                                     />
                                     <NavItem
-                                        href="/admin/student/machineStudents"
-                                        icon={FaUserCog}
-                                        label="Machine Students"
-                                        subItem={true}
-                                    />
-                                    <NavItem
                                         href="/admin/student"
                                         icon={FaUsers}
                                         label="SMHQ Students"
@@ -85,6 +79,18 @@ const SideNav = () => {
                                         href="/admin/student/create"
                                         icon={FaUserEdit}
                                         label="Create Student"
+                                        subItem={true}
+                                    />
+                                    <NavItem
+                                        href="/admin/machine/machineStudents"
+                                        icon={FaUserCog}
+                                        label="Machine Students"
+                                        subItem={true}
+                                    />
+                                    <NavItem
+                                        href="/admin/machine/addStudent"
+                                        icon={FaUserCog}
+                                        label="Add Student"
                                         subItem={true}
                                     />
                                     <NavItem
