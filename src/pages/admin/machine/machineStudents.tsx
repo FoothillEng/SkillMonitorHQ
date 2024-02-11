@@ -5,7 +5,7 @@ import Title from '@/components/Title';
 import ListStudents from '@/components/ListStudents';
 import { MachineContext } from '@/lib/contexts/MachineContext';
 
-const AdminStudentsIndex = (props) => {
+const AdminMachineIndex = (props) => {
     const { machineUUID } = useContext(MachineContext);
 
     return (
@@ -24,4 +24,4 @@ const AdminStudentsIndex = (props) => {
     );
 };
 
-export default AdminStudentsIndex;
+export default AdminMachineIndex;

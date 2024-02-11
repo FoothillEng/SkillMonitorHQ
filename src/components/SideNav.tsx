@@ -70,24 +70,6 @@ const SideNav = () => {
                                         label="Admin Home"
                                     />
                                     <NavItem
-                                        href="/admin/student"
-                                        icon={FaUsers}
-                                        label="SMHQ Students"
-                                        subItem={true}
-                                    />
-                                    <NavItem
-                                        href="/admin/student/create"
-                                        icon={FaUserEdit}
-                                        label="Create Student"
-                                        subItem={true}
-                                    />
-                                    <NavItem
-                                        href="/admin/teacher"
-                                        icon={FaUserEdit}
-                                        label="New Students"
-                                        subItem={true}
-                                    />
-                                    <NavItem
                                         href="/admin/machine/machineStudents"
                                         icon={FaUserCog}
                                         label="Machine Students"
@@ -96,15 +78,48 @@ const SideNav = () => {
                                     <NavItem
                                         href="/admin/machine/addStudent"
                                         icon={FaUserCog}
-                                        label="Add Student"
+                                        label="Add Student to Machine"
                                         subItem={true}
                                     />
                                     <NavItem
-                                        href="/admin/machine"
-                                        icon={FiSettings}
-                                        label="Machine Settings"
+                                        href="/admin/student"
+                                        icon={FaUsers}
+                                        label="All SMHQ Students"
                                         subItem={true}
                                     />
+                                    <NavItem
+                                        href="/admin/student/create"
+                                        icon={FaUserEdit}
+                                        label="Create Student"
+                                        subItem={true}
+                                    />
+                                    {session.user?.role === 'TEACHER' && (
+                                        <div>
+                                            <NavItem
+                                                href="/teacher/"
+                                                icon={AiFillHome}
+                                                label="Teacher Home"
+                                            />
+                                            <NavItem
+                                                href="/admin/machine" // should this be teacher or admin?
+                                                icon={FiSettings}
+                                                label="Machine Settings"
+                                                subItem={true}
+                                            />
+                                            <NavItem
+                                                href="/admin/teacher"
+                                                icon={FaUserEdit}
+                                                label="New Students"
+                                                subItem={true}
+                                            />
+                                            <NavItem
+                                                href="/teacher/settings"
+                                                icon={FaUserEdit}
+                                                label="SMHQ Settings"
+                                                subItem={true}
+                                            />
+                                        </div>
+                                    )}
                                     <div className="mb-[2rem] mt-[1rem] border-t-2 border-blue-300" />
                                 </div>
                             )}
