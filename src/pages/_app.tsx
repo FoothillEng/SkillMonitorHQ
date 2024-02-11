@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import type { Session } from 'next-auth';
+import { Analytics } from '@vercel/analytics/react';
 
 import { SessionProvider } from 'next-auth/react';
 
@@ -14,7 +15,7 @@ interface AppPropsWithSession extends AppProps {
     session: Session;
 }
 
-const App = ({ Component, pageProps }: AppPropsWithSession) => {
+const App = ({ Component, pageProps }) => {
     return (
         <SessionProvider session={pageProps.session}>
             <MachineProvider>
@@ -33,6 +34,7 @@ const App = ({ Component, pageProps }: AppPropsWithSession) => {
                     }
                 `}
             </style>
+            <Analytics mode={'production'} />
         </SessionProvider>
     );
 };

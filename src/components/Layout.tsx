@@ -1,5 +1,4 @@
 import { useEffect, useContext, useRef } from 'react';
-import { Analytics } from '@vercel/analytics/react';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
 import AutoLogoutTimer from '@/components/AutoLogoutTimer';
@@ -55,7 +54,6 @@ const Layout = ({ children }: LayoutProps) => {
             <main className="flex flex-row">
                 {children}
                 <SideNav />
-                <Analytics mode={'production'} />
             </main>
             <Footer />
         </div>
