@@ -93,6 +93,12 @@ const SideNav = () => {
                                         label="Create Student"
                                         subItem={true}
                                     />
+                                    <NavItem
+                                        href="admin/student/safetyTest"
+                                        icon={FaUserEdit}
+                                        label="Create Student"
+                                        subItem={true}
+                                    />
                                     {session.user?.role === 'TEACHER' && (
                                         <div>
                                             <NavItem

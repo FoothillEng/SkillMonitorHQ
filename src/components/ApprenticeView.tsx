@@ -9,7 +9,6 @@ import CldAvatar from '@/components/CldAvatar';
 import { FaPlus, FaUserCheck } from 'react-icons/fa';
 import { Dialog } from '@headlessui/react';
 
-import Student from '@/components/Student';
 import LockScreen from '@/components/LockScreen';
 
 const Apprentice = ({
@@ -46,7 +45,6 @@ const Apprentice = ({
                 setApprentice(data.apprentice);
                 setIsOpen(false);
                 onApprenticeAdded();
-                // setApprenticeIds((prev: string[]) => [...prev, studentId]);
                 setApprenticeUserMachines(
                     (
                         prev: { apprenticeId: string; userMachineId: number }[]
