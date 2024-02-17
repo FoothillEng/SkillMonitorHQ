@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 // import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 import { useSession, signIn } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
@@ -139,6 +140,11 @@ const Index = (props) => {
         const timeRemaining =
             nextAuthSession?.user.realExpTime - Math.floor(Date.now() / 1000);
         if (timeRemaining < 60) return;
+        if (
+            nextAuthSession?.user.role === 'ADMIN' ||
+            nextAuthSession?.user.role === 'TEACHER'
+        )
+            return;
         update({
             realExpTime: Date.now() / 1000 + 59 // 1 minute
         });
@@ -146,6 +152,7 @@ const Index = (props) => {
         UILoading,
         nextAuthSession?.user?.realExpTime,
         accessMachine.allowed,
+        nextAuthSession?.user.role,
         update
     ]);
 
@@ -264,15 +271,25 @@ const Index = (props) => {
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
                     {!UILoading && (
-                        <div className="w-[100rem] text-6xl">
-                            You are{' '}
-                            {`${
-                                accessMachine.apprentice
-                                    ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
-                                    : 'not authorized to use this machine'
-                            }`}
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="w-[100rem] text-6xl">
+                                You are{' '}
+                                {`${
+                                    accessMachine.apprentice
+                                        ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
+                                        : 'not authorized to use this machine'
+                                }`}
+                            </div>
+                            {!accessMachine.apprentice && (
+                                <div className="mt-[5rem] w-[50rem] p-[2rem] text-4xl outline outline-4 ">
+                                    <Link href={'/admin/student/safetyTest'}>
+                                        Take Safety Test
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     )}
+
                     {accessMachine.allowedMachines && (
                         <div className="mt-[10rem] text-5xl text-primary">
                             Machines you are authorized to use:
