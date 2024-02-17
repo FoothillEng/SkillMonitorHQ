@@ -62,6 +62,7 @@ const Index = (props) => {
         if (!userId) return;
         if (!machineUUID) {
             // go to /admin/machine to set machine
+            setUILoading(false);
             setError('Machine not set. Please contact an administrator.');
             return;
         }
@@ -164,7 +165,7 @@ const Index = (props) => {
                         placeholder="Enter your Student ID"
                         handleSubmit={handleSubmit}
                     />
-                    {machineUUID && (
+                    {machineUUID ? (
                         <div className="mt-[8rem] flex flex-col items-center justify-center text-primary md:mt-[10rem]">
                             <div className="mb-[5rem] text-8xl md:text-6xl">
                                 Last used:
@@ -173,6 +174,10 @@ const Index = (props) => {
                                 fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
                                 admin={false}
                             />
+                        </div>
+                    ) : (
+                        <div className="mt-[8rem] text-6xl text-red">
+                            Machine not set. Please contact an administrator.
                         </div>
                     )}
                 </>
@@ -270,7 +275,7 @@ const Index = (props) => {
 
             {nextAuthSession && !accessMachine.allowed && (
                 <div className="flex flex-col items-center justify-center text-center">
-                    {!UILoading && (
+                    {!UILoading && machineUUID && (
                         <div className="flex flex-col items-center justify-center">
                             <div className="w-[100rem] text-6xl">
                                 You are{' '}
@@ -316,8 +321,7 @@ const Index = (props) => {
             )}
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
-                    {JSON.stringify(accessMachine)}
-                    {JSON.stringify(error)}
+                    {error}
                 </div>
             )}
         </div>
