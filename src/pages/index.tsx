@@ -63,7 +63,7 @@ const Index = (props) => {
         if (!machineUUID) {
             // go to /admin/machine to set machine
             setUILoading(false);
-            setError('Machine not set. Please contact an administrator.');
+            setError('Machine not set. Please contact your teacher.');
             return;
         }
 
@@ -177,7 +177,7 @@ const Index = (props) => {
                         </div>
                     ) : (
                         <div className="mt-[8rem] text-6xl text-red">
-                            Machine not set. Please contact an administrator.
+                            Machine not set. Please contact your teacher.
                         </div>
                     )}
                 </>
