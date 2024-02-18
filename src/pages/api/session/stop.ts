@@ -49,7 +49,17 @@ export default async function handler(
                             usageCount: {
                                 increment: 1
                             }
-                        }
+                        },
+                        select: {
+                            userId: true,
+                            duration: true,
+                            _count: {
+                                select: {
+                                    sessions: true
+                                }
+                            },
+                        },
+
                     })
 
                     const user = await prisma.user.update({
@@ -61,6 +71,14 @@ export default async function handler(
                                 increment: duration
                             }
                         },
+                        select: {
+                            lifetimeDuration: true,
+                            _count: {
+                                select: {
+                                    sessions: true
+                                }
+                            },
+                        }
                     })
 
 
@@ -68,15 +86,20 @@ export default async function handler(
                 }
 
                 const updateUsers = [session.userMachineId, session.apprentice1UMID, session.apprentice2UMID, session.apprentice3UMID]
-                    .filter(Boolean) // remove nulls spprenticeUMIDs
+                    .filter(Boolean) // remove null apprenticeUMIDs
                     .map(async (userMachineId) => {
                         const { userMachine, user } = await updateHours(userMachineId as number, session?.duration as number);
-                        return { userMachineDuration: userMachine?.duration, userLifetimeDuration: user?.lifetimeDuration };
+                        return { userMachineDuration: userMachine?.duration, userMachineSessions: userMachine?._count.sessions, userLifetimeDuration: user?.lifetimeDuration, userLifetimeSessions: user?._count.sessions };
                     });
 
                 const results = await Promise.all(updateUsers);
 
-                res.status(200).json({ session, userMachineDuration: results[0].userMachineDuration, userLifetimeDuration: results[0].userLifetimeDuration });
+                res.status(200).json({
+                    session, userMachineDuration: results[0].userMachineDuration,
+                    userMachineSessions: results[0].userMachineSessions,
+                    userLifetimeDuration: results[0].userLifetimeDuration,
+                    userLifetimeSessions: results[0].userLifetimeSessions
+                });
             } catch (error) {
                 console.log(error);
                 res.status(400).json({

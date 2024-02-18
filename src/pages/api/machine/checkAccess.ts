@@ -22,7 +22,19 @@ export default async function handler(
                 await prisma.userMachine.findFirst({
                     where: {
                         userId: userId.toString(),
-                        machineUUID: machineUUID.toString()
+                        machineUUID: machineUUID.toString(),
+                    },
+                    select: {
+                        id: true,
+                        machineId: true,
+                        apprentice: true,
+                        duration: true,
+                        averageRating: true,
+                        _count: {
+                            select: {
+                                sessions: true
+                            }
+                        },
                     },
                 }).then(async (userMachine) => {
 
@@ -55,15 +67,34 @@ export default async function handler(
                                 id: userId.toString()
                             },
                             select: {
-                                lifetimeDuration: true
+                                lifetimeDuration: true,
+                                _count: {
+                                    select: {
+                                        sessions: true
+                                    }
+                                },
                             }
                         });;
 
+                        type respType = {
+                            allowed: boolean,
+                            userMachineId: number,
+                            userMachineDuration: number,
+                            userMachineSessions: number,
+                            userLifetimeDuration?: number,
+                            userLifetimeSessions: number,
+                            averageRating: number,
+                            lastLogin?: Date
+                        }
+                        let resp: respType = {
+                            allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, userMachineSessions: userMachine._count.sessions, userLifetimeSessions: user!._count.sessions
+                        }
 
                         if (lastLogin) {
-                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, lastLoginId: lastLogin.id });
+                            resp = { ...resp, lastLogin: lastLogin.loginTime }
+                            res.status(200).json(resp);
                         } else {
-                            res.status(200).json({ allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, });
+                            res.status(200).json(resp);
                         }
                     } else {
 
