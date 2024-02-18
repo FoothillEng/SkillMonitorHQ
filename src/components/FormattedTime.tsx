@@ -1,11 +1,13 @@
 interface FormattedTimeProps {
     prependedString?: string;
     milliseconds: number;
+    extraStyles?: string;
 }
 // returns a string in the format of "HH:MM:SS". If seconds, minutes, or hours are less than 10, a 0 is prepended to the string.
 const FormattedTime = ({
     prependedString,
-    milliseconds
+    milliseconds,
+    extraStyles
 }: FormattedTimeProps) => {
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -16,7 +18,7 @@ const FormattedTime = ({
     const formattedHours = hours % 60;
 
     return (
-        <div>
+        <span className={extraStyles}>
             {(prependedString ? prependedString : '') +
                 (formattedHours < 10 ? '0' : '') +
                 formattedHours +
@@ -26,7 +28,7 @@ const FormattedTime = ({
                 ':' +
                 (formattedSeconds < 10 ? '0' : '') +
                 formattedSeconds}
-        </div>
+        </span>
     );
 };
 

@@ -16,7 +16,7 @@ import SessionStopWatch from '@/components/SessionStopWatch';
 import ApprenticeView from '@/components/ApprenticeView';
 import CldAvatar from '@/components/CldAvatar';
 
-interface AccessMachine {
+interface AccessMachineType {
     allowed: boolean;
     apprentice?: boolean;
     allowedMachines?: Machine[];
@@ -25,15 +25,21 @@ interface AccessMachine {
     lastLoginId?: number;
 }
 
+interface AccessMachineStatsType {
+    userMachineSessions?: number;
+    userMachineDuration?: number;
+    userLifetimeSessions?: number;
+    userLifetimeDuration?: number;
+}
+
 const Index = (props) => {
     const [error, setError] = useState('');
-    const [accessMachine, setAccessMachine] = useState<AccessMachine>({
+    const [accessMachine, setAccessMachine] = useState<AccessMachineType>({
         allowed: false,
         lastLoginId: 0
     });
-    const [userMachineDuration, setUserMachineDuration] = useState<number>(-1); // [milliseconds]
-    const [userLifetimeDuration, setUserLifetimeDuration] =
-        useState<number>(-1); // [milliseconds]
+    const [accessMachineStats, setAccessMachineStats] =
+        useState<AccessMachineStatsType>({});
     const [wasCalled, setWasCalled] = useState(false);
     const { data: nextAuthSession, update, status } = useSession();
     const { machineUUID } = useContext(MachineContext);
@@ -83,12 +89,16 @@ const Index = (props) => {
                         setAccessMachine({
                             allowed: true,
                             userMachineId: data.userMachineId,
+                            averageRating: data.averageRating,
                             lastLoginId:
-                                data.lastLoginId == null ? 0 : data.lastLoginId,
-                            averageRating: data.averageRating
+                                data.lastLoginId == null ? 0 : data.lastLoginId
                         });
-                        setUserMachineDuration(data.userMachineDuration);
-                        setUserLifetimeDuration(data.userLifetimeDuration);
+                        setAccessMachineStats({
+                            userMachineSessions: data.userMachineSessions,
+                            userMachineDuration: data.userMachineDuration,
+                            userLifetimeSessions: data.userLifetimeSessions,
+                            userLifetimeDuration: data.userLifetimeDuration
+                        });
                     }
                     setUILoading(false);
 
@@ -213,18 +223,53 @@ const Index = (props) => {
                                     nextAuthSession.user?.lastName}
                             </div>
                             <div className="space-y-[2rem] text-5xl">
-                                {userMachineDuration != -1 && (
-                                    <FormattedTime
-                                        prependedString="This Machine: "
-                                        milliseconds={userMachineDuration}
-                                    />
-                                )}
-                                {userLifetimeDuration != -1 && (
-                                    <FormattedTime
-                                        prependedString="All Machines: "
-                                        milliseconds={userLifetimeDuration}
-                                    />
-                                )}
+                                {accessMachineStats.userMachineDuration !==
+                                    undefined &&
+                                    accessMachineStats.userMachineSessions !==
+                                        undefined && (
+                                        <div>
+                                            <span>{`This machine: `}</span>
+                                            <FormattedTime
+                                                milliseconds={
+                                                    accessMachineStats.userMachineDuration
+                                                }
+                                                extraStyles="text-primary"
+                                            />
+                                            <span>
+                                                {` across `}
+                                                <span className="text-primary">
+                                                    {
+                                                        accessMachineStats.userMachineSessions
+                                                    }
+                                                </span>
+                                                {` sessions`}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                {accessMachineStats.userLifetimeDuration !==
+                                    undefined &&
+                                    accessMachineStats.userLifetimeSessions !==
+                                        undefined && (
+                                        <div>
+                                            <span>{`Lifetime: `}</span>
+                                            <FormattedTime
+                                                milliseconds={
+                                                    accessMachineStats.userLifetimeDuration
+                                                }
+                                                extraStyles="text-primary"
+                                            />
+                                            <span>
+                                                {` across `}
+                                                <span className="text-primary">
+                                                    {
+                                                        accessMachineStats.userLifetimeSessions
+                                                    }
+                                                </span>
+                                                {` sessions`}
+                                            </span>
+                                        </div>
+                                    )}
                             </div>
                         </div>
                     </div>
@@ -250,11 +295,18 @@ const Index = (props) => {
                                         userMachineId={
                                             accessMachine?.userMachineId
                                         }
-                                        setUserMachineDuration={
-                                            setUserMachineDuration
-                                        }
-                                        setUserLifetimeDuration={
-                                            setUserLifetimeDuration
+                                        updateUserMachineStats={(
+                                            userMachineDuration,
+                                            userMachineSessions,
+                                            userLifetimeDuration,
+                                            userLifetimeSessions
+                                        ) =>
+                                            setAccessMachineStats({
+                                                userMachineDuration,
+                                                userMachineSessions,
+                                                userLifetimeDuration,
+                                                userLifetimeSessions
+                                            })
                                         }
                                         setError={setError}
                                     />

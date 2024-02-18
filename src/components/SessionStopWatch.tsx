@@ -10,16 +10,19 @@ import FormattedTime from '@/components/FormattedTime';
 interface SessionStopWatchProps {
     userId: string;
     userMachineId: number;
-    setUserMachineDuration: (duration: number) => void;
-    setUserLifetimeDuration: (duration: number) => void;
+    updateUserMachineStats: (
+        userMachineDuration: number,
+        userMachineSessions: number,
+        userLifetimeDuration: number,
+        userLifetimeSessions: number
+    ) => void;
     setError: (error: string) => void;
 }
 
 const SessionStopWatch = ({
     userId,
     userMachineId,
-    setUserMachineDuration,
-    setUserLifetimeDuration,
+    updateUserMachineStats,
     setError
 }: SessionStopWatchProps) => {
     const [time, setTime] = useState(0);
@@ -72,8 +75,12 @@ const SessionStopWatch = ({
             .then((res) => res.json())
             .then((res) => {
                 setSession(res.session),
-                    setUserMachineDuration(res.userMachineDuration),
-                    setUserLifetimeDuration(res.userLifetimeDuration);
+                    updateUserMachineStats(
+                        res.userMachineDuration,
+                        res.userMachineSessions,
+                        res.userLifetimeDuration,
+                        res.userLifetimeSessions
+                    );
             })
             .then(() => {
                 setStarted(false);
@@ -86,8 +93,7 @@ const SessionStopWatch = ({
     }, [
         setError,
         setSession,
-        setUserMachineDuration,
-        setUserLifetimeDuration,
+        updateUserMachineStats,
         update,
         started,
         session,
