@@ -60,7 +60,7 @@ const AutoLogoutTimer = () => {
             return;
         }
 
-        await fetch(`/api/checkAdmin`, {
+        await fetch(`/api/machine/checkAdmin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -85,25 +85,25 @@ const AutoLogoutTimer = () => {
         setStudentId: any,
         setError: any
     ) => {
-        const hours = parseInt(studentId);
+        const minutes = parseInt(studentId);
 
         if (!adminSet) {
             setError('Please enter Admin ID first');
             return;
         }
 
-        if (isNaN(hours)) {
+        if (isNaN(minutes)) {
             setError('Please enter a valid number');
             return;
         }
 
-        if (hours < 1 || hours > 48) {
-            setError('Please enter a number between 1 and 48');
+        if (minutes < 1 || minutes > 3000) {
+            setError('Please enter a number between 1 and 3000');
             return;
         }
 
         update({
-            realExpTime: nextAuthSession?.user.realExpTime + hours * 3600
+            realExpTime: nextAuthSession?.user.realExpTime + minutes * 60
         });
 
         setIsOpen(false);
@@ -151,7 +151,7 @@ const AutoLogoutTimer = () => {
                                         )) || (
                                             <LockScreen
                                                 placeholder={
-                                                    'Enter total # of hours to add to session time (1-48)'
+                                                    'Enter total # of minutes to add to session time (max 50h~3000m)'
                                                 }
                                                 start={''}
                                                 handleSubmit={handleSubmit2}

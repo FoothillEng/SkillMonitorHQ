@@ -4,18 +4,20 @@ import { withAuth } from "next-auth/middleware"
 export default withAuth({
     callbacks: {
         authorized({ req, token }) {
-            const tokenExists = token?.role === "TEACHER" || token?.role === "ADMIN" || token?.role === "STUDENT"
-            // if (req.nextUrl.pathname.startsWith("/admin/teacher") || req.nextUrl.pathname.startsWith("/api/admin/teacher")) {
-            //     return token?.role === "TEACHER"
-            // }
-            // if (req.nextUrl.pathname.startsWith("/admin") || req.nextUrl.pathname.startsWith("/api/admin")) {
-            //     return token?.role === "TEACHER" || token?.role === "ADMIN"
-            // }
+            // const tokenExists = token?.role === "TEACHER" || token?.role === "ADMIN" || token?.role === "STUDENT"
+            if (req.nextUrl.pathname.startsWith("/teacher") || req.nextUrl.pathname.startsWith("/api/teacher")) {
+                return token?.role === "TEACHER"
+            }
+            if (req.nextUrl.pathname.startsWith("/admin") || req.nextUrl.pathname.startsWith("/api/admin")) {
+                return token?.role === "TEACHER" || token?.role === "ADMIN"
+            }
 
-            const safeRoutes = ['/', '/api/machine/get', '/api/checkLastLogin']
-            if (tokenExists || safeRoutes.includes(req.nextUrl.pathname)) return true;
+            if (req.nextUrl.pathname == '/' || req.nextUrl.pathname.startsWith('/api/machine/')) {
+                return true;
+            }
 
-            return token?.role === "TEACHER" || token?.role === "ADMIN"
+            // return token?.role === "TEACHER" || token?.role === "ADMIN"
+            return false
         },
     },
 })

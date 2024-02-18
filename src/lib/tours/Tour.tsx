@@ -58,9 +58,9 @@ interface TourProps {
 const Tour = ({ TourType }: TourProps) => {
     const { tour, setTour } = useContext(TourContext);
 
-    useEffect(() => {
-        console.log('Tour:', tour);
-    }, [tour]);
+    // useEffect(() => {
+    //     console.log('Tour:', tour);
+    // }, [tour]);
 
     const handleJoyrideCallback = (data: CallBackProps) => {
         const { status } = data;

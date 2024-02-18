@@ -1,40 +1,34 @@
 import { useContext } from 'react';
 
-import type { Machine } from '@prisma/client';
+import type { Machine as MachineType } from '@prisma/client';
+import { FaQuestion } from 'react-icons/fa';
+
 import { MachineContext } from '@/lib/contexts/MachineContext';
 
+export type MachineTestQuestions = MachineType & { testQuestions: boolean };
+
 interface MachineProps {
-    machine: Machine;
+    machine: MachineTestQuestions;
+    highlight: boolean;
+    handleOnClick: (machine: MachineTestQuestions) => void;
 }
-const Machine = ({ machine }: MachineProps) => {
-    const { setMachineUUID, setMachineName, machineUUID } =
-        useContext(MachineContext);
-
-    const handleOnClick = async () => {
-        setMachineUUID(machine.uuid);
-        localStorage.setItem('machineUUID', machine.uuid);
-
-        await fetch(`/api/machine/get?UUID=${machine.uuid}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setMachineName(data.machine.name);
-            })
-            .catch((error) => console.error(error));
-    };
+const Machine = ({ highlight, machine, handleOnClick }: MachineProps) => {
+    const { machineUUID } = useContext(MachineContext);
 
     return (
         <div
-            onClick={handleOnClick}
+            onClick={handleOnClick.bind(this, machine)}
             className={`flex flex-row items-center justify-center space-x-[2rem] active:bg-slate-400 ${
-                machineUUID === machine.uuid ? 'text-red-400' : ''
+                (highlight && machineUUID) === machine.uuid
+                    ? 'text-red-400'
+                    : ''
             }`}
         >
             <div className="text-5xl">{machine.name}</div>
+            <FaQuestion
+                size={'4rem'}
+                color={machine.testQuestions ? 'green' : 'red'}
+            />
         </div>
     );
 };

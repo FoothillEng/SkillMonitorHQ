@@ -15,15 +15,26 @@ export default async function handler(
                         where: {
                             uuid: UUID.toString()
                         }
-                    }).then((machine) => {
+                    }).then(async (machine) => {
                         if (!machine) {
                             res.status(404).json({
                                 message: 'Machine not found'
                             });
                         } else {
-                            res.status(200).json({
-                                machine
+                            const questions = await prisma.testQuestion.findMany({
+                                where: {
+                                    machineId: machine.id
+                                }
                             });
+                            if (questions.length === 0) {
+                                res.status(422).json({
+                                    message: 'No questions found'
+                                });
+                            } else {
+                                res.status(200).json({
+                                    questions
+                                });
+                            }
                         }
                     })
                 } else {

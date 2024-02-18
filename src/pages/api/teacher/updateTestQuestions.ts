@@ -7,17 +7,27 @@ import { IncomingForm } from 'formidable';
 
 import { prisma } from '@/lib/prisma';
 
-interface User {
-    studentId: number;
-    firstName: string;
-    lastName: string;
+interface Question {
+    id: number
+    text: string
+    choice1: string
+    choice2: string
+    choice3: string
+    choice4: string
+    correctChoice: number
+    machineId: number
 }
 
-interface RawUser {
-    'ID': string;
-    'First Name': string;
-    'Last Name': string;
+interface RawQuestion {
+    id: string
+    text: string
+    choice1: string
+    choice2: string
+    choice3: string
+    choice4: string
+    correctChoice: string
 }
+
 
 export const config = {
     api: {
@@ -43,33 +53,45 @@ export default async function handler(
                     }
 
                     const { file } = files;
+                    const { machineId } = fields
 
                     if (!file) {
                         return res.status(400).json({ message: 'No file uploaded' });
                     }
 
+                    if (!machineId) {
+                        return res.status(400).json({ message: 'No machine id provided' });
+                    }
+
                     // Read and process the CSV file
-                    const csvData: RawUser[] = [];
+                    const questionData: Question[] = [];
                     const parserStream = fs.createReadStream(file[0].filepath)
                         .pipe(parse({ headers: true }))
-                        .on('data', (row: RawUser) => {
-                            // Process each row as needed
-                            if (row['ID'] && row['First Name'] && row['Last Name']) {
-                                csvData.push(row);
+                        .on('data', (row: RawQuestion) => {
+                            if (row.id === '' || row.text === '' || row.choice1 === '' || row.choice2 === '' || row.choice3 === '' || row.choice4 === '' || row.correctChoice === '') {
+                                console.log('skpping row', row.id, row.text, row.choice1, row.choice2, row.choice3, row.choice4, row.correctChoice)
+                            } else {
+                                questionData.push({
+                                    id: parseInt(row.id),
+                                    text: row.text,
+                                    choice1: row.choice1,
+                                    choice2: row.choice2,
+                                    choice3: row.choice3,
+                                    choice4: row.choice4,
+                                    correctChoice: parseInt(row.correctChoice),
+                                    machineId: parseInt(machineId[0])
+                                });
                             }
                         })
                         .on('end', async () => {
-                            let studentData: User[] = csvData.map((row) => ({
-                                studentId: parseInt(row['ID']),
-                                firstName: row['First Name'],
-                                lastName: row['Last Name'],
-                            }));
+                            await prisma.testQuestion.deleteMany({
+                                where: {
+                                    machineId: parseInt(machineId[0])
+                                }
+                            });
 
-                            await prisma.studentBody.deleteMany({});
-
-                            await prisma.studentBody.createMany({
-                                data: studentData,
-                                skipDuplicates: true,
+                            await prisma.testQuestion.createMany({
+                                data: questionData
                             });
 
                             fs.unlinkSync(file[0].filepath);

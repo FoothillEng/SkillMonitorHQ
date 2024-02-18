@@ -11,7 +11,7 @@ const Header = () => {
     const { setTour } = useContext(TourContext);
 
     const handleTour = () => {
-        console.log('Tour:', true);
+        // console.log('Tour:', true);
         setTour(true);
     };
 

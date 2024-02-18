@@ -35,11 +35,12 @@ model User {
 }
 
 model Machine {
-  id        Int           @id @default(autoincrement())
-  uuid      String        @unique @default(uuid())
-  name      String        @unique
-  users     UserMachine[]
-  UserLogin UserLogin[]
+  id            Int            @id @default(autoincrement())
+  uuid          String         @unique @default(uuid())
+  name          String         @unique
+  users         UserMachine[]
+  UserLogin     UserLogin[]
+  testQuestions TestQuestion[]
 
   @@unique([id, uuid])
 }
@@ -57,6 +58,7 @@ model UserMachine {
   cumulativeRatingCount Int       @default(0)
   averageRating         Float     @default(5)
   apprentice            Boolean   @default(true)
+  passedTest            Boolean   @default(true)
   sessions              Session[]
 
   @@unique([userId, machineId])
@@ -93,4 +95,16 @@ model StudentBody {
   studentId Int
   firstName String
   lastName  String
+}
+
+model TestQuestion {
+  id            Int     @id @default(autoincrement())
+  text          String
+  choice1       String
+  choice2       String
+  choice3       String
+  choice4       String
+  correctChoice Int
+  machine       Machine @relation(fields: [machineId], references: [id])
+  machineId     Int
 }

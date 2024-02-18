@@ -36,7 +36,7 @@ const Layout = ({ children }: LayoutProps) => {
                     } catch (error) {
                         if (error instanceof TypeError) {
                             setMachineName(
-                                'Machine not Found, please contact admin'
+                                'Machine not Found. Please contact your teacher.'
                             );
                         } else {
                             console.error(error);
@@ -54,6 +54,7 @@ const Layout = ({ children }: LayoutProps) => {
             <main className="flex flex-row">
                 {children}
                 <SideNav />
+                <div id="modal" />
             </main>
             <Footer />
         </div>
