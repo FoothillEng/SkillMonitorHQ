@@ -9,7 +9,19 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             try {
-                const machines = await prisma.machine.findMany();
+                const rawMachines = await prisma.machine.findMany({
+                    include: {
+                        testQuestions: true
+                    }
+                });
+                const machines = rawMachines.map((machine) => {
+                    return {
+                        id: machine.id,
+                        name: machine.name,
+                        uuid: machine.uuid,
+                        testQuestions: (machine.testQuestions.length > 0) ? true : false
+                    }
+                });
                 res.status(200).json({
                     machines
                 });

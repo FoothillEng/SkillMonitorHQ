@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
-import type { Machine as MachineType } from '@prisma/client';
 
 import Machine from '@/components/admin/machine/Machine';
+import type { MachineTestQuestions } from '@/components/admin/machine/Machine';
 
 interface ListMachinesProps {
     reload: boolean;
     highlight: boolean;
     setReload: (reload: boolean) => void;
-    handleOnClick: (machine: MachineType) => void;
+    handleOnClick: (machine: MachineTestQuestions) => void;
 }
+
 const ListMachines = ({
     reload,
     highlight,
     setReload,
     handleOnClick
 }: ListMachinesProps) => {
-    const [machines, setMachines] = useState<MachineType[]>([]);
+    const [machines, setMachines] = useState<MachineTestQuestions[]>([]);
 
     useEffect(() => {
         const fetchMachines = async () => {
@@ -27,8 +28,9 @@ const ListMachines = ({
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    const sortedMachines = data.machines.sort((a, b) =>
-                        a.name.localeCompare(b.name)
+                    const sortedMachines = data.machines.sort(
+                        (a: { name: string }, b: { name: string }) =>
+                            a.name.localeCompare(b.name)
                     );
                     setMachines(sortedMachines);
                 })
