@@ -8,7 +8,7 @@ interface StarRatingProps {
     setError: (error: string) => void;
 }
 
-const OSCILLATION_DEFAULT = [0,0, 0, 0, 0] as number[];
+const OSCILLATION_DEFAULT = [0, 0, 0, 0, 0] as number[];
 
 const StarRating = ({
     currentUserId,
@@ -20,9 +20,9 @@ const StarRating = ({
     const [index, setIndex] = useState(0);
     const oscillating = useRef(true);
 
-
-    useEffect(() => { // oscillate the stars
-        if (!oscillating.current) return; 
+    useEffect(() => {
+        // oscillate the stars
+        if (!oscillating.current) return;
         const interval = setInterval(() => {
             if (index < 3) {
                 setRating((prevRating) => {
@@ -35,7 +35,7 @@ const StarRating = ({
                 setRating((prevRating) => {
                     const newRating = [...prevRating];
                     newRating[index] = 1;
-                    newRating[index-3] = 0;
+                    newRating[index - 3] = 0;
                     return newRating;
                 });
                 setIndex(index + 1);
@@ -46,7 +46,7 @@ const StarRating = ({
                     return newRating;
                 });
                 setIndex(index + 1);
-            }else {
+            } else {
                 clearInterval(interval);
                 setTimeout(() => {
                     if (!oscillating.current) return;
@@ -71,13 +71,12 @@ const StarRating = ({
                     newRating[i] = 0;
                 }
             }
-            console.log(clickedRating,newRating);
             return newRating;
         });
-        
+
         try {
             // Send an API request to record the rating
-            await fetch('/api/updateRating', {
+            await fetch('/api/admin/updateRating', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -104,18 +103,18 @@ const StarRating = ({
 
     return (
         <div className="flex flex-col items-center">
-            <div className="text-primary text-6xl mb-[10rem]">
+            <div className="mb-[10rem] text-6xl text-primary">
                 Rate the cleanliness of the last user
             </div>
-            <div className='flex flex-row space-x-[5rem]'>
-            {rating.map((star, idx) => (
-                <DynamicStar
-                    key={idx}
-                    fill={star}
-                    size={50}
-                    onClick={() => handleRatingClick(idx+1)}
-                />
-            ))}
+            <div className="flex flex-row space-x-[5rem]">
+                {rating.map((star, idx) => (
+                    <DynamicStar
+                        key={idx}
+                        fill={star}
+                        size={50}
+                        onClick={() => handleRatingClick(idx + 1)}
+                    />
+                ))}
             </div>
         </div>
     );

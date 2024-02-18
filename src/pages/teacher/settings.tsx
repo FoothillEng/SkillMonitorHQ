@@ -47,7 +47,7 @@ const TeacherSettingsIndex = (props) => {
     return (
         <div className="flex w-screen flex-col items-center text-center font-oxygen text-white">
             <Title title="Teacher Settings" />
-            <div className="mb-[2rem] flex flex-row">
+            <div className="flex flex-col">
                 <div className="flex flex-col items-center">
                     <div className="mt-[3rem] text-6xl text-secondary">
                         Change Student Body Population
@@ -82,9 +82,18 @@ const TeacherSettingsIndex = (props) => {
                         <div className="text-4xl text-red-500">{error1}</div>
                     )}
                 </div>
-                <div className="flex flex-col items-center">
-                    <div className="mt-[3rem] text-6xl text-secondary">
-                        Change Test Questions for 1 Machine
+                <div className="flex w-[200rem] flex-col items-center">
+                    <div className=" mt-[10rem] text-6xl text-secondary">
+                        Change Test Questions for
+                        <span
+                            className={
+                                selectedMachine ? 'text-secondary-400' : ''
+                            }
+                        >
+                            {selectedMachine
+                                ? ` ${selectedMachine.name}`
+                                : ' A Machine'}
+                        </span>
                     </div>
                     {!selectedMachine ? (
                         <div>

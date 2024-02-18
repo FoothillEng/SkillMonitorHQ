@@ -132,7 +132,7 @@ const ListStudents = ({ fetchUrl, admin }: ListStudentsProps) => {
                                                 {student.apprentice ? (
                                                     <FaCheck
                                                         size={'5rem'}
-                                                        className="text-center text-green"
+                                                        className=" text-green"
                                                         onClick={() =>
                                                             handleChange(
                                                                 student,
