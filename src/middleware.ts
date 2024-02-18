@@ -12,7 +12,7 @@ export default withAuth({
                 return token?.role === "TEACHER" || token?.role === "ADMIN"
             }
 
-            if (req.nextUrl.pathname == '/' || req.nextUrl.pathname.startsWith('/api/machine/')) {
+            if (req.nextUrl.pathname == '/' || req.nextUrl.pathname.startsWith('/student/') || req.nextUrl.pathname.startsWith('/api/machine/') || req.nextUrl.pathname.startsWith('/api/apprentice/') || req.nextUrl.pathname.startsWith('/api/session/')) {
                 return true;
             }
 
