@@ -54,6 +54,7 @@ const Layout = ({ children }: LayoutProps) => {
             <main className="flex flex-row">
                 {children}
                 <SideNav />
+                <div id="modal" />
             </main>
             <Footer />
         </div>
