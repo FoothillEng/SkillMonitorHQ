@@ -5,7 +5,7 @@ import Title from '@/components/Title';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
 
-import { StudentIdInput } from '@/pages/admin/student/create';
+import { StudentIdInput } from '@/pages/admin/student/createStudent';
 
 const AdminMachineAdd: React.FC = (props) => {
     const { machineName, machineUUID } = useContext(MachineContext);
@@ -28,7 +28,7 @@ const AdminMachineAdd: React.FC = (props) => {
             })
         }).then((res) => {
             if (res.status === 200) {
-                router.push('/admin/machine/machineStudents');
+                router.push('/admin/machine/');
             } else if (res.status === 401) {
                 setError('Student is already on the machine');
             } else if (res.status === 404) {

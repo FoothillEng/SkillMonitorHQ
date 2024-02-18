@@ -119,10 +119,22 @@ const SafetyTest = (props) => {
         if (questions.length == 0) {
             const res = await fetch(
                 `/api/machine/getQuestions?UUID=${machineUUID}`
-            ).then((res) => res.json());
-            setQuestions(res.questions);
+            ).then((res) => {
+                if (res.status === 404) {
+                    setError('Machine not found. Please contact your teacher.');
+                    return;
+                } else if (res.status === 422) {
+                    setError('No questions found. Please contact your teacher');
+                    return;
+                }
+                return res.json();
+            });
+
+            if (res) {
+                setQuestions(res.questions);
+                setCurrentQuestion(1);
+            }
         }
-        setCurrentQuestion(1);
     };
 
     const handleTouch = (choiceNumber: Answer) => {
@@ -290,7 +302,9 @@ const SafetyTest = (props) => {
                     </div>
                 )}
             </div>
-            {error && <div className="text-5xl text-red-500">{error}</div>}
+            {error && (
+                <div className="mt-[2rem] text-5xl text-red-500">{error}</div>
+            )}
         </div>
     );
 };

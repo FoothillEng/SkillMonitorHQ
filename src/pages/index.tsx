@@ -171,7 +171,7 @@ const Index = (props) => {
                                 Last used:
                             </div>
                             <ListStudents
-                                fetchUrl={`/api/checkLastLogin?machineUUID=${machineUUID}&length=3`}
+                                fetchUrl={`/api/machine/checkLastLogin?machineUUID=${machineUUID}&length=3`}
                                 admin={false}
                             />
                         </div>
@@ -287,7 +287,7 @@ const Index = (props) => {
                             </div>
                             {!accessMachine.apprentice && (
                                 <div className="mt-[5rem] w-[50rem] p-[2rem] text-4xl outline outline-4 ">
-                                    <Link href={'/admin/student/safetyTest'}>
+                                    <Link href={'/student/safetyTest'}>
                                         Take Safety Test
                                     </Link>
                                 </div>

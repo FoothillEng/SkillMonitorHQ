@@ -70,7 +70,7 @@ const SideNav = () => {
                                         label="Admin Home"
                                     />
                                     <NavItem
-                                        href="/admin/machine/machineStudents"
+                                        href="/admin/machine/"
                                         icon={FaUserCog}
                                         label="Machine Students"
                                         subItem={true}
@@ -82,19 +82,13 @@ const SideNav = () => {
                                         subItem={true}
                                     />
                                     <NavItem
-                                        href="/admin/student"
+                                        href="/admin/student/"
                                         icon={FaUsers}
                                         label="All SMHQ Students"
                                         subItem={true}
                                     />
                                     <NavItem
-                                        href="/admin/student/create"
-                                        icon={FaUserEdit}
-                                        label="Create Student"
-                                        subItem={true}
-                                    />
-                                    <NavItem
-                                        href="admin/student/safetyTest"
+                                        href="/admin/student/createStudent/"
                                         icon={FaUserEdit}
                                         label="Create Student"
                                         subItem={true}
@@ -107,15 +101,9 @@ const SideNav = () => {
                                                 label="Teacher Home"
                                             />
                                             <NavItem
-                                                href="/admin/machine" // should this be teacher or admin?
+                                                href="/teacher/changeMachine" // should this be teacher or admin?
                                                 icon={FiSettings}
                                                 label="Machine Settings"
-                                                subItem={true}
-                                            />
-                                            <NavItem
-                                                href="/admin/teacher"
-                                                icon={FaUserEdit}
-                                                label="New Students"
                                                 subItem={true}
                                             />
                                             <NavItem

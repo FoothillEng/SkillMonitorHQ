@@ -60,7 +60,7 @@ const AutoLogoutTimer = () => {
             return;
         }
 
-        await fetch(`/api/checkAdmin`, {
+        await fetch(`/api/machine/checkAdmin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
