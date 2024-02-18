@@ -3,10 +3,9 @@ import { useRouter } from 'next/router';
 
 import { CldUploadWidget } from 'next-cloudinary';
 
-import { FaCheck, FaTimes } from 'react-icons/fa';
-
 import Title from '@/components/Title';
 import LockScreen from '@/components/LockScreen';
+import FaOptions from '@/components/FaOptions';
 
 import dynamic from 'next/dynamic';
 const Tour = dynamic(() => import('@/lib/tours/Tour'), {
@@ -177,29 +176,12 @@ const CreateUser = (props) => {
                                         className="mb-[4rem] text-center text-8xl text-primary"
                                     >
                                         {formData.firstName} {formData.lastName}
-                                        <div className="mt-[15rem] flex flex-row justify-around">
-                                            <div className="border-[1rem] border-green p-[3rem] ">
-                                                <FaCheck
-                                                    size={'7rem'}
-                                                    className="text-center text-green"
-                                                    onClick={() =>
-                                                        handleConfirmStudent(
-                                                            true
-                                                        )
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="border-[1rem] border-red p-[3rem] ">
-                                                <FaTimes
-                                                    size={'7rem'}
-                                                    className="text-red"
-                                                    onClick={() =>
-                                                        handleConfirmStudent(
-                                                            false
-                                                        )
-                                                    }
-                                                />
-                                            </div>
+                                        <div className="mt-[15rem]">
+                                            <FaOptions
+                                                handleConfirm={
+                                                    handleConfirmStudent
+                                                }
+                                            />
                                         </div>
                                     </div>
                                 </div>
