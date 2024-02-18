@@ -26,9 +26,15 @@ export default async function handler(
                                     machineId: machine.id
                                 }
                             });
-                            res.status(200).json({
-                                questions
-                            });
+                            if (questions.length === 0) {
+                                res.status(422).json({
+                                    message: 'No questions found'
+                                });
+                            } else {
+                                res.status(200).json({
+                                    questions
+                                });
+                            }
                         }
                     })
                 } else {
