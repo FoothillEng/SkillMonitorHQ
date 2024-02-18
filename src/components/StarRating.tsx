@@ -76,7 +76,7 @@ const StarRating = ({
 
         try {
             // Send an API request to record the rating
-            await fetch('/api/admin/updateRating', {
+            await fetch('/api/machine/updateRating', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

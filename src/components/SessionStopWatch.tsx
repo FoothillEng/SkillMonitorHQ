@@ -34,7 +34,7 @@ const SessionStopWatch = ({
         if (started) return;
         // transform apprenticeIds into an array of numbers, each in the format apprentice{}Id
 
-        await fetch('/api/admin/session/start', {
+        await fetch('/api/session/start', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ const SessionStopWatch = ({
 
     const handleStop = useCallback(async () => {
         if (!started) return;
-        await fetch('/api/admin/session/stop', {
+        await fetch('/api/session/stop', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
