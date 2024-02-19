@@ -10,15 +10,15 @@ const FaOptions = ({ handleConfirm }: FaOptionsProps) => {
             <div className="border-[1rem] border-green p-[3rem] ">
                 <FaCheck
                     size={'7rem'}
-                    className="modal-block text-center text-green"
-                    onClick={() => handleConfirm(true)}
+                    className="modal-block text-green"
+                    onClick={async () => handleConfirm(true)}
                 />
             </div>
-            <div className="modal-block border-[1rem] border-red p-[3rem]">
+            <div className="border-[1rem] border-red p-[3rem]">
                 <FaTimes
                     size={'7rem'}
-                    className="text-red"
-                    onClick={() => handleConfirm(false)}
+                    className="modal-block text-red"
+                    onClick={async () => handleConfirm(false)}
                 />
             </div>
         </div>

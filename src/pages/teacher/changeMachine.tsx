@@ -1,17 +1,13 @@
-import dynamic from 'next/dynamic';
 import { useState, useRef, useContext } from 'react';
+import dynamic from 'next/dynamic';
 
 import type { MachineTestQuestions } from '@/components/admin/machine/Machine';
 import { MachineContext } from '@/lib/contexts/MachineContext';
 
-const Tour = dynamic(() => import('@/lib/tours/Tour'), {
-    ssr: false
-});
+const Tour = dynamic(() => import('@/lib/tours/Tour'), { ssr: false });
 
 import Title from '@/components/Title';
-const Modal = dynamic(() => import('@/components/Modal'), {
-    ssr: false
-});
+const Modal = dynamic(() => import('@/components/Modal'), { ssr: false });
 import FaOptions from '@/components/FaOptions';
 import CreateMachine from '@/components/admin/machine/CreateMachine';
 import ListMachines from '@/components/admin/machine/ListMachines';
