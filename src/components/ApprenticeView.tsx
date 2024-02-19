@@ -29,7 +29,18 @@ const Apprentice = ({
         studentId: string,
         setStudentId: any,
         setErrorMessage: any
-    ) {
+    ) => {
+        if (
+            allApprentices
+                .filter(Boolean)
+                .some(
+                    (apprentice) =>
+                        apprentice.studentId.toString() === studentId
+                )
+        ) {
+            setErrorMessage('Apprentice already added');
+            return;
+        }
         try {
             const response = await fetch('/api/apprentice/get', {
                 method: 'POST',
