@@ -35,7 +35,6 @@ export default async function handler(
                     return;
                 }
 
-
                 const userMachine = await prisma.userMachine.findUnique({
                     where: {
                         userId_machineId: {
@@ -52,7 +51,7 @@ export default async function handler(
                     if (userMachine.apprentice) {
                         res.status(200).json({
                             apprentice: userMachine.user,
-                            userMachineId: userMachine.id
+                            apprenticeMachineId: userMachine.id
                         });
                     } else {
                         res.status(401).json({
@@ -78,9 +77,10 @@ export default async function handler(
                             user: true,
                         }
                     })
+
                     res.status(200).json({
                         apprentice: userMachine.user,
-                        userMachineId: userMachine.id
+                        apprenticeMachineId: userMachine.id
                     });
                 }
 

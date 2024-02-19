@@ -3,7 +3,10 @@ import { useState, useContext } from 'react';
 import { User } from '@prisma/client';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
-import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
+import {
+    ApprenticeContext,
+    type ApprenticeUser
+} from '@/lib/contexts/ApprenticeContext';
 
 import CldAvatar from '@/components/CldAvatar';
 import { FaPlus, FaUserCheck } from 'react-icons/fa';
@@ -12,16 +15,17 @@ import { Dialog } from '@headlessui/react';
 import LockScreen from '@/components/LockScreen';
 
 const Apprentice = ({
+    index: i,
+    apprentice,
+    setAllApprentices,
+    allApprentices,
     onApprenticeAdded
-}: {
-    onApprenticeAdded: () => void;
-}) => {
+}: ApprenticeProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [apprentice, setApprentice] = useState<User>();
     const { machineUUID } = useContext(MachineContext);
-    const { setApprenticeUserMachines } = useContext(ApprenticeContext);
 
-    async function handleSubmit(
+    const handleAddApprentice = async (
         studentId: string,
         setStudentId: any,
         setErrorMessage: any
@@ -42,7 +46,13 @@ const Apprentice = ({
             if (data.message) {
                 setErrorMessage(data.message);
             } else {
-                setApprentice(data.apprentice);
+                setAllApprentices((prev: ApprenticeUser[]) => {
+                    const newApprentices = [...prev];
+                    newApprentices[i] = data.apprentice;
+                    newApprentices[i]['apprenticeMachineId'] =
+                        data.apprenticeMachineId;
+                    return newApprentices;
+                });
                 setIsOpen(false);
                 onApprenticeAdded();
                 setApprenticeUserMachines(
@@ -85,13 +95,13 @@ const Apprentice = ({
                 onClose={() => setIsOpen(false)}
                 className="relative z-50"
             >
-                <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+                <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
 
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                    <Dialog.Panel className="mx-auto flex h-[75rem] w-[55rem] items-center justify-center rounded bg-white text-center">
+                    <Dialog.Panel className="mx-auto flex h-[75rem] w-[55rem] items-center justify-center rounded bg-primary-400 text-center">
                         <LockScreen
                             placeholder="Enter Apprentice ID"
-                            handleSubmit={handleSubmit}
+                            handleSubmit={handleAddApprentice}
                         />
                     </Dialog.Panel>
                 </div>
@@ -102,6 +112,8 @@ const Apprentice = ({
 
 const ApprenticeView = () => {
     const [isApprenticeAdded, setIsApprenticeAdded] = useState(false);
+
+    const { apprentices, setApprentices } = useContext(ApprenticeContext);
 
     const handleApprenticeAdded = () => {
         setIsApprenticeAdded(true);
@@ -118,6 +130,10 @@ const ApprenticeView = () => {
                     .map((_, i) => (
                         <Apprentice
                             key={i}
+                            index={i}
+                            apprentice={apprentices[i]}
+                            setAllApprentices={setApprentices}
+                            allApprentices={apprentices}
                             onApprenticeAdded={handleApprenticeAdded}
                         />
                     ))}

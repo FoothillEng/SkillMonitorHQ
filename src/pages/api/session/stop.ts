@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import type { User, StudentLevel } from '@prisma/client';
+
 import { prisma } from '@/lib/prisma';
 
 export default async function handler(
@@ -9,23 +11,23 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                const { sessionId, startTime, apprenticeUserMachines } = req.body;
+                const { sessionId, startTime, apprentices } = req.body;
 
                 let data: any = {
                     endTime: new Date(),
                     duration: Math.floor(new Date().getTime() - new Date(startTime).getTime())
                 };
 
-                if (apprenticeUserMachines[0]) {
-                    data.apprentice1UMID = apprenticeUserMachines[0].userMachineId;
+                if (apprentices[0]) {
+                    data.apprentice1UMID = apprentices[0].apprenticeMachineId;
                 }
 
-                if (apprenticeUserMachines[1]) {
-                    data.apprentice2UMID = apprenticeUserMachines[1].userMachineId;
+                if (apprentices[1]) {
+                    data.apprentice2UMID = apprentices[1].apprenticeMachineId;
                 }
 
-                if (apprenticeUserMachines[2]) {
-                    data.apprentice3UMID = apprenticeUserMachines[2].userMachineId;
+                if (apprentices[2]) {
+                    data.apprentice3UMID = apprentices[2].apprenticeMachineId;
                 }
                 const session = await prisma.session.update({
                     where: { id: sessionId },
@@ -59,7 +61,6 @@ export default async function handler(
                                 }
                             },
                         },
-
                     })
 
                     const user = await prisma.user.update({

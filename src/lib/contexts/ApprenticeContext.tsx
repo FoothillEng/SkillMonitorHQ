@@ -1,25 +1,23 @@
 import { useState, createContext } from 'react';
 
+import type { User } from '@prisma/client';
+
+export type ApprenticeUser = User & {
+    userMachineId: number;
+};
+
 interface IApprenticeContext {
-    apprenticeIds: string[]; // don't need this... currently actually only need the userMachineIds, but whatever lol
-    apprenticeUserMachines: { apprenticeId: string; userMachineId: number }[];
-    setApprenticeIds: (
-        prevState: string[] | ((prevState: string[]) => string[])
-    ) => void;
-    setApprenticeUserMachines: (
+    apprentices: ApprenticeUser[];
+    setApprentices: (
         prevState:
-            | { apprenticeId: string; userMachineId: number }[]
-            | ((
-                  prevState: { apprenticeId: string; userMachineId: number }[]
-              ) => { apprenticeId: string; userMachineId: number }[])
+            | ApprenticeUser[]
+            | ((prevState: ApprenticeUser[]) => ApprenticeUser[])
     ) => void;
 }
 
 export const ApprenticeContext = createContext<IApprenticeContext>({
-    apprenticeIds: [],
-    apprenticeUserMachines: [],
-    setApprenticeIds: () => {},
-    setApprenticeUserMachines: () => {}
+    apprentices: [],
+    setApprentices: () => {}
 });
 
 export const ApprenticeProvider = ({
@@ -27,46 +25,25 @@ export const ApprenticeProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [apprenticeIds, setApprenticeIds] = useState<string[]>([]);
-    const [apprenticeUserMachines, setApprenticeUserMachines] = useState<
-        { apprenticeId: string; userMachineId: number }[]
-    >([]);
+    const [apprentices, setApprentices] = useState<ApprenticeUser[]>([]);
 
-    const handleSetApprenticeIds = (
-        prevState: string[] | ((prevState: string[]) => string[])
-    ) => {
-        if (typeof prevState === 'function') {
-            setApprenticeIds((prevApprenticeIds) =>
-                prevState(prevApprenticeIds)
-            );
-        } else {
-            setApprenticeIds(prevState);
-        }
-    };
-
-    const handleSetApprenticeUserMachines = (
+    const handleSetApprentices = (
         prevState:
-            | { apprenticeId: string; userMachineId: number }[]
-            | ((
-                  prevState: { apprenticeId: string; userMachineId: number }[]
-              ) => { apprenticeId: string; userMachineId: number }[])
+            | ApprenticeUser[]
+            | ((prevState: ApprenticeUser[]) => ApprenticeUser[])
     ) => {
         if (typeof prevState === 'function') {
-            setApprenticeUserMachines((prevApprenticeUserMachines) =>
-                prevState(prevApprenticeUserMachines)
-            );
+            setApprentices((prevApprentices) => prevState(prevApprentices));
         } else {
-            setApprenticeUserMachines(prevState);
+            setApprentices(prevState);
         }
     };
 
     return (
         <ApprenticeContext.Provider
             value={{
-                apprenticeIds,
-                apprenticeUserMachines,
-                setApprenticeIds: handleSetApprenticeIds,
-                setApprenticeUserMachines: handleSetApprenticeUserMachines
+                apprentices,
+                setApprentices: handleSetApprentices
             }}
         >
             {children}

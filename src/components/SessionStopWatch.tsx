@@ -29,6 +29,7 @@ const SessionStopWatch = ({
     const intervalIDRef = useRef<NodeJS.Timeout | null>(null);
     const [started, setStarted] = useState(false);
     const [session, setSession] = useState<Session>();
+    const { apprentices } = useContext(ApprenticeContext);
     const { forceStopSession, setRunningSession } = useContext(AuthContext);
 
     const handleStart = useCallback(async () => {
@@ -74,7 +75,7 @@ const SessionStopWatch = ({
             body: JSON.stringify({
                 sessionId: session?.id,
                 startTime: session?.startTime,
-                apprenticeUserMachines
+                apprentices
             })
         })
             .then((res) => res.json())
@@ -102,7 +103,7 @@ const SessionStopWatch = ({
         setRunningSession,
         started,
         session,
-        apprenticeUserMachines
+        apprentices
     ]);
 
     const startTimer = useCallback(() => {
