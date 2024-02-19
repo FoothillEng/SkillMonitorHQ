@@ -1,9 +1,9 @@
 import { useState, useCallback, useRef, useContext, useEffect } from 'react';
 
 import type { Session } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 
 import { ApprenticeContext } from '@/lib/contexts/ApprenticeContext';
+import { AuthContext } from '@/lib/contexts/AuthContext';
 
 import FormattedTime from '@/components/FormattedTime';
 
@@ -29,9 +29,7 @@ const SessionStopWatch = ({
     const intervalIDRef = useRef<NodeJS.Timeout | null>(null);
     const [started, setStarted] = useState(false);
     const [session, setSession] = useState<Session>();
-    const { apprenticeUserMachines } = useContext(ApprenticeContext);
-
-    const { data: nextAuthSession, update } = useSession();
+    const { forceStopSession, setRunningSession } = useContext(AuthContext);
 
     const handleStart = useCallback(async () => {
         if (started) return;
@@ -51,13 +49,20 @@ const SessionStopWatch = ({
             .then((res) => setSession(res.session))
             .then(() => {
                 setStarted(true);
-                update({ runningSession: true });
+                setRunningSession(true);
             })
             .catch((error) => {
                 console.error(error);
                 setError('An error occurred. Please try again.');
             });
-    }, [setError, setSession, update, started, userMachineId, userId]);
+    }, [
+        setError,
+        setSession,
+        setRunningSession,
+        started,
+        userMachineId,
+        userId
+    ]);
 
     const handleStop = useCallback(async () => {
         if (!started) return;
@@ -84,7 +89,7 @@ const SessionStopWatch = ({
             })
             .then(() => {
                 setStarted(false);
-                update({ runningSession: false });
+                setRunningSession(false);
             })
             .catch((error) => {
                 console.error(error);
@@ -94,7 +99,7 @@ const SessionStopWatch = ({
         setError,
         setSession,
         updateUserMachineStats,
-        update,
+        setRunningSession,
         started,
         session,
         apprenticeUserMachines
@@ -117,10 +122,20 @@ const SessionStopWatch = ({
     }, []);
 
     useEffect(() => {
-        if (nextAuthSession?.user?.forceStopSession) {
+        if (forceStopSession) {
             handleStop();
         }
-    }, [nextAuthSession?.user?.forceStopSession, handleStop]);
+    }, [forceStopSession, handleStop]);
+
+    useEffect(() => {
+        const handleUnload = () => {
+            setRunningSession(false);
+        };
+        window.addEventListener('unload', handleUnload);
+        return () => {
+            window.removeEventListener('unload', handleUnload);
+        };
+    }, [setRunningSession]);
 
     return (
         <div className="flex flex-col items-center justify-center space-y-[2rem]">

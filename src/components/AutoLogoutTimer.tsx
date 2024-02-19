@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import { useSession, signOut } from 'next-auth/react';
 
 import { Dialog } from '@headlessui/react';
 
+import { AuthContext } from '@/lib/contexts/AuthContext';
 import LockScreen from '@/components/LockScreen';
 import FormattedTime from '@/components/FormattedTime';
 
@@ -14,6 +15,7 @@ const AutoLogoutTimer = () => {
     const [error, setError] = useState('');
 
     const { data: nextAuthSession, status, update } = useSession();
+    const { forceStopSession, setForceStopSession } = useContext(AuthContext);
 
     useEffect(() => {
         if (status === 'authenticated') {
@@ -23,8 +25,9 @@ const AutoLogoutTimer = () => {
                     Math.floor(Date.now() / 1000);
 
                 if (timeRemaining <= 0) {
-                    if (!nextAuthSession?.user.forceStopSession)
-                        update({ forceStopSession: true });
+                    if (!forceStopSession) {
+                        setForceStopSession(true);
+                    }
                     setTimeout(() => {
                         signOut();
                     }, 5000);
@@ -46,7 +49,7 @@ const AutoLogoutTimer = () => {
                 clearInterval(intervalId2);
             };
         }
-    }, [nextAuthSession?.user, status, update]);
+    }, [nextAuthSession?.user, status, forceStopSession, setForceStopSession]);
 
     const handleSubmit1 = async (
         studentId: string,

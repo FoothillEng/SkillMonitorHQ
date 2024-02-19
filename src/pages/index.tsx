@@ -6,6 +6,7 @@ import { useSession, signIn } from 'next-auth/react';
 import type { Machine } from '@prisma/client';
 
 import { MachineContext } from '@/lib/contexts/MachineContext';
+import { AuthContext } from '@/lib/contexts/AuthContext';
 
 import LockScreen from '@/components/LockScreen';
 import ListStudents from '@/components/ListStudents';
@@ -41,9 +42,12 @@ const Index = (props) => {
     const [accessMachineStats, setAccessMachineStats] =
         useState<AccessMachineStatsType>({});
     const [wasCalled, setWasCalled] = useState(false);
-    const { data: nextAuthSession, update, status } = useSession();
-    const { machineUUID } = useContext(MachineContext);
     const [UILoading, setUILoading] = useState(true);
+
+    const { data: nextAuthSession, update, status } = useSession();
+
+    const { machineUUID } = useContext(MachineContext);
+    const { runningSession } = useContext(AuthContext);
 
     const handleStarRatingClick = async () => {
         setAccessMachine((prevAccessMachine) => ({
@@ -310,9 +314,7 @@ const Index = (props) => {
                                         }
                                         setError={setError}
                                     />
-                                    {nextAuthSession.user?.runningSession && (
-                                        <ApprenticeView />
-                                    )}
+                                    {runningSession && <ApprenticeView />}
                                 </div>
                             )
                         )}

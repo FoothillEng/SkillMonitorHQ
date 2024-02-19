@@ -36,8 +36,6 @@ export const authOptions: AuthOptions = {
             session.user.isFirstLogin = token.isFirstLogin;
             session.user.message = token.message;
             session.user.realExpTime = token.realExpTime;
-            session.user.runningSession = token.runningSession; // im just using this for global state now lol
-            session.user.forceStopSession = token.forceStopSession; // when timer runs out, force stop Session
             return session;
         },
         jwt({ token, user, account, trigger, session }) {
@@ -57,16 +55,10 @@ export const authOptions: AuthOptions = {
                 token.realExpTime = session.realExpTime;
                 // session.user.timeRemaining = session.user.realExpTime - Math.floor(Date.now() / 1000);
                 // session.user.realExpTime = token.realExpTime;
-            } else if (trigger === "update" && session?.forceStopSession !== undefined) {
-                token.forceStopSession = session.forceStopSession;
-            } else if (trigger === "update" && session?.runningSession !== undefined) {
-                token.runningSession = session.runningSession;
             } else {
                 if (token.iat) {
                     if (token.realExpTime === undefined) {  // first time login??
                         token.realExpTime = token.iat as number + 1800;  // 30 minutes
-                        token.runningSession = false;
-                        token.forceStopSession = false;
                     }
 
                 }

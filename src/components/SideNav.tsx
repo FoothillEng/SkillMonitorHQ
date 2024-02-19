@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 
 import { User } from '@prisma/client';
 
 import Student from '@/components/Student';
+import { AuthContext } from '@/lib/contexts/AuthContext';
 
 import { AiFillDashboard, AiFillHome } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
@@ -39,8 +40,10 @@ const NavItem = ({ href, icon, label, subItem, onClick }: NavItemProps) => {
 };
 
 const SideNav = () => {
-    const { data: session, status } = useSession();
     const [user, setUser] = useState<User>();
+    const { runningSession } = useContext(AuthContext);
+
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         if (status === 'authenticated') {
@@ -62,7 +65,7 @@ const SideNav = () => {
                         <div className="my-[1rem] border-t-2 border-blue-300" />
                         {(session.user?.role === 'TEACHER' ||
                             session.user?.role === 'ADMIN') &&
-                            !session?.user.runningSession && (
+                            !runningSession && (
                                 <div>
                                     <NavItem
                                         href="/admin/"

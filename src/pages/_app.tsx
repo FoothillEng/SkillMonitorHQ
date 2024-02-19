@@ -9,6 +9,7 @@ import Layout from '@/components/Layout';
 import { MachineProvider } from '@/lib/contexts/MachineContext';
 import { ApprenticeProvider } from '@/lib/contexts/ApprenticeContext';
 import { TourProvider } from '@/lib/contexts/TourContext';
+import { AuthProvider } from '@/lib/contexts/AuthContext';
 import { oxygen } from '@/lib/fonts';
 
 interface AppPropsWithSession extends AppProps {
@@ -21,9 +22,11 @@ const App = ({ Component, pageProps }) => {
             <MachineProvider>
                 <ApprenticeProvider>
                     <TourProvider>
-                        <Layout>
-                            <Component {...pageProps} />
-                        </Layout>
+                        <AuthProvider>
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        </AuthProvider>
                     </TourProvider>
                 </ApprenticeProvider>
             </MachineProvider>
