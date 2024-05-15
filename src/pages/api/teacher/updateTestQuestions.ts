@@ -14,6 +14,8 @@ interface Question {
     choice2: string
     choice3: string
     choice4: string
+    choice5: string
+    choice6: string
     correctChoice: number
     machineId: number
 }
@@ -25,6 +27,8 @@ interface RawQuestion {
     choice2: string
     choice3: string
     choice4: string
+    choice5: string
+    choice6: string
     correctChoice: string
 }
 
@@ -68,8 +72,8 @@ export default async function handler(
                     const parserStream = fs.createReadStream(file[0].filepath)
                         .pipe(parse({ headers: true }))
                         .on('data', (row: RawQuestion) => {
-                            if (row.id === '' || row.text === '' || row.choice1 === '' || row.choice2 === '' || row.choice3 === '' || row.choice4 === '' || row.correctChoice === '') {
-                                console.log('skpping row', row.id, row.text, row.choice1, row.choice2, row.choice3, row.choice4, row.correctChoice)
+                            if (row.id === '' || row.text === '' || row.choice1 === '' || row.choice2 === '' || row.correctChoice === '') { // do not need choice3-6
+                                console.log('skipping row', row.id, row.text, row.choice1, row.choice2, row.choice3, row.choice4, row.choice5, row.choice6, row.correctChoice)
                             } else {
                                 questionData.push({
                                     id: parseInt(row.id),
@@ -78,6 +82,8 @@ export default async function handler(
                                     choice2: row.choice2,
                                     choice3: row.choice3,
                                     choice4: row.choice4,
+                                    choice5: row.choice5,
+                                    choice6: row.choice6,
                                     correctChoice: parseInt(row.correctChoice),
                                     machineId: parseInt(machineId[0])
                                 });

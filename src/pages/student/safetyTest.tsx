@@ -13,7 +13,7 @@ interface ChoiceProps {
     handleTouch: () => void;
 }
 
-type Answer = 1 | 2 | 3 | 4;
+type Answer = 1 | 2 | 3 | 4 | 5 | 6;
 
 type TestQuestionAnswer = TestQuestion & { answer?: Answer };
 
@@ -38,34 +38,54 @@ interface QuestionProps {
 
 const Question = ({ questionCount, question, handleTouch }: QuestionProps) => {
     return (
-        <div className="flex w-[200rem] flex-col items-center">
-            <div className="mb-[20rem] text-7xl text-primary">
+        <div className="flex w-[130rem] flex-col items-center">
+            <div className="mb-[10rem] text-7xl text-primary">
                 {questionCount}. {question.text}
             </div>
             <div className="flex w-full justify-around text-secondary">
                 <Choice
-                    text={question.choice1}
+                    text={'A. ' + question.choice1}
                     selected={question.answer === 1}
                     handleTouch={() => handleTouch(1)}
                 />
                 <Choice
-                    text={question.choice2}
+                    text={'B. ' + question.choice2}
                     selected={question.answer === 2}
                     handleTouch={() => handleTouch(2)}
                 />
             </div>
-            <div className="flex w-full justify-around text-secondary">
-                <Choice
-                    text={question.choice3}
-                    selected={question.answer === 3}
-                    handleTouch={() => handleTouch(3)}
-                />
-                <Choice
-                    text={question.choice4}
-                    selected={question.answer === 4}
-                    handleTouch={() => handleTouch(4)}
-                />
-            </div>
+            {question.choice3 && (
+                <div className="flex w-full justify-around text-secondary">
+                    <Choice
+                        text={'C. ' + question.choice3}
+                        selected={question.answer === 3}
+                        handleTouch={() => handleTouch(3)}
+                    />
+                    {question.choice4 && (
+                        <Choice
+                            text={'D. ' + question.choice4}
+                            selected={question.answer === 4}
+                            handleTouch={() => handleTouch(4)}
+                        />
+                    )}
+                </div>
+            )}
+            {question.choice5 && (
+                <div className="flex w-full justify-around text-secondary">
+                    <Choice
+                        text={'E. ' + question.choice5}
+                        selected={question.answer === 5}
+                        handleTouch={() => handleTouch(5)}
+                    />
+                    {question.choice6 && (
+                        <Choice
+                            text={'F. ' + question.choice6}
+                            selected={question.answer === 6}
+                            handleTouch={() => handleTouch(6)}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 };
