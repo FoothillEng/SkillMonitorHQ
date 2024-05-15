@@ -49,6 +49,12 @@ export default async function handler(
         case 'POST':
             try {
                 const form = new IncomingForm();
+                const { generalSafetyTestRaw } = req.query;
+                let generalSafetyTest = false;
+
+                if (generalSafetyTestRaw === 'true') {
+                    generalSafetyTest = true;
+                }
 
                 form.parse(req, async (err, fields, files) => {
                     if (err) {
@@ -68,6 +74,8 @@ export default async function handler(
                     }
 
                     // Read and process the CSV file
+                    const uniquePrefix = generalSafetyTest ? "1337" : Math.floor(Math.random() * 1000000).toString();
+
                     const questionData: Question[] = [];
                     const parserStream = fs.createReadStream(file[0].filepath)
                         .pipe(parse({ headers: true }))
@@ -76,7 +84,7 @@ export default async function handler(
                                 console.log('skipping row', row.id, row.text, row.choice1, row.choice2, row.choice3, row.choice4, row.choice5, row.choice6, row.correctChoice)
                             } else {
                                 questionData.push({
-                                    id: parseInt(row.id),
+                                    id: parseInt(uniquePrefix + row.id),
                                     text: row.text,
                                     choice1: row.choice1,
                                     choice2: row.choice2,

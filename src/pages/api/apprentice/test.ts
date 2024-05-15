@@ -9,9 +9,9 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                const { studentId, machineUUID } = req.body;
+                const { studentId, machineUUID, generalSafetyTest } = req.body;
 
-                if (!studentId || !machineUUID) {
+                if (!studentId || !machineUUID || !generalSafetyTest) {
                     res.status(400).json({ message: 'Missing query parameters' });
                     return;
                 }
@@ -22,13 +22,35 @@ export default async function handler(
                     }
                 })
 
+                if (!student) {
+                    res.status(404).json({
+                        message: 'Student or machine not found'
+                    });
+                    return;
+                }
+
+                if (generalSafetyTest) {
+                    await prisma.user.update({
+                        where: {
+                            id: student.id
+                        },
+                        data: {
+                            generalSafetyTest: true
+                        }
+                    })
+                    res.status(200).json({
+                        message: 'Congrats! You have passed the general safety test!!'
+                    });
+                    return;
+                }
+
                 const machine = await prisma.machine.findFirst({
                     where: {
                         uuid: machineUUID.toString()
                     }
                 })
 
-                if (!student || !machine) {
+                if (!machine) {
                     res.status(404).json({
                         message: 'Student or machine not found'
                     });
@@ -78,7 +100,7 @@ export default async function handler(
                         }
                     })
 
-                    res.status(200).json({ message: 'Congrats! You have passed test and are now an apprentice on this machine!!' });
+                    res.status(200).json({ message: 'Congrats! You have passed the test and are now an apprentice on this machine!!' });
                 }
 
 

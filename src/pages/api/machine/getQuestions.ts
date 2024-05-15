@@ -9,8 +9,44 @@ export default async function handler(
     switch (req.method) {
         case 'GET':
             try {
-                const { UUID } = req.query;
+                const { UUID, generalSafetyTest } = req.query;
                 if (UUID) {
+                    if (generalSafetyTest) {
+                        let generalSafetyTestMachine = await prisma.machine.findFirst({
+                            where: {
+                                nonUserMachine: true,
+                            },
+                            select: {
+                                testQuestions: true
+                            }
+                        })
+
+                        if (!generalSafetyTestMachine) {
+                            await prisma.machine.create({
+                                data: {
+                                    name: 'General Safety',
+                                    nonUserMachine: true
+                                },
+                                select: {
+                                    testQuestions: true
+                                }
+                            });
+                            res.status(422).json({
+                                message: 'No questions found'
+                            });
+                        } else {
+                            if (generalSafetyTestMachine.testQuestions.length === 0) {
+                                res.status(422).json({
+                                    message: 'No questions found'
+                                });
+                            } else {
+                                res.status(200).json({
+                                    questions: generalSafetyTestMachine.testQuestions
+                                });
+                            }
+                        }
+                    }
+
                     await prisma.machine.findUnique({
                         where: {
                             uuid: UUID.toString()

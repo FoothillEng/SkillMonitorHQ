@@ -21,26 +21,28 @@ enum Role {
 }
 
 model User {
-  id               String        @id @default(uuid())
-  studentId        Int           @unique
-  firstName        String
-  lastName         String
-  avatar           String        @default("https://res.cloudinary.com/dxj8g5osv/image/upload/v1695244850/yvod98i9tspx7fpwxbm5.png")
-  level            StudentLevel  @default(BEGINNER)
-  lifetimeDuration Int           @default(1)
-  role             Role          @default(STUDENT)
-  machines         UserMachine[]
-  sessions         Session[]
-  UserLogin        UserLogin[]
+  id                String        @id @default(uuid())
+  studentId         Int           @unique
+  firstName         String
+  lastName          String
+  avatar            String        @default("https://res.cloudinary.com/dxj8g5osv/image/upload/v1695244850/yvod98i9tspx7fpwxbm5.png")
+  level             StudentLevel  @default(BEGINNER)
+  lifetimeDuration  Int           @default(1)
+  role              Role          @default(STUDENT)
+  generalSafetyTest Boolean       @default(false)
+  machines          UserMachine[]
+  sessions          Session[]
+  UserLogin         UserLogin[]
 }
 
 model Machine {
-  id            Int            @id @default(autoincrement())
-  uuid          String         @unique @default(uuid())
-  name          String         @unique
-  users         UserMachine[]
-  UserLogin     UserLogin[]
-  testQuestions TestQuestion[]
+  id             Int            @id @default(autoincrement())
+  uuid           String         @unique @default(uuid())
+  name           String         @unique
+  nonUserMachine Boolean        @default(false) // for FK constraints, specifically for GeneralSafetyTestFakeMachine 
+  users          UserMachine[]
+  UserLogin      UserLogin[]
+  testQuestions  TestQuestion[]
 
   @@unique([id, uuid])
 }
@@ -104,6 +106,8 @@ model TestQuestion {
   choice2       String
   choice3       String
   choice4       String
+  choice5       String
+  choice6       String
   correctChoice Int
   machine       Machine @relation(fields: [machineId], references: [id])
   machineId     Int

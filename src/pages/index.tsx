@@ -197,182 +197,205 @@ const Index = (props) => {
                 </>
             )}
 
-            {nextAuthSession && accessMachine.allowed && (
-                <div className="flex flex-col text-center">
-                    <div className="flex flex-row text-5xl">
-                        <div className="flex flex-col space-x-[2rem]">
-                            {nextAuthSession.user &&
-                                nextAuthSession.user?.avatar &&
-                                nextAuthSession?.user?.level && (
-                                    <CldAvatar
-                                        avatar={nextAuthSession.user.avatar}
-                                        level={nextAuthSession.user.level}
-                                        size={'extraLarge'}
-                                    />
+            {nextAuthSession &&
+                accessMachine.allowed &&
+                nextAuthSession?.user?.generalSafetyTest && (
+                    <div className="flex flex-col text-center">
+                        <div className="flex flex-row text-5xl">
+                            <div className="flex flex-col space-x-[2rem]">
+                                {nextAuthSession.user &&
+                                    nextAuthSession.user?.avatar &&
+                                    nextAuthSession?.user?.level && (
+                                        <CldAvatar
+                                            avatar={nextAuthSession.user.avatar}
+                                            level={nextAuthSession.user.level}
+                                            size={'extraLarge'}
+                                        />
+                                    )}
+                                {accessMachine.averageRating && (
+                                    <div className="mt-[3rem]">
+                                        <DynamicStarRating
+                                            averageRating={
+                                                accessMachine.averageRating
+                                            }
+                                        />
+                                    </div>
                                 )}
-                            {accessMachine.averageRating && (
-                                <div className="mt-[3rem]">
-                                    <DynamicStarRating
-                                        averageRating={
-                                            accessMachine.averageRating
+                            </div>
+                            <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-secondary">
+                                <div className="w-[50rem] text-6xl capitalize">
+                                    {nextAuthSession.user?.firstName +
+                                        ' ' +
+                                        nextAuthSession.user?.lastName}
+                                </div>
+                                <div className="space-y-[2rem] text-5xl">
+                                    {accessMachineStats.userMachineDuration !==
+                                        undefined &&
+                                        accessMachineStats.userMachineSessions !==
+                                            undefined && (
+                                            <div>
+                                                <span>{`This machine: `}</span>
+                                                <FormattedTime
+                                                    milliseconds={
+                                                        accessMachineStats.userMachineDuration
+                                                    }
+                                                    extraStyles="text-primary"
+                                                />
+                                                <span>
+                                                    {` across `}
+                                                    <span className="text-primary">
+                                                        {
+                                                            accessMachineStats.userMachineSessions
+                                                        }
+                                                    </span>
+                                                    {` sessions`}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                    {accessMachineStats.userLifetimeDuration !==
+                                        undefined &&
+                                        accessMachineStats.userLifetimeSessions !==
+                                            undefined && (
+                                            <div>
+                                                <span>{`Lifetime: `}</span>
+                                                <FormattedTime
+                                                    milliseconds={
+                                                        accessMachineStats.userLifetimeDuration
+                                                    }
+                                                    extraStyles="text-primary"
+                                                />
+                                                <span>
+                                                    {` across `}
+                                                    <span className="text-primary">
+                                                        {
+                                                            accessMachineStats.userLifetimeSessions
+                                                        }
+                                                    </span>
+                                                    {` sessions`}
+                                                </span>
+                                            </div>
+                                        )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-[10rem]">
+                            {accessMachine.lastLoginId &&
+                            accessMachine.lastLoginId > 0 ? (
+                                <div className="text-5xl">
+                                    <StarRating
+                                        currentUserId={nextAuthSession.user?.id}
+                                        userLoginId={accessMachine.lastLoginId}
+                                        handleStarRatingClick={
+                                            handleStarRatingClick
                                         }
+                                        setError={setError}
                                     />
                                 </div>
-                            )}
-                        </div>
-                        <div className="ml-[10rem] flex flex-col space-y-[3rem] text-start text-secondary">
-                            <div className="w-[50rem] text-6xl capitalize">
-                                {nextAuthSession.user?.firstName +
-                                    ' ' +
-                                    nextAuthSession.user?.lastName}
-                            </div>
-                            <div className="space-y-[2rem] text-5xl">
-                                {accessMachineStats.userMachineDuration !==
-                                    undefined &&
-                                    accessMachineStats.userMachineSessions !==
-                                        undefined && (
-                                        <div>
-                                            <span>{`This machine: `}</span>
-                                            <FormattedTime
-                                                milliseconds={
-                                                    accessMachineStats.userMachineDuration
-                                                }
-                                                extraStyles="text-primary"
-                                            />
-                                            <span>
-                                                {` across `}
-                                                <span className="text-primary">
-                                                    {
-                                                        accessMachineStats.userMachineSessions
-                                                    }
-                                                </span>
-                                                {` sessions`}
-                                            </span>
-                                        </div>
-                                    )}
-
-                                {accessMachineStats.userLifetimeDuration !==
-                                    undefined &&
-                                    accessMachineStats.userLifetimeSessions !==
-                                        undefined && (
-                                        <div>
-                                            <span>{`Lifetime: `}</span>
-                                            <FormattedTime
-                                                milliseconds={
-                                                    accessMachineStats.userLifetimeDuration
-                                                }
-                                                extraStyles="text-primary"
-                                            />
-                                            <span>
-                                                {` across `}
-                                                <span className="text-primary">
-                                                    {
-                                                        accessMachineStats.userLifetimeSessions
-                                                    }
-                                                </span>
-                                                {` sessions`}
-                                            </span>
-                                        </div>
-                                    )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-[10rem]">
-                        {accessMachine.lastLoginId &&
-                        accessMachine.lastLoginId > 0 ? (
-                            <div className="text-5xl">
-                                <StarRating
-                                    currentUserId={nextAuthSession.user?.id}
-                                    userLoginId={accessMachine.lastLoginId}
-                                    handleStarRatingClick={
-                                        handleStarRatingClick
-                                    }
-                                    setError={setError}
-                                />
-                            </div>
-                        ) : (
-                            nextAuthSession &&
-                            accessMachine.userMachineId && (
-                                <div className="flex flex-col">
-                                    <SessionStopWatch
-                                        userId={nextAuthSession.user?.id}
-                                        userMachineId={
-                                            accessMachine?.userMachineId
-                                        }
-                                        updateUserMachineStats={(
-                                            userMachineDuration,
-                                            userMachineSessions,
-                                            userLifetimeDuration,
-                                            userLifetimeSessions
-                                        ) =>
-                                            setAccessMachineStats({
+                            ) : (
+                                nextAuthSession &&
+                                accessMachine.userMachineId && (
+                                    <div className="flex flex-col">
+                                        <SessionStopWatch
+                                            userId={nextAuthSession.user?.id}
+                                            userMachineId={
+                                                accessMachine?.userMachineId
+                                            }
+                                            updateUserMachineStats={(
                                                 userMachineDuration,
                                                 userMachineSessions,
                                                 userLifetimeDuration,
                                                 userLifetimeSessions
-                                            })
-                                        }
-                                        setError={setError}
-                                    />
-                                    {runningSession && <ApprenticeView />}
-                                </div>
-                            )
-                        )}
+                                            ) =>
+                                                setAccessMachineStats({
+                                                    userMachineDuration,
+                                                    userMachineSessions,
+                                                    userLifetimeDuration,
+                                                    userLifetimeSessions
+                                                })
+                                            }
+                                            setError={setError}
+                                        />
+                                        {runningSession && <ApprenticeView />}
+                                    </div>
+                                )
+                            )}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
             {UILoading &&
                 (status == 'loading' || status == 'authenticated') && (
                     <div className="text-6xl">Loading...</div>
                 )}
 
-            {nextAuthSession && !accessMachine.allowed && (
-                <div className="flex flex-col items-center justify-center text-center">
-                    {!UILoading && machineUUID && (
-                        <div className="flex flex-col items-center justify-center">
-                            <div className="w-[100rem] text-6xl">
-                                You are{' '}
-                                {`${
-                                    accessMachine.apprentice
-                                        ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
-                                        : 'not authorized to use this machine'
-                                }`}
-                            </div>
-                            {!accessMachine.apprentice && (
-                                <div className="mt-[5rem] w-[50rem] p-[2rem] text-4xl outline outline-4 ">
-                                    <Link href={'/student/safetyTest'}>
-                                        Take Safety Test
-                                    </Link>
+            {nextAuthSession &&
+                !accessMachine.allowed &&
+                nextAuthSession?.user?.generalSafetyTest && (
+                    <div className="flex flex-col items-center justify-center text-center">
+                        {!UILoading && machineUUID && (
+                            <div className="flex flex-col items-center justify-center">
+                                <div className="w-[100rem] text-6xl">
+                                    You are{' '}
+                                    {`${
+                                        accessMachine.apprentice
+                                            ? 'an apprentice on this machine. Please wait for a mentor to start your session.'
+                                            : 'not authorized to use this machine'
+                                    }`}
                                 </div>
-                            )}
-                        </div>
-                    )}
-
-                    {accessMachine.allowedMachines && (
-                        <div className="mt-[10rem] text-5xl text-primary">
-                            Machines you are authorized to use:
-                            {accessMachine.allowedMachines.length === 0 && (
-                                <div className="mt-[3rem] text-red">
-                                    You are not authorized to use any machines.
-                                </div>
-                            )}
-                            <div className="mt-[3rem] flex flex-col space-y-[1rem]">
-                                {accessMachine.allowedMachines.map(
-                                    (machine) => (
-                                        <div
-                                            className="text-secondary"
-                                            key={machine.id}
-                                        >
-                                            {machine.name}
-                                        </div>
-                                    )
+                                {!accessMachine.apprentice && (
+                                    <div className="mt-[5rem] w-[50rem] p-[2rem] text-4xl outline outline-4 ">
+                                        <Link href={'/student/safetyTest'}>
+                                            Take Machine Safety Test
+                                        </Link>
+                                    </div>
                                 )}
                             </div>
-                        </div>
-                    )}
+                        )}
+
+                        {accessMachine.allowedMachines && (
+                            <div className="mt-[10rem] text-5xl text-primary">
+                                Machines you are authorized to use:
+                                {accessMachine.allowedMachines.length === 0 && (
+                                    <div className="mt-[3rem] text-red">
+                                        You are not authorized to use any
+                                        machines.
+                                    </div>
+                                )}
+                                <div className="mt-[3rem] flex flex-col space-y-[1rem]">
+                                    {accessMachine.allowedMachines.map(
+                                        (machine) => (
+                                            <div
+                                                className="text-secondary"
+                                                key={machine.id}
+                                            >
+                                                {machine.name}
+                                            </div>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+            {nextAuthSession && !nextAuthSession?.user?.generalSafetyTest && (
+                <div className="mt-[10rem] flex w-[130rem] flex-col items-center justify-center text-center text-6xl  text-red">
+                    You have not taken the general safety test. Please take the
+                    test before using any machines.
+                    <div className="mt-[5rem] w-[50rem] p-[2rem] text-4xl outline outline-4 ">
+                        <Link
+                            href={{
+                                pathname: '/student/safetyTest',
+                                query: { generalSafetyTest: 'true' }
+                            }}
+                        >
+                            Take General Safety Test
+                        </Link>
+                    </div>
                 </div>
             )}
+
             {error && (
                 <div className="mt-[4rem] text-center text-4xl text-red">
                     {error}

@@ -36,6 +36,7 @@ export const authOptions: AuthOptions = {
             session.user.isFirstLogin = token.isFirstLogin;
             session.user.message = token.message;
             session.user.realExpTime = token.realExpTime;
+            session.user.generalSafetyTest = token.generalSafetyTest;
             return session;
         },
         jwt({ token, user, account, trigger, session }) {
@@ -47,6 +48,7 @@ export const authOptions: AuthOptions = {
                 token.avatar = (user as User).avatar;
                 token.role = (user as User).role;
                 token.level = (user as User).level;
+                token.generalSafetyTest = (user as User).generalSafetyTest;
             }
 
             if (trigger === 'signIn') {

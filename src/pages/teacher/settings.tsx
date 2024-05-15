@@ -1,17 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import type { Machine } from '@prisma/client';
+import type { Machine as MachineType } from '@prisma/client';
 
 import Title from '@/components/Title';
+import Machine, {
+    type MachineTestQuestions
+} from '@/components/admin/machine/Machine';
 import ListMachines from '@/components/admin/machine/ListMachines';
 
 const TeacherSettingsIndex = (props) => {
     const [error1, setError1] = useState('');
     const [successMessage1, setSuccessMessage1] = useState(''); // make this a toast
 
-    const [selectedMachine, setSelectedMachine] = useState<Machine>();
+    const [selectedMachine, setSelectedMachine] = useState<MachineType>();
     const [error2, setError2] = useState('');
     const [successMessage2, setSuccessMessage2] = useState(''); // make this a toast
+
+    const [GeneralSafetyFakeMachine, setGeneralSafetyFakeMachine] =
+        useState<MachineTestQuestions>();
+
+    useEffect(() => {
+        const fetchGeneralSafetyMachine = async () => {
+            await fetch('/api/teacher/getGeneralSafetyTest', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setGeneralSafetyFakeMachine({
+                        id: data.machine.id,
+                        name: data.machine.name,
+                        uuid: data.machine.uuid,
+                        nonUserMachine: true,
+                        testQuestions: data.machine._count.testQuestions > 0
+                    });
+                })
+                .catch((error) => console.error(error));
+        };
+        fetchGeneralSafetyMachine();
+    }, []);
 
     const handleFileUpload = (
         e,
@@ -40,7 +70,7 @@ const TeacherSettingsIndex = (props) => {
             .catch((error) => console.error(error));
     };
 
-    const handleChooseMachine = (machine: Machine) => {
+    const handleChooseMachine = (machine: MachineType) => {
         setSelectedMachine(machine);
     };
 
@@ -101,6 +131,14 @@ const TeacherSettingsIndex = (props) => {
                                 Choose the machine you want to update the
                                 questions for:
                             </div>
+                            {GeneralSafetyFakeMachine && (
+                                <Machine
+                                    key={103040}
+                                    machine={GeneralSafetyFakeMachine}
+                                    highlight={false}
+                                    handleOnClick={handleChooseMachine}
+                                />
+                            )}
                             <ListMachines
                                 reload={false}
                                 setReload={() => {}}
@@ -115,7 +153,7 @@ const TeacherSettingsIndex = (props) => {
                                 {`'`}s test questions. Include the header
                                 column. The columns should be in the following
                                 order: id, text, choice1, choice2, choice3,
-                                choice4, correctChoice,
+                                choice4, choice5, choice6, correctChoice
                             </div>
                             <div>
                                 <div className="ml-[15rem] mt-[5rem] text-3xl">
@@ -125,7 +163,7 @@ const TeacherSettingsIndex = (props) => {
                                         onChange={(e) =>
                                             handleFileUpload(
                                                 e,
-                                                '/api/teacher/updateTestQuestions',
+                                                `/api/teacher/updateTestQuestions?generalSafetyTestRaw=${selectedMachine.nonUserMachine}`,
                                                 setSuccessMessage2,
                                                 setError2
                                             )

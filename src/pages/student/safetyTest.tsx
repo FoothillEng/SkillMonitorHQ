@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
 
 import type { TestQuestion } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -128,6 +129,7 @@ const SafetyTest = (props) => {
     const { machineUUID } = useContext(MachineContext);
 
     const { data: nextAuthSession } = useSession();
+    const router = useRouter();
 
     useEffect(() => {
         if (nextAuthSession?.user?.studentId !== undefined) {
@@ -138,7 +140,9 @@ const SafetyTest = (props) => {
     const getQuestions = async () => {
         if (questions.length == 0) {
             const res = await fetch(
-                `/api/machine/getQuestions?UUID=${machineUUID}`
+                `/api/machine/getQuestions?UUID=${machineUUID}&generalSafetyTest=${
+                    router.query?.generalSafetyTest ?? false
+                }`
             ).then((res) => {
                 if (res.status === 404) {
                     setError('Machine not found. Please contact your teacher.');
@@ -214,7 +218,8 @@ const SafetyTest = (props) => {
             },
             body: JSON.stringify({
                 studentId,
-                machineUUID
+                machineUUID,
+                generalSafetyTest: router?.query?.generalSafetyTest ?? false
             })
         });
 
@@ -222,10 +227,13 @@ const SafetyTest = (props) => {
         if (data.message) {
             setError(data.message);
         }
+        if (res.status === 200) {
+            router.push('/');
+        }
     };
 
     const retryTest = () => {
-        setCurrentQuestion(0);
+        setCurrentQuestion(1);
         setAnswers(Array(10).fill(0));
         setQuestions((prev) => {
             const newQuestions = [...prev];
@@ -240,11 +248,17 @@ const SafetyTest = (props) => {
 
     return (
         <div className="flex w-screen flex-col items-center text-center font-oxygen text-white">
-            <Title title="Safety Test" />
+            <Title
+                title={`${
+                    router.query?.generalSafetyTest ?? false
+                        ? 'General'
+                        : 'Machine'
+                } Safety Test`}
+            />
             <div className="flex flex-col items-center p-[2rem] text-4xl ">
                 {currentQuestion === 0 && (
                     <div
-                        className="mt-[40rem] w-[30rem] p-[3rem] text-center text-5xl outline outline-[.5rem]"
+                        className="mt-[20rem] w-[30rem] p-[3rem] text-center text-5xl outline outline-[.5rem]"
                         onClick={() => {
                             getQuestions();
                         }}
@@ -266,7 +280,7 @@ const SafetyTest = (props) => {
                     score == 0 && (
                         <div className="flex flex-col items-center justify-center text-center">
                             <div
-                                className="mt-[10rem] flex h-[10rem] w-[30rem] items-center justify-center  p-[5rem] text-5xl text-primary outline outline-[1rem] outline-primary"
+                                className="mt-[5rem] flex h-[10rem] w-[30rem] items-center justify-center  p-[5rem] text-5xl text-primary outline outline-[1rem] outline-primary"
                                 onClick={() => moveForward(false, true)}
                             >
                                 Submit Test
@@ -278,7 +292,7 @@ const SafetyTest = (props) => {
                         </div>
                     )}
                 {score === 100 && (
-                    <div className="mt-[10rem] text-5xl text-green">
+                    <div className="mt-[5rem] text-5xl text-green">
                         Test Passed
                     </div>
                 )}
@@ -292,7 +306,7 @@ const SafetyTest = (props) => {
                             click the button below to retry the test.
                         </div>
                         <div
-                            className="mt-[4rem] flex h-[10rem] w-[30rem] items-center justify-center  p-[5rem] text-5xl text-red outline outline-[1rem] outline-red"
+                            className="mb-[4rem] mt-[4rem] flex h-[10rem] w-[30rem] items-center justify-center p-[5rem] text-5xl text-red outline outline-[1rem] outline-red"
                             onClick={() => retryTest()}
                         >
                             Retry Test
@@ -300,9 +314,9 @@ const SafetyTest = (props) => {
                     </div>
                 )}
                 {questions && currentQuestion > 0 && (
-                    <div className="mt-[5rem]">
+                    <div className="mt-[2rem]">
                         {/* need this to be low but now the main piece is too high  */}
-                        <div className="flex flex-row justify-center space-x-[4rem] text-5xl">
+                        <div className="flex flex-row justify-center space-x-[1rem] text-5xl">
                             {questions.map((question, index) => (
                                 <QuestionButton
                                     key={index}
@@ -323,7 +337,9 @@ const SafetyTest = (props) => {
                 )}
             </div>
             {error && (
-                <div className="mt-[2rem] text-5xl text-red-500">{error}</div>
+                <div className="mt-[2rem] scroll-smooth text-5xl text-red-500">
+                    {error}
+                </div>
             )}
         </div>
     );

@@ -10,6 +10,9 @@ export default async function handler(
         case 'GET':
             try {
                 const rawMachines = await prisma.machine.findMany({
+                    where: {
+                        nonUserMachine: false
+                    },
                     include: {
                         testQuestions: true
                     }
