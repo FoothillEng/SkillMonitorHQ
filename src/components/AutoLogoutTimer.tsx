@@ -117,52 +117,50 @@ const AutoLogoutTimer = () => {
         <div className="fixed right-[5rem] top-[50rem] text-lg text-white">
             {nextAuthSession && (
                 <div className="text-center font-oxygen text-secondary">
-                    <div className="flex h-[10rem] w-[28rem] flex-col justify-center p-[2rem] outline outline-4 outline-primary">
+                    <div
+                        className="flex h-[10rem] w-[28rem] flex-col justify-center p-[2rem] outline outline-4 outline-primary"
+                        onClick={() => setIsOpen(true)}
+                    >
                         {/* <h1 className="text-4xl"> :</h1> */}
                         <div className="flex flex-col text-3xl">
                             <p className="text-4xl">AutoLogout</p>
                             <FormattedTime milliseconds={time} />
                         </div>
-                        <div>
-                            <h2
-                                onClick={() => setIsOpen(true)}
-                                className="text-2xl"
-                            >
-                                click here to extend session time!
-                            </h2>
-                            <Dialog
-                                open={isOpen}
-                                onClose={() => setIsOpen(false)}
-                                className="relative z-50"
-                            >
-                                <div
-                                    className="fixed inset-0 bg-black/80"
-                                    aria-hidden="true"
-                                />
+                        <h2 className="text-2xl">
+                            click here to extend session time!
+                        </h2>
+                        <Dialog
+                            open={isOpen}
+                            onClose={() => setIsOpen(false)}
+                            className="relative z-50"
+                        >
+                            <div
+                                className="fixed inset-0 bg-black/80"
+                                aria-hidden="true"
+                            />
 
-                                <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                                    <Dialog.Panel className="mx-auto flex h-[95rem] w-[65rem] items-center justify-center rounded bg-green-500 text-center">
-                                        {(!adminSet && (
-                                            <LockScreen
-                                                placeholder={'Enter Admin ID'}
-                                                start={''}
-                                                handleSubmit={handleSubmit1}
-                                                key={1}
-                                            />
-                                        )) || (
-                                            <LockScreen
-                                                placeholder={
-                                                    'Enter total # of minutes to add to session time (max 50h~3000m)'
-                                                }
-                                                start={''}
-                                                handleSubmit={handleSubmit2}
-                                                key={2}
-                                            />
-                                        )}
-                                    </Dialog.Panel>
-                                </div>
-                            </Dialog>
-                        </div>
+                            <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+                                <Dialog.Panel className="mx-auto flex h-[95rem] w-[65rem] items-center justify-center rounded bg-green-500 text-center">
+                                    {(!adminSet && (
+                                        <LockScreen
+                                            placeholder={'Enter Admin ID'}
+                                            start={''}
+                                            handleSubmit={handleSubmit1}
+                                            key={1}
+                                        />
+                                    )) || (
+                                        <LockScreen
+                                            placeholder={
+                                                'Enter total # of minutes to add to session time (max 50h~3000m)'
+                                            }
+                                            start={''}
+                                            handleSubmit={handleSubmit2}
+                                            key={2}
+                                        />
+                                    )}
+                                </Dialog.Panel>
+                            </div>
+                        </Dialog>
                         {error && <p className="text-red-500">{error}</p>}
                     </div>
                 </div>
