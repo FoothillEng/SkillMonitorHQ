@@ -72,8 +72,7 @@ export default async function handler(
                                 increment: duration
                             }
                         },
-                        select: {
-                            lifetimeDuration: true,
+                        include: {
                             _count: {
                                 select: {
                                     sessions: true
@@ -86,20 +85,63 @@ export default async function handler(
                     return { userMachine, user };
                 }
 
+
+                // check if user has 10 lifetime hours. count how many userMachine relations they have
+                const updateLevel = async (user: User) => {
+                    if (user.level === 'ADVANCED') return
+                    const userMachines = await prisma.userMachine.findMany({
+                        where: {
+                            userId: user.id,
+                            apprentice: {
+                                not: {
+                                    equals: true
+                                }
+                            }
+                        }
+                    });
+
+                    const userMachineCount = userMachines.length;
+                    let level: StudentLevel;
+
+                    if ((user.lifetimeDuration >= 108000000) && (userMachineCount >= 10)) {
+                        level = 'ADVANCED';
+                    } else if ((user.lifetimeDuration >= 36000000) && (userMachineCount >= 3)) { // 3dp + laser cutter + 1 wood machine
+                        level = 'INTERMEDIATE';
+                    } else {
+                        level = 'BEGINNER';
+                    }
+
+                    await prisma.user.update({
+                        where: {
+                            id: user.id
+                        },
+                        data: {
+                            level: level
+                        }
+                    });
+                }
+
                 const updateUsers = [session.userMachineId, session.apprentice1UMID, session.apprentice2UMID, session.apprentice3UMID]
                     .filter(Boolean) // remove null apprenticeUMIDs
                     .map(async (userMachineId) => {
                         const { userMachine, user } = await updateHours(userMachineId as number, session?.duration as number);
-                        return { userMachineDuration: userMachine?.duration, userMachineSessions: userMachine?._count.sessions, userLifetimeDuration: user?.lifetimeDuration, userLifetimeSessions: user?._count.sessions };
+                        await updateLevel(user);
+                        return {
+                            userMachineDuration: userMachine?.duration,
+                            userMachineSessions: userMachine?._count.sessions,
+                            userLifetimeDuration: user?.lifetimeDuration,
+                            userLifetimeSessions: user?._count.sessions
+                        };
                     });
 
                 const results = await Promise.all(updateUsers);
+                const curUser = results[0];
 
                 res.status(200).json({
-                    session, userMachineDuration: results[0].userMachineDuration,
-                    userMachineSessions: results[0].userMachineSessions,
-                    userLifetimeDuration: results[0].userLifetimeDuration,
-                    userLifetimeSessions: results[0].userLifetimeSessions
+                    session, userMachineDuration: curUser.userMachineDuration,
+                    userMachineSessions: curUser.userMachineSessions,
+                    userLifetimeDuration: curUser.userLifetimeDuration,
+                    userLifetimeSessions: curUser.userLifetimeSessions
                 });
             } catch (error) {
                 console.log(error);
