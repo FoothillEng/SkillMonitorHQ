@@ -11,7 +11,7 @@ export default async function handler(
             try {
                 const { UUID, generalSafetyTest } = req.query;
                 if (UUID) {
-                    if (generalSafetyTest) {
+                    if (generalSafetyTest === 'true') {
                         let generalSafetyTestMachine = await prisma.machine.findFirst({
                             where: {
                                 nonUserMachine: true,
@@ -34,15 +34,18 @@ export default async function handler(
                             res.status(422).json({
                                 message: 'No questions found'
                             });
+                            return;
                         } else {
                             if (generalSafetyTestMachine.testQuestions.length === 0) {
                                 res.status(422).json({
                                     message: 'No questions found'
                                 });
+                                return;
                             } else {
                                 res.status(200).json({
                                     questions: generalSafetyTestMachine.testQuestions
                                 });
+                                return;
                             }
                         }
                     }

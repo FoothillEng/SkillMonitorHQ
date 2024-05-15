@@ -128,7 +128,7 @@ const SafetyTest = (props) => {
 
     const { machineUUID } = useContext(MachineContext);
 
-    const { data: nextAuthSession } = useSession();
+    const { data: nextAuthSession, update } = useSession();
     const router = useRouter();
 
     useEffect(() => {
@@ -228,6 +228,9 @@ const SafetyTest = (props) => {
             setError(data.message);
         }
         if (res.status === 200) {
+            update({
+                generalSafetyTest: true
+            });
             router.push('/');
         }
     };

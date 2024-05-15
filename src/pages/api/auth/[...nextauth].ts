@@ -57,6 +57,8 @@ export const authOptions: AuthOptions = {
                 token.realExpTime = session.realExpTime;
                 // session.user.timeRemaining = session.user.realExpTime - Math.floor(Date.now() / 1000);
                 // session.user.realExpTime = token.realExpTime;
+            } else if (trigger === "update" && session?.generalSafetyTest) {
+                token.generalSafetyTest = session.generalSafetyTest;
             } else {
                 if (token.iat) {
                     if (token.realExpTime === undefined) {  // first time login??
