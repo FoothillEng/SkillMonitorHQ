@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import type { User, StudentLevel } from '@prisma/client';
-
 import { prisma } from '@/lib/prisma';
+
+import { findSimilarUserMachines } from '@/pages/api/admin/student/update';
 
 export default async function handler(
     req: NextApiRequest,
@@ -40,9 +41,13 @@ export default async function handler(
                 }
 
                 const updateHours = async (userMachineId: number, duration: number) => {
-                    const userMachine = await prisma.userMachine.update({
+                    const { similarUserMachineIds, userId } = await findSimilarUserMachines(userMachineId) as { similarUserMachineIds: number[]; userId: string };
+
+                    await prisma.userMachine.updateMany({
                         where: {
-                            id: userMachineId
+                            id: {
+                                in: similarUserMachineIds
+                            }
                         },
                         data: {
                             duration: {
@@ -51,6 +56,12 @@ export default async function handler(
                             usageCount: {
                                 increment: 1
                             }
+                        },
+                    })
+
+                    const userMachine = await prisma.userMachine.findFirst({
+                        where: {
+                            id: userMachineId
                         },
                         select: {
                             userId: true,
@@ -61,11 +72,11 @@ export default async function handler(
                                 }
                             },
                         },
-                    })
+                    });
 
                     const user = await prisma.user.update({
                         where: {
-                            id: userMachine?.userId
+                            id: userId
                         },
                         data: {
                             lifetimeDuration: {

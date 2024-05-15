@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from '@/lib/prisma';
+import { createSimilarUserMachine } from '@/pages/api/admin/machine/addStudent';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,7 +12,7 @@ export default async function handler(
             try {
                 const { studentId, machineUUID, generalSafetyTest } = req.body;
 
-                if (!studentId || !machineUUID || !generalSafetyTest) {
+                if (studentId === undefined || machineUUID === undefined || generalSafetyTest === undefined) {
                     res.status(400).json({ message: 'Missing query parameters' });
                     return;
                 }
@@ -80,30 +81,10 @@ export default async function handler(
                         });
                     }
                 } else {
-                    await prisma.userMachine.create({
-                        data: {
-                            user: {
-                                connect: {
-                                    id: student.id
-                                },
-                            },
-                            machine: {
-                                connect: {
-                                    id: machine.id
-                                }
-                            },
-                            apprentice: true,
-                            passedTest: true,
-                        },
-                        include: {
-                            user: true,
-                        }
-                    })
+                    await createSimilarUserMachine(student.id, machine, { passedTest: true });
 
                     res.status(200).json({ message: 'Congrats! You have passed the test and are now an apprentice on this machine!!' });
                 }
-
-
             } catch (error) {
                 console.log(error);
                 res.status(400).json({

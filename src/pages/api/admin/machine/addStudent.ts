@@ -1,7 +1,39 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-
 import { prisma } from '@/lib/prisma';
+import { Machine } from '@prisma/client';
+
+export const createSimilarUserMachine = async (userId: string, machine: Machine, additionalArgs?: Object) => {
+    const similarMachinesRaw = await prisma.machine.findMany({
+        where: {
+            name: {
+                startsWith: machine.name.split('-')[0].trim()
+            }
+        },
+        select: {
+            id: true,
+            uuid: true
+        }
+    })
+
+    const similarMachines = similarMachinesRaw.map((machine) => {
+        return {
+            userId: userId,
+            machineId: machine.id,
+            machineUUID: machine.uuid,
+            apprentice: true,
+            ...additionalArgs
+        }
+    })
+
+    return await prisma.userMachine.createManyAndReturn({
+        data: similarMachines,
+        include: {
+            user: true,
+        },
+        skipDuplicates: true
+    })
+}
 
 export default async function handler(
     req: NextApiRequest,
@@ -53,23 +85,7 @@ export default async function handler(
                         message: 'Student is already on the machine',
                     });
                 } else {
-                    await prisma.userMachine.create({
-                        data: {
-                            user: {
-                                connect: {
-                                    id: student.id
-                                },
-                            },
-                            machine: {
-                                connect: {
-                                    id: machine.id
-                                }
-                            },
-                        },
-                        include: {
-                            user: true,
-                        }
-                    })
+                    await createSimilarUserMachine(student.id, machine);
                     res.status(200).json({ "message": "success" })
                 }
 

@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from '@/lib/prisma';
 
+import { findSimilarUserMachines } from '@/pages/api/admin/student/update';
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
@@ -28,6 +30,7 @@ export default async function handler(
                 })
 
                 // EDGE CASE: permute excess ratings for users who used machine 2+ times (not just the current one)
+                // THIS IS NOT WORKING
                 await prisma.userLogin.updateMany({
                     where: {
                         machineId: userLogin.machineId,
@@ -53,9 +56,14 @@ export default async function handler(
                     }
 
                     const newRating = (userMachine.cumulativeRatingSum + rating) / (1.0 * (userMachine.cumulativeRatingCount + 1));
-                    await prisma.userMachine.update({
+
+                    const { similarUserMachineIds } = await findSimilarUserMachines(userMachine.id) as { similarUserMachineIds: number[]; userId: string };
+
+                    await prisma.userMachine.updateMany({
                         where: {
-                            id: userMachine.id,
+                            id: {
+                                in: similarUserMachineIds
+                            }
                         },
                         data: {
                             cumulativeRatingSum: {

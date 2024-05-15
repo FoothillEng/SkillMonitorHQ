@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-
 import { prisma } from '@/lib/prisma';
+import { createSimilarUserMachine } from '@/pages/api/admin/machine/addStudent';
 
 export default async function handler(
     req: NextApiRequest,
@@ -59,28 +59,11 @@ export default async function handler(
                         });
                     }
                 } else {
-                    const userMachine = await prisma.userMachine.create({
-                        data: {
-                            user: {
-                                connect: {
-                                    id: student.id
-                                },
-                            },
-                            machine: {
-                                connect: {
-                                    id: machine.id
-                                }
-                            },
-                            apprentice: true
-                        },
-                        include: {
-                            user: true,
-                        }
-                    })
+                    const userMachines = createSimilarUserMachine(student.id, machine);
 
                     res.status(200).json({
-                        apprentice: userMachine.user,
-                        apprenticeMachineId: userMachine.id
+                        apprentice: student,
+                        apprenticeMachineId: userMachines[0].id
                     });
                 }
 

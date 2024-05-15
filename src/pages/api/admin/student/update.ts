@@ -2,6 +2,46 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from '@/lib/prisma';
 
+export const findSimilarUserMachines = async (userMachineId: number) => {
+    const currUserMachine = await prisma.userMachine.findFirst({
+        where: {
+            id: userMachineId
+        },
+        select: {
+            userId: true,
+            machine: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
+
+    if (!currUserMachine) {
+        return [];
+    }
+
+    const similarMachinesRaw = await prisma.userMachine.findMany({
+        where: {
+            machine: {
+                name: {
+                    startsWith: currUserMachine.machine.name.split('-')[0].trim()
+                }
+            }
+        },
+        select: {
+            id: true
+        }
+    })
+
+    // return flattened array of userMachine ids
+    return {
+        similarUserMachineIds: similarMachinesRaw.map((userMachine) => userMachine.id),
+        userId: currUserMachine.userId
+    }
+}
+
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
@@ -11,16 +51,21 @@ export default async function handler(
             try {
                 const { userMachineId, apprentice } = req.body;
 
-                if (!userMachineId) {
+                if (userMachineId === undefined || apprentice === undefined) {
                     res.status(400).json({
-                        message: 'Missing userMachineId'
+                        message: 'Missing userMachineId or apprentice'
                     });
                     return;
                 }
 
-                const userMachine = await prisma.userMachine.update({
+                const { similarUserMachineIds } = await findSimilarUserMachines(userMachineId) as { similarUserMachineIds: number[]; userId: string; };
+
+
+                await prisma.userMachine.updateMany({
                     where: {
-                        id: userMachineId
+                        id: {
+                            in: similarUserMachineIds
+                        }
                     },
                     data: {
                         apprentice: apprentice
@@ -28,7 +73,7 @@ export default async function handler(
                 })
 
                 res.status(200).json({
-                    apprentice: userMachine.apprentice
+                    apprentice: apprentice
                 });
 
             } catch (error) {
