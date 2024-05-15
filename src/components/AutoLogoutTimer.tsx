@@ -117,13 +117,11 @@ const AutoLogoutTimer = () => {
         <div className="fixed right-[5rem] top-[50rem] text-lg text-white">
             {nextAuthSession && (
                 <div className="text-center font-oxygen text-secondary">
-                    <div className="flex h-[10rem] w-[40rem] flex-col justify-center p-[5rem] outline outline-4 outline-primary">
+                    <div className="flex h-[10rem] w-[28rem] flex-col justify-center p-[2rem] outline outline-4 outline-primary">
                         {/* <h1 className="text-4xl"> :</h1> */}
-                        <div className="text-3xl">
-                            <FormattedTime
-                                prependedString="Autologout in: "
-                                milliseconds={time}
-                            />
+                        <div className="flex flex-col text-3xl">
+                            <p className="text-4xl">AutoLogout</p>
+                            <FormattedTime milliseconds={time} />
                         </div>
                         <div>
                             <h2
