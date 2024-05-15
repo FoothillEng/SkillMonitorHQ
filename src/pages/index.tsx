@@ -23,7 +23,7 @@ interface AccessMachineType {
     allowedMachines?: Machine[];
     userMachineId?: number;
     averageRating?: number;
-    lastLoginId?: number;
+    lastUserLoginId?: number;
 }
 
 interface AccessMachineStatsType {
@@ -37,7 +37,7 @@ const Index = (props) => {
     const [error, setError] = useState('');
     const [accessMachine, setAccessMachine] = useState<AccessMachineType>({
         allowed: false,
-        lastLoginId: 0
+        lastUserLoginId: -1
     });
     const [accessMachineStats, setAccessMachineStats] =
         useState<AccessMachineStatsType>({});
@@ -52,7 +52,7 @@ const Index = (props) => {
     const handleStarRatingClick = async () => {
         setAccessMachine((prevAccessMachine) => ({
             ...prevAccessMachine,
-            lastLoginId: 0
+            lastUserLoginId: 0
         }));
     };
 
@@ -94,8 +94,10 @@ const Index = (props) => {
                             allowed: true,
                             userMachineId: data.userMachineId,
                             averageRating: data.averageRating,
-                            lastLoginId:
-                                data.lastLoginId == null ? 0 : data.lastLoginId
+                            lastUserLoginId:
+                                data.lastUserLoginId === null
+                                    ? -1
+                                    : data.lastUserLoginId
                         });
                         setAccessMachineStats({
                             userMachineSessions: data.userMachineSessions,
@@ -280,12 +282,13 @@ const Index = (props) => {
                             </div>
                         </div>
                         <div className="mt-[10rem]">
-                            {accessMachine.lastLoginId &&
-                            accessMachine.lastLoginId > 0 ? (
+                            {accessMachine.lastUserLoginId &&
+                            accessMachine.lastUserLoginId > -1 ? (
                                 <div className="text-5xl">
                                     <StarRating
-                                        currentUserId={nextAuthSession.user?.id}
-                                        userLoginId={accessMachine.lastLoginId}
+                                        userLoginId={
+                                            accessMachine.lastUserLoginId
+                                        }
                                         handleStarRatingClick={
                                             handleStarRatingClick
                                         }

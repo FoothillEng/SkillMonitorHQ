@@ -129,7 +129,6 @@ export default async function handler(
                                 }
                             });
 
-
                             // flatten oldQUestions to get machine ids
                             const machineIds: number[] = [parseInt(machineId[0])];
                             for (const item of oldQuestions) {

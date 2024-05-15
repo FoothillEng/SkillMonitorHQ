@@ -37,9 +37,8 @@ export default async function handler(
                         },
                     },
                 }).then(async (userMachine) => {
-
                     if (userMachine && !userMachine.apprentice) {
-                        const lastLogin = await prisma.userLogin.findFirst({
+                        const lastUserLogin = await prisma.userLogin.findFirst({
                             where: {
                                 machineId: userMachine.machineId,
                                 isLoginSession: true,
@@ -52,7 +51,7 @@ export default async function handler(
                                 loginTime: 'desc'
                             }
                         })
-
+                        console.log('lastLogin', lastUserLogin)
 
                         await prisma.userLogin.create({
                             data: {
@@ -84,14 +83,14 @@ export default async function handler(
                             userLifetimeDuration?: number,
                             userLifetimeSessions: number,
                             averageRating: number,
-                            lastLogin?: Date
+                            lastUserLoginId?: number,
                         }
                         let resp: respType = {
                             allowed: true, userMachineId: userMachine.id, userMachineDuration: userMachine.duration, userLifetimeDuration: user?.lifetimeDuration, averageRating: userMachine.averageRating, userMachineSessions: userMachine._count.sessions, userLifetimeSessions: user!._count.sessions
                         }
 
-                        if (lastLogin) {
-                            resp = { ...resp, lastLogin: lastLogin.loginTime }
+                        if (lastUserLogin) {
+                            resp = { ...resp, lastUserLoginId: lastUserLogin.id }
                             res.status(200).json(resp);
                         } else {
                             res.status(200).json(resp);

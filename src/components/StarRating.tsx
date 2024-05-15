@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { DynamicStar } from './DynamicStarRating';
 
 interface StarRatingProps {
-    currentUserId: String;
     userLoginId: number;
     handleStarRatingClick: () => void;
     setError: (error: string) => void;
@@ -11,7 +10,6 @@ interface StarRatingProps {
 const OSCILLATION_DEFAULT = [0, 0, 0, 0, 0] as number[];
 
 const StarRating = ({
-    currentUserId,
     userLoginId,
     handleStarRatingClick,
     setError
@@ -82,7 +80,6 @@ const StarRating = ({
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    currentUserId,
                     userLoginId,
                     rating: clickedRating
                 })
