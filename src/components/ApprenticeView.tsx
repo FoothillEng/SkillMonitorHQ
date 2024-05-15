@@ -142,25 +142,36 @@ const Apprentice = ({
                 </div>
             </Dialog>
             {removeApprentice && (
-                <Modal
-                    isOpen={removeIsOpen}
+                <Dialog
+                    open={removeIsOpen}
                     onClose={() => setRemoveIsOpen(false)}
+                    className="relative z-50"
                 >
-                    <div className="w-[95rem] text-center text-7xl text-secondary">
-                        <div className="mb-[2rem]">
-                            <span>selected apprentice: </span>
-                            <span className=" font-bold">
-                                {`${removeApprentice?.firstName} `}
-                            </span>
-                        </div>
-                        <div>
-                            Are you sure you want to remove this apprentice?
-                        </div>
+                    <div
+                        className="fixed inset-0 bg-black/80"
+                        aria-hidden="true"
+                    />
+
+                    <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+                        <Dialog.Panel className="mx-auto flex h-[75rem] w-[55rem] flex-col items-center justify-center space-y-[5rem] rounded bg-primary-400 text-center text-primary">
+                            <div className="flex flex-col space-y-[2rem] text-7xl">
+                                <p>selected apprentice: </p>
+                                <p className="font-bold text-secondary">
+                                    {`${removeApprentice?.firstName} `}
+                                </p>
+                            </div>
+                            <div className="text-5xl">
+                                Are you sure you want to remove this apprentice?
+                            </div>
+
+                            <div className="container mx-auto mt-[10rem]">
+                                <FaOptions
+                                    handleConfirm={handleRemoveApprentice}
+                                />
+                            </div>
+                        </Dialog.Panel>
                     </div>
-                    <div className="mt-[10rem]">
-                        <FaOptions handleConfirm={handleRemoveApprentice} />
-                    </div>
-                </Modal>
+                </Dialog>
             )}
         </div>
     );
