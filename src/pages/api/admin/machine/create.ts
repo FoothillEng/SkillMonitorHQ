@@ -11,6 +11,10 @@ export default async function handler(
             try {
                 const { machineName } = req.body;
 
+                if (!machineName) {
+                    return res.status(400).send({ message: 'Machine name is required' });
+                }
+
                 const machine = await prisma.machine.findUnique({
                     where: {
                         name: machineName
@@ -21,11 +25,31 @@ export default async function handler(
                     return res.status(403).send({ message: 'Machine already exists' });
                 }
 
+                // add common test questions here
+                const questions = await prisma.testQuestion.findMany({
+                    where: {
+                        machine: {
+                            every: {
+                                name: {
+                                    startsWith: machineName.split('-')[0].trim()
+                                }
+                            }
+                        }
+                    },
+                    select: {
+                        id: true
+                    }
+                })
+
                 await prisma.machine.create({
                     data: {
-                        name: machineName
+                        name: machineName,
+                        testQuestions: {
+                            connect: questions
+                        }
                     }
                 });
+
                 res.status(200).json({
                     message: 'Machine created successfully'
                 });

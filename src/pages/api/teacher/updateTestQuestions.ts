@@ -17,7 +17,6 @@ interface Question {
     choice5: string
     choice6: string
     correctChoice: number
-    machineId: number
 }
 
 interface RawQuestion {
@@ -93,20 +92,64 @@ export default async function handler(
                                     choice5: row.choice5,
                                     choice6: row.choice6,
                                     correctChoice: parseInt(row.correctChoice),
-                                    machineId: parseInt(machineId[0])
                                 });
                             }
                         })
                         .on('end', async () => {
+                            const oldQuestions = await prisma.testQuestion.findMany({
+                                where: {
+                                    machine: {
+                                        some: {
+                                            id: parseInt(machineId[0])
+                                        }
+                                    }
+                                },
+                                select: {
+                                    id: true,
+                                    machine: {
+                                        select: {
+                                            id: true
+                                        }
+                                    }
+                                }
+                            })
+
                             await prisma.testQuestion.deleteMany({
                                 where: {
-                                    machineId: parseInt(machineId[0])
+                                    id: {
+                                        in: oldQuestions.map((question) => question.id)
+                                    }
                                 }
                             });
 
-                            await prisma.testQuestion.createMany({
-                                data: questionData
+                            const newQuestions = await prisma.testQuestion.createManyAndReturn({
+                                data: questionData,
+                                select: {
+                                    id: true
+                                }
                             });
+
+
+                            // flatten oldQUestions to get machine ids
+                            const machineIds: number[] = [parseInt(machineId[0])];
+                            for (const item of oldQuestions) {
+                                machineIds.push(...item.machine.map((machine) => machine.id));
+                            }
+                            const oldMachineIds = [...new Set(machineIds)]
+
+                            // add new questions to similar machine
+                            for (let i = 0; i < oldMachineIds.length; i++) {
+                                await prisma.machine.update({
+                                    where: {
+                                        id: oldMachineIds[i]
+                                    },
+                                    data: {
+                                        testQuestions: {
+                                            connect: newQuestions
+                                        }
+                                    }
+                                })
+                            }
 
                             fs.unlinkSync(file[0].filepath);
 

@@ -132,12 +132,14 @@ const TeacherSettingsIndex = (props) => {
                                 questions for:
                             </div>
                             {GeneralSafetyFakeMachine && (
-                                <Machine
-                                    key={103040}
-                                    machine={GeneralSafetyFakeMachine}
-                                    highlight={false}
-                                    handleOnClick={handleChooseMachine}
-                                />
+                                <div className="my-[2rem]">
+                                    <Machine
+                                        key={103040}
+                                        machine={GeneralSafetyFakeMachine}
+                                        highlight={false}
+                                        handleOnClick={handleChooseMachine}
+                                    />
+                                </div>
                             )}
                             <ListMachines
                                 reload={false}

@@ -100,7 +100,7 @@ model StudentBody {
 }
 
 model TestQuestion {
-  id            Int     @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   text          String
   choice1       String
   choice2       String
@@ -109,6 +109,5 @@ model TestQuestion {
   choice5       String
   choice6       String
   correctChoice Int
-  machine       Machine @relation(fields: [machineId], references: [id])
-  machineId     Int
+  machine       Machine[]
 }

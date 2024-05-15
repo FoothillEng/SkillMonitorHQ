@@ -59,7 +59,11 @@ export default async function handler(
                         } else {
                             const questions = await prisma.testQuestion.findMany({
                                 where: {
-                                    machineId: machine.id
+                                    machine: {
+                                        some: {
+                                            id: machine.id
+                                        }
+                                    }
                                 }
                             });
                             if (questions.length === 0) {
